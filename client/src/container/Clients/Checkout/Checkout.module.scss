@@ -1,0 +1,112 @@
+.mainVieww {
+  width: 100%;
+  min-height: 90vh;
+  padding: 2%;
+  display: flex;
+  flex-direction: row;
+  //   align-items: center;
+  justify-content: center;
+
+  .left {
+    width: 30%;
+    height: 100%;
+    .imageBg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .right {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .contentProduct {
+      width: 80%;
+      width: 900px;
+      min-height: 200px;
+      // border: 1px solid darkblue;
+      display: flex;
+
+      .table {
+        width: 70%;
+        height: auto;
+      }
+
+      .formtotal {
+        width: 30%;
+        margin-left: 1%;
+        height: 300px;
+        // border: 1px solid rgb(14, 7, 7);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+
+        span {
+          font-size: 16px;
+          font-weight: 600;
+
+          &:last-child {
+            color: orangered;
+          }
+        }
+      }
+    }
+
+    .formAddress {
+      margin-top: 5%;
+      width: 80%;
+      min-width: 900px;
+      min-height: 150px;
+      // border: 1px solid darkcyan;
+      background: url("https://png.pngtree.com/thumb_back/fw800/background/20190223/ourmid/pngtree-pure-vintage-envelope-made-of-old-paper-background-backgroundpaper-backgroundstationery-backgroundpostmark-image_71092.jpg")
+        no-repeat;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 10%;
+
+      .FormName {
+        width: 60%;
+        height: fit-content;
+        // border: 1px solid darkblue;
+        display: flex;
+        justify-content: space-around;
+
+        div {
+          font-size: 15px;
+          span {
+            &:first-child {
+              color: gray;
+              font-weight: 600;
+            }
+            &:last-child {
+              color: rgb(73, 65, 65);
+              font-weight: 600;
+            }
+          }
+        }
+      }
+      .address {
+        margin-top: 2%;
+        width: 90%;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        font-style: italic;
+        color: rgb(6, 6, 79);
+      }
+    }
+    .formPaypal {
+      width: 50%;
+      min-height: 200px;
+      margin-top: 5%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

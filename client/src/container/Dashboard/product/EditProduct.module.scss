@@ -1,0 +1,115 @@
+  @import "../../../assets/style/formInput";
+@import "../../../assets/style/fontstyle";
+@import "../../../assets/style/buton";
+.mainViewDesc {
+  width: 100%;
+  height: 100%;
+  min-width: 80vw;
+  // overflow-x: auto;
+  display: flex;
+  margin-top: 2%;
+  margin-left: 1%;
+  min-width: 80vw;
+
+  .left {
+    width: 70%;
+    height: auto;
+    // background-color: saddlebrown;
+    min-width: 800px;
+    display: flex;
+    flex-direction: column;
+
+    .formBtnSave {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+    }
+    .basicFormProduct {
+      width: 100%;
+      padding: 2%;
+      min-height: 300px;
+      background-color: white;
+
+      .selectProduct {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+      }
+
+      .inforProduct {
+        width: 100%;
+        height: auto;
+        display: flex;
+      }
+    }
+
+    .Config {
+      width: 100%;
+      min-height: 500px;
+      background-color: white;
+      margin-top: 2%;
+    }
+
+    .Description {
+      height: auto;
+      width: 100%;
+      background-color: white;
+      margin-top: 2%;
+
+      .formDesc {
+        width: 100%;
+        min-height: 800px;
+        :global {
+          .k-editor-content {
+            height: 600px;
+
+            .k-iframe {
+              height: 650px;
+            }
+          }
+        }
+      }
+    }
+.optionProduct {
+  width: 100%;
+  min-height: 300px;
+  background-color: white;
+  margin-top: 2%;
+  display: flex;
+  flex-wrap: wrap;
+}
+    
+  }
+  .right {
+    width: 25%;
+    margin-left: 2%;
+    height: 100%;
+    min-width: 300px;
+    .ImageProduct {
+        width: 100%;
+        min-height: 270px;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .formUpload{
+          width: 100%;
+          height: 70px;
+        }
+      }
+    .otherInformation {
+      width: 100%;
+      height: 140px;
+      background-color: white;
+      margin-top: 1%;
+      border-radius: 5px;
+    }
+
+  }
+}
+       
+      

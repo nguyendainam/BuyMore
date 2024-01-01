@@ -1,0 +1,40 @@
+$mobile: "mobile";
+$tablet: "tablet";
+$normalDesktop: "normal";
+$largeScreen: "langer";
+
+$mobile-width: 480px;
+$tablet-width: 768px;
+$normal-desktop-width: 900px;
+$largeScreen-width: 1440px;
+
+
+
+@mixin Reponsive($screen) {
+    @if($screen ==$mobile) {
+        @media only screen and (max-width: #{$tablet-width - 2px}) {
+            @content;
+        }
+    }
+
+
+    @if($screen ==$tablet) {
+        @media only screen and (min-width: #{$tablet-width - 2px}) and (max-width: #{$normal-desktop-width - 2px}) {
+            @content;
+        }
+    }
+
+    @if($screen ==$normalDesktop) {
+        @media only screen and (min-width: #{$normal-desktop-width}) and (max-width: #{$largeScreen-width - 2px}) {
+            @content;
+        }
+    }
+
+    @if($screen ==$largeScreen) {
+        @media only screen and (min-width: #{$largeScreen-width}) {
+            @content;
+        }
+    }
+
+
+}

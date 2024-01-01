@@ -1,0 +1,589 @@
+@import "../../../assets/style/color";
+@import "../../../assets/style/screen";
+@import "../../../assets/style/fontstyle";
+
+.mainHeader {
+  width: 100%;
+  height: auto;
+  position: relative;
+  transition: opacity 1s ease;
+
+  .topHeader {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid $linegray;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .topHeaderTablet {
+    display: none;
+  }
+
+  .centerHeader {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 5%;
+    padding-right: 5%;
+
+    .formLogo {
+      height: 100%;
+      width: 225px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .imgLogo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .formSearch {
+      width: 60%;
+      padding-top: 10px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .aboutUser {
+      width: 30%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: end;
+      padding-right: 5%;
+
+      .loginUser {
+        width: 180px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+
+        // margin-right: 3%;
+
+        .iconLogin {
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 35px;
+          color: $blueColor;
+        }
+
+        .textUser {
+          white-space: pre-wrap;
+          word-break: break-all;
+          width: 150px;
+          height: 100%;
+          overflow: hidden;
+          font-size: 13px;
+          display: flex;
+          align-items: center;
+          font-weight: 500;
+          // text-overflow: ellipsis;
+        }
+      }
+
+      .iconCart {
+        font-size: 25px;
+        height: 50%;
+        display: flex;
+        align-items: center;
+        color: $blueColor;
+        margin-left: 5%;
+      }
+    }
+  }
+
+  .MenuHeader {
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid $linegray;
+    border-top: 1px solid $linegray;
+    padding-left: 5%;
+    padding-right: 5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+
+    .leftMenuHeader {
+      position: relative;
+      width: 20%;
+      border-width: 0px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        border-top: 2px solid blue;
+        transition: all 1s ease;
+        /* Remove or adjust the z-index property */
+      }
+
+      &:hover::before {
+        border-top: 2px solid blue;
+        width: 100%;
+      }
+
+      .formLineIcons {
+        font-size: 25px;
+        margin-right: 2%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .formTitleListCategory {
+        height: 50%;
+        border-right: 1px solid $linegray;
+        width: 80%;
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .centerMenuHeader {
+      min-width: 50%;
+      height: 100%;
+      margin-left: 3%;
+      margin-right: 3%;
+      display: flex;
+      align-items: center;
+
+      .centerDropdown {
+        width: 100%;
+        margin-right: 1%;
+        display: flex;
+        align-items: center;
+        height: 100%;
+
+        .itemDropdown {
+          padding-left: 5%;
+        }
+      }
+    }
+  }
+
+  .active {
+    position: fixed;
+    top: 0;
+    height: 50px;
+    z-index: 100;
+    margin-bottom: 20px;
+    border-bottom: 1px solid $linegray;
+    transition: all 3s ease-in-out;
+  }
+
+  @include Reponsive($normalDesktop) {
+    .topHeader {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid $linegray;
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+
+    .topHeaderTablet {
+      display: none;
+    }
+
+    .centerHeader {
+      width: 100%;
+      height: 70px;
+      display: flex;
+      flex-direction: row;
+      padding-left: 5%;
+      padding-right: 5%;
+
+      .formLogo {
+        height: 100%;
+        width: 30%;
+        margin-right: 15%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .imgLogo {
+          width: 80%;
+          height: 80%;
+          object-fit: cover;
+        }
+      }
+
+      .formSearch {
+        width: 30%;
+        padding-top: 10px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .aboutUser {
+        margin-left: 15%;
+        width: 20%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: end;
+
+        .loginUser {
+          width: 100px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .iconLogin {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: $blueColor;
+          }
+        }
+
+        .iconCart {
+          font-size: 35px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          color: $blueColor;
+        }
+      }
+    }
+
+    .MenuHeader {
+      width: 100%;
+      height: 50px;
+      border-bottom: 1px solid $linegray;
+      border-top: 1px solid $linegray;
+      padding-left: 5%;
+      padding-right: 5%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background-color: white;
+
+      .leftMenuHeader {
+        position: relative;
+        width: 20%;
+        border-width: 0px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 0;
+          height: 100%;
+          border-top: 2px solid blue;
+          transition: all 1s ease;
+          /* Remove or adjust the z-index property */
+        }
+
+        &:hover::before {
+          border-top: 2px solid blue;
+          width: 100%;
+        }
+
+        .formLineIcons {
+          font-size: 25px;
+          margin-right: 2%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+        }
+
+        .formTitleListCategory {
+          height: 50%;
+          border-right: 1px solid $linegray;
+          width: 80%;
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      .centerMenuHeader {
+        min-width: 50%;
+        height: 100%;
+        margin-left: 3%;
+        margin-right: 3%;
+        display: flex;
+        align-items: center;
+
+        .centerDropdown {
+          width: 100%;
+          margin-right: 1%;
+          display: flex;
+          align-items: center;
+          height: 100%;
+
+          .itemDropdown {
+            padding-left: 5%;
+          }
+        }
+      }
+    }
+
+    .active {
+      position: fixed;
+      top: 0;
+      height: 50px;
+      z-index: 100;
+      margin-bottom: 20px;
+      border-bottom: 1px solid $linegray;
+      transition: all 3s ease-in-out;
+    }
+  }
+
+  @include Reponsive($tablet) {
+    .topHeader {
+      display: none;
+    }
+
+    .topHeaderTablet {
+      width: 100%;
+      height: 70px;
+      display: block;
+    }
+
+    .centerHeader {
+      width: 100%;
+      height: 70px;
+      display: flex;
+      flex-direction: row;
+      padding-left: 5%;
+      padding-right: 5%;
+
+      .formLogo {
+        display: none;
+      }
+
+      .formSearch {
+        width: 100%;
+        padding-top: 10px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .aboutUser {
+        display: none;
+      }
+    }
+
+    .MenuHeader {
+      display: none;
+    }
+  }
+
+  @include Reponsive($mobile) {
+    .topHeader {
+      display: none;
+    }
+
+    .topHeaderTablet {
+      width: 100%;
+      height: 70px;
+      display: block;
+    }
+
+    .centerHeader {
+      width: 100%;
+      height: 70px;
+      display: flex;
+      flex-direction: row;
+      padding-left: 5%;
+      padding-right: 5%;
+
+      .formLogo {
+        display: none;
+      }
+
+      .formSearch {
+        width: 100%;
+        padding-top: 10px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .aboutUser {
+        display: none;
+      }
+    }
+
+    .MenuHeader {
+      display: none;
+    }
+  }
+}
+
+.formDropdownMenu {
+  max-width: 600px;
+  max-height: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  .itemMenu {
+    background-color: white !important;
+    height: 30px;
+
+    &:hover {
+      color: $hoverText;
+
+      .formDropdownItem {
+        padding-left: 5%;
+        transition: all 0.5s ease-in-out;
+      }
+    }
+
+    .formDropdownItem {
+      width: 150px;
+      min-width: max-content;
+    }
+  }
+
+  :global {
+    .ant-menu-item {
+      pointer-events: none !important;
+    }
+
+    /* (Optional) Để giữ màu sắc không thay đổi khi hover */
+    .ant-menu-item:hover {
+      background-color: blueviolet !important;
+      color: blue !important;
+    }
+  }
+}
+
+.imgIcon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid;
+}
+
+.Menu {
+  width: 300px;
+}
+.formListItem {
+  min-width: 800px;
+  height: auto;
+  min-height: 200px;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .formCategory {
+    width: 30%;
+    min-height: 30px;
+    height: fit-content;
+    margin: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .titleCat {
+      font-size: 16px;
+      color: $blueColor;
+      font-weight: bold;
+    }
+
+    .itemCat {
+      width: 100%;
+      height: 20px;
+      margin: 1px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+.dataEmpty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 20px;
+  color: gainsboro;
+}
+
+.OptionAdmin {
+  width: 220px;
+  height: 100px;
+  background-color: white;
+  // border: 1px solid rgb(212, 212, 212);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 2%;
+
+  // .welcomeAdmin {
+  //   width: 100%;
+  //   height: 30%;
+  //   border: 1px solid darkblue;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  // }
+  .listOption {
+    width: 100%;
+    height: auto;
+    padding-right: 5%;
+    .item {
+      width: 100%;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      cursor: pointer;
+
+      .icon {
+        margin-left: 10%;
+        font-size: 15px;
+      }
+    }
+  }
+}

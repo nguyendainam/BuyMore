@@ -1,0 +1,58 @@
+@import '../../../../assets/style/formInput';
+@import '../../../../assets/style/buton';
+
+.mainManage {
+  width: 100%;
+  min-height: 700px;
+  height: 100%;
+  overflow-y: auto;
+  margin: 2%;
+position: relative;
+
+
+
+  .formAddImg {
+    width: 95%;
+    min-height: max-content;
+    display: flex;
+
+    .previewImage {
+      width: 80%;
+      overflow-y: auto; // Sử dụng 'auto' thay vì 'scroll'
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-height: 500px;
+      min-height: 0;
+
+      .image {
+        width: 100%; // Đảm bảo hình ảnh chiếm toàn bộ chiều rộng của parent
+        max-width: 500px;
+        max-height: 300px;
+        margin: 30;
+        object-fit: contain;
+        margin: 2%;
+      }
+    }
+  }
+
+  .formButton{
+    width: 200px;
+    height: 80px;
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    margin-top: -50px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+  }
+  
+
+  .formTable {
+    width: 95%;
+    height: 450px;
+    border: 1px solid darkblue;
+    margin-top: 3%;
+  }
+}

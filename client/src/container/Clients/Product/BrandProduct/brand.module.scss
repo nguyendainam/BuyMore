@@ -1,0 +1,40 @@
+.mainView {
+    width: 100%;
+    margin-top: 2%;
+    display: flex;
+    justify-content: center;
+
+    .formContent{
+        width: 80%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+
+        .itembrand {
+                width: calc(33.33% - 4%);
+                /* 33.33% width with a 2% margin on each side */
+                    height: 160px;
+                background-color: white;
+                margin: 0.5%;
+                box-sizing: border-box;
+                /* Include padding and border in the element's total width and height */
+                display: flex;
+                align-items: center;
+                 justify-content: center;
+                 cursor: pointer;
+
+                img {
+                    width:35%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                &:hover{
+                   img {
+                    width: 38%;
+                    height: 100%;
+                   }
+                }
+            }
+    }
+}

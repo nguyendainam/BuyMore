@@ -1,0 +1,89 @@
+@import "../assets/style/screen";
+
+.formSearch {
+  width: 500px;
+  position: relative;
+
+  .searchInputCustom {
+    width: 400px;
+  }
+
+  .formSearchContainer {
+    width: 600px;
+    height: 500px;
+    position: absolute;
+    background-color: rgb(236, 236, 236);
+    margin-top: 5%;
+    z-index: 99;
+    overflow: auto;
+    .items {
+      width: 100%;
+      min-height: 500px;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+
+      .item {
+        width: 100%;
+        height: 80px;
+        margin-bottom: 10px;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        padding-left: 2%;
+        cursor: pointer;
+        .image {
+          width: 50px;
+          height: 50px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+
+        .information {
+          width: 80%;
+          height: 40px;
+          margin-left: 2%;
+          font-size: 14px;
+          display: -webkit-box;
+          -webkit-line-clamp: 2 ; // Số dòng tối đa muốn hiển thị
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .price {
+          width: 30%;
+          height: 50px;
+          margin-left: 3%;
+          display: flex;
+          align-items: center;
+          font-weight: 600;
+          color: rgb(9, 86, 194);
+        }
+      }
+    }
+  }
+}
+
+@include Reponsive($normalDesktop) {
+  .searchInputCustom {
+    width: 400px;
+  }
+}
+
+@include Reponsive($tablet) {
+  .searchInputCustom {
+    width: 700px;
+  }
+}
+
+@include Reponsive($mobile) {
+  .searchInputCustom {
+    width: auto;
+  }
+}

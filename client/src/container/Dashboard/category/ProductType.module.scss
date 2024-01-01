@@ -1,0 +1,23 @@
+@import '../../../assets/style/formInput';
+@import '../../../assets/style/buton';
+@import '../../../assets/style/fontstyle';
+@import '../../../assets/style/color';
+.main{
+    width: 95%;
+    min-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    border-radius: 10px;
+    align-items: center;
+    margin: 3%;
+
+}
+
+.formList{
+    border-radius: 10px;
+    width: 95%;
+    margin: 3%;
+    
+}

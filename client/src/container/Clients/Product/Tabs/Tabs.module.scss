@@ -1,0 +1,111 @@
+.mainTabs {
+  width: 95%;
+  height: auto;
+  //   min-height: 400px;
+  display: flex;
+  flex-wrap: wrap;
+
+  margin-top: 1%;
+  justify-content: center;
+
+  .formQC {
+    width: 10%;
+    height: 400px;
+    margin-right: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Tab {
+    width: 80%;
+    height: 500px;
+    margin-bottom: 2%;
+    display: flex;
+    position: relative;
+    background: url("../../../../assets/image/unnamed.png");
+    object-fit: cover;
+    background-repeat: round;
+
+    .countdown {
+      width: 20%;
+      height: 80%;
+      bottom: 0;
+      top: 10;
+      position: absolute;
+    }
+
+    :global {
+      .ant-tabs-top {
+        width: 100%;
+      }
+
+      .ant-tabs-nav-list {
+        width: 100%;
+      }
+      .ant-tabs-nav-wrap {
+        width: 100%;
+        transform: translate(0px, 0px);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        height: 70px;
+        border-bottom: none;
+      }
+      .ant-tabs-tab {
+        width: 25%;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        background-color: white;
+        margin: 0 0 0 0 !important;
+        justify-content: center;
+      }
+
+      .ant-tabs-tab-btn {
+        // width: 250px !important;
+        text-shadow: none;
+        font-size: 18px;
+      }
+
+      .ant-tabs-tab-active {
+        display: flex;
+        align-items: center;
+        border-bottom: none !important;
+        border: 1px solid white;
+        color: white !important;
+        text-shadow: none;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        border: 2px solid black;
+        background: rgba(0, 0, 0, 0);
+
+        .ant-tabs-tab-btn {
+          color: rgb(255, 255, 255);
+          font-weight: 700;
+          text-shadow: none;
+          font-size: 20px;
+        }
+      }
+
+      .ant-tabs-content-holder {
+        width: 75%;
+        float: right;
+        position: absolute;
+        height: 70%;
+        bottom: 0;
+        margin-bottom: 2%;
+        right: 0;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.388);
+        display: flex;
+      }
+    }
+
+    .formProduct {
+      width: 20%;
+      height: 200px;
+      border: 1px solid white;
+    }
+  }
+}

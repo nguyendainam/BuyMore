@@ -1,0 +1,32 @@
+.FormSelect {
+    width: max-content;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .iconFlags {
+        width: 20px;
+        height: 13px;
+        flex-grow: 1;
+        margin-right: 5px;
+    }
+}
+
+.MenuListItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .itemFlag {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        /* Adjust the margin as needed */
+    }
+
+    .itemLabel {
+        flex-grow: 1;
+        /* Takes up the remaining space */
+    }
+}

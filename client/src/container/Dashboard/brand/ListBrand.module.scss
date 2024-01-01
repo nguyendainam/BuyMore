@@ -1,0 +1,18 @@
+@import '../../../assets/style/color';
+
+.buttonEdit {
+    width: 20px;
+    height: 20px;
+    color: $iconEdit;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 20px;
+}
+
+.buttonDelete {
+    width: 20px;
+    height: 20px;
+    color: $iconDelete;
+    cursor: pointer;
+    font-size: 20px;
+}

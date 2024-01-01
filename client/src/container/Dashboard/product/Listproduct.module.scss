@@ -1,0 +1,175 @@
+.mainViewList {
+  width: 100%;
+  height: 100%;
+  min-width: 800px;
+  display: flex;
+
+  .formLeft {
+    width: 15%;
+    margin-left: 3%;
+    min-width: 140px;
+    height: 100%;
+    background-color: rgb(246, 248, 249);
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    .raitingMoney {
+      width: 95%;
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      justify-self: start;
+
+      .sliderCustom {
+        z-index: 99;
+        width: 100%;
+      }
+    }
+
+    .category {
+      margin-top: 10%;
+      width: 95%;
+      min-height: 300px;
+
+      .listCheckBox {
+        width: 95%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        :global {
+          .ant-checkbox-group {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px; // Thêm khoảng cách giữa các checkbox
+            // padding: 10px; // Thêm padding để tạo khoảng cách xung quanh
+            // justify-content: space-between;
+            .ant-checkbox-wrapper {
+              // width: calc(60%); // Đảm bảo 3 checkbox mỗi dòng
+              width: auto;
+              min-width: 47%;
+              display: flex;
+              align-items: center;
+
+              // Thêm khoảng cách dưới mỗi checkbox
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .formRight {
+    width: 70%;
+    margin-left: 3%;
+    height: 100%;
+    background-color: rgb(246, 248, 249);
+
+    .formSearch {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center !important;
+      border-bottom: 1px solid gainsboro;
+
+      .search {
+        width: 100%;
+        height: 40px;
+        border-radius: 0px;
+      }
+    }
+
+    .table {
+      width: 100%;
+      min-height: 700px;
+      position: relative;
+      :global {
+        table {
+          min-height: 700px;
+        }
+      }
+
+      .products {
+        width: 100%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+
+        .imageProduct {
+          width: 70px;
+          height: 70px;
+          object-fit: cover;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+
+        .formInfor {
+          width: 100%;
+          height: 100%;
+          // background-color: aqua;
+          margin-left: 2%;
+          .name {
+            width: 90%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1; /* Số dòng tối đa */
+            -webkit-box-orient: vertical;
+            font-size: 13px;
+            &:last-child {
+              color: grey;
+            }
+          }
+        }
+      }
+
+      .icons {
+        cursor: pointer;
+
+        &:hover {
+          + .optProduct {
+            display: block;
+          }
+        }
+      }
+
+      .optProduct {
+        width: 150px;
+        height: 80px;
+        border: 1px solid gainsboro;
+        background-color: white;
+        position: absolute;
+        z-index: 99;
+        display: none;
+        top: 51px;
+        left: -100px;
+        cursor: pointer;
+        padding: 15%;
+        div {
+          width: 100%;
+          height: 30px;
+
+          &:last-child {
+            color: red;
+          }
+          &:hover {
+            background-color: aliceblue;
+          }
+        }
+
+        &:hover {
+          display: block;
+        }
+      }
+    }
+  }
+}

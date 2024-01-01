@@ -1,0 +1,108 @@
+@import '../../../assets/style/formInput';
+@import '../../../assets/style/color';
+
+.mainCategory {
+    width: 100%;
+    display: flex;
+    margin-top: 3%;
+
+
+    .formAddCategory {
+        width: 30%;
+        min-height: 500px;
+        float: left;
+        border: 2px solid gainsboro;
+        overflow-x: auto;
+
+
+        .formImageCate {
+            width: 100%;
+            height: 50%;
+            display: flex;
+
+            .Oldimage {
+                height: 102px;
+                width: 100%;
+            }
+        }
+    }
+
+    .formListCategory {
+        width: 70%;
+        min-height: 500px;
+        float: right;
+        border: 1px solid gainsboro;
+        max-height: 500px;
+        overflow-y: auto;
+        padding-left: 5%;
+
+        .formListItem {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            border: 1px solid gainsboro;
+            padding-left: 20px;
+
+
+            .formText {
+                width: 50%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center !important;
+                align-items: center !important;
+
+
+                .formItem {
+                    height: 50%;
+                    width: 100%;
+                    padding: 10px;
+
+                }
+            }
+
+            .formImage {
+                width: 10%;
+                display: flex;
+                align-items: center;
+
+
+                .image {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .formButton {
+                width: 20%;
+
+                float: right;
+                display: flex;
+                margin-left: 15%;
+                font-size: 25px;
+                align-items: center;
+                justify-content: center;
+
+                .buttonEdit {
+                    width: 20px;
+                    height: 20px;
+                    color: $iconEdit;
+                    cursor: pointer;
+                    margin-right: 5px;
+                }
+
+                .buttonDelete {
+                    width: 20px;
+                    height: 20px;
+                    color: $iconDelete;
+                    cursor: pointer;
+                }
+            }
+        }
+
+
+    }
+
+
+}

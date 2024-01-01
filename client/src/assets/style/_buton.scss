@@ -1,0 +1,70 @@
+.btnPrimary {
+  width: 130px;
+  height: 40px;
+  background-color: rgb(11, 133, 154);
+  border: 1px solid transparent;
+  color: #fff;
+  transition: border-color 0.3s, color 0.3s;
+  margin: 2px;
+  border-radius: 0px;
+  &:hover {
+    border: 1px solid white !important;
+    color: white;
+  }
+}
+
+.btnWhite {
+  width: 130px;
+  height: 40px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(11, 133, 154);
+  color: #0d8680;
+  transition: border-color 0.3s, color 0.3s;
+  margin: 2px;
+  border-radius: 0px;
+  &:hover {
+    border: 1px solid rgb(20, 149, 166) !important;
+    color: white;
+  }
+}
+
+.btnBlue {
+  width: 130px;
+  height: 40px;
+  background-color: rgb(16, 183, 255);
+  // border: 1px solid rgb(11, 133, 154);
+  color: white;
+  transition: border-color 0.3s, color 0.3s;
+  margin: 2px;
+  border-radius: 0px;
+  &:hover {
+    border: 1px solid rgb(5, 219, 247) !important;
+    color: white;
+  }
+}
+.btnBluelength {
+  width: 150px;
+  height: 40px;
+  background-color: rgb(16, 183, 255);
+  // border: 1px solid rgb(11, 133, 154);
+  color: white;
+  transition: border-color 0.3s, color 0.3s;
+  margin: 2px;
+  border-radius: 0px;
+  display: flex;
+  align-items: center;
+  &:hover {
+    border: 1px solid rgb(5, 219, 247) !important;
+    color: white;
+  }
+}
+
+.btnOranged {
+  width: 150px;
+  height: 50px;
+  background-color: orangered;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 0px;
+}

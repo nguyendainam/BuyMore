@@ -1,0 +1,433 @@
+@import "../../../../assets/style/color";
+@import "../../../../assets/style/buton";
+@import "../../../../assets/style/formInput";
+
+.mainFormDetail {
+  width: 100%;
+  height: auto;
+
+  .formProduct {
+    width: 100%;
+    min-height: 100vh;
+    margin-top: 2%;
+    overflow-x: auto;
+
+    .productItems {
+      width: 100%;
+      min-height: 600px;
+      //   height: auto;
+      // border: 1px solid red;
+      display: flex;
+      justify-content: center;
+      // min-width: 900px;
+
+      .Product {
+        width: 70%;
+        min-height: 500px;
+        // background-color: rgb(206, 39, 39);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        min-width: 500px;
+        .leftProduct {
+          width: 35%;
+          min-height: 550px;
+          min-width: 300px;
+          background-color: white;
+          .Image {
+            width: 100%;
+            height: 60%;
+            border-bottom: 1px solid $linegray;
+            border-bottom-style: dashed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .mainImg {
+              width: 50%;
+              // border: 1px solid;
+              height: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+
+            .itemChild {
+              width: 100%;
+              height: 20%;
+              display: flex;
+              align-items: center;
+              justify-content: start;
+              margin-top: 6%;
+              overflow-y: auto;
+              .item {
+                width: 100px;
+                height: 100%;
+                cursor: pointer;
+                margin-left: 2%;
+                margin-right: 2%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &:hover {
+                  border: 1px solid rgb(94, 94, 249);
+                }
+              }
+            }
+          }
+
+          .aboutProduct {
+            width: 100%;
+            height: 40%;
+            font-size: 14px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            // width: 60%;
+            overflow-y: auto;
+          }
+        }
+
+        .rightProduct {
+          background-color: white;
+          margin-left: 1%;
+          width: 50%;
+          min-height: 550px;
+
+          .formTitle {
+            width: 100%;
+            height: 40%;
+            margin-bottom: 2%;
+            display: flex;
+            flex-direction: column;
+            justify-self: start;
+
+            .nameProduct {
+              width: 100%;
+              min-height: 50px;
+              height: fit-content;
+              display: flex;
+              align-items: center;
+              font-size: 26px;
+              font-weight: 600;
+            }
+
+            .nameBrand {
+              width: 100%;
+              font-size: 18px;
+              color: rgb(9, 55, 139);
+              margin-bottom: 2%;
+              margin-top: 1%;
+            }
+
+            .fontTilte {
+              color: gray;
+            }
+
+            .priceProduct {
+              width: 100%;
+              height: 35%;
+              display: flex;
+              align-items: center;
+
+              .formMoney {
+                width: 80%;
+                height: 100px;
+                display: flex;
+                flex-direction: column;
+                padding-left: 5%;
+                justify-content: center;
+
+                .price {
+                  font-size: 25px;
+                  color: blue;
+                }
+
+                .befordiscount {
+                  color: gray;
+                  font-size: 18px;
+                  font-style: italic;
+                  text-decoration: line-through;
+                }
+              }
+            }
+
+            .quantity {
+              width: 100%;
+              height: 50px;
+              // border: 1px solid;
+              display: grid;
+              align-items: center;
+              grid-template-columns: 20% 20%;
+
+              Input {
+                height: 30px;
+                border-radius: 0px;
+              }
+            }
+
+            .fromButton {
+              margin-top: 5%;
+              width: 100%;
+              height: 35%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              justify-content: start;
+              border-top: 1px solid gainsboro;
+              border-top-style: dashed;
+              border-bottom: 1px solid gainsboro;
+              border-bottom-style: dashed;
+              Button {
+                font-size: 16px;
+                font-weight: 700;
+                &:first-child {
+                  width: 49%;
+                  height: 50px;
+                  background-color: rgb(0, 81, 255);
+                  color: white;
+                  margin-right: 2%;
+                }
+
+                &:last-child {
+                  width: 49%;
+                  height: 50px;
+                  color: rgb(0, 81, 255);
+                  border-color: rgb(0, 81, 255);
+                }
+              }
+            }
+          }
+
+          .formOption {
+            padding: 15%;
+            width: 100%;
+            min-height: 40%;
+            height: auto;
+            padding-left: 2%;
+            .OptionShow {
+              color: gray;
+              font-weight: 500;
+              margin: 1%;
+            }
+            .option {
+              width: 100%;
+              min-height: 50px;
+
+              .formOptionItems {
+                width: 100%;
+                height: auto;
+              }
+
+              .items {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+
+                .item {
+                  width: 90px;
+                  height: 40px;
+                  border: 1px solid $linegray;
+                  margin: 2px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+
+                  &[id="Active"] {
+                    cursor: pointer;
+
+                    &:hover {
+                      border: 2px solid rgb(10, 192, 247);
+                    }
+
+                    &[choose="choosen"] {
+                      border: 1px solid rgb(17, 128, 219);
+                    }
+                  }
+
+                  &[id="UnActive"] {
+                    cursor: no-drop;
+                    border: 1px solid gray;
+                    color: gainsboro;
+
+                    &:hover {
+                      border: 2px solid rgb(0, 43, 56);
+                    }
+
+                    &[choose="choosen"] {
+                      border: 1px solid gray;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // .information {
+      //   // width: 30%;
+      //   max-height: 600px;
+      //   min-width: 200px;
+      //   background-color: white;
+
+      //   .title {
+      //     font-size: 16px;
+      //     font-weight: 800;
+      //   }
+
+      //   .formReview {
+      //     width: 100%;
+      //     height: calc(100% - 50px);
+      //     border: 1px solid darkblue;
+      //   }
+      // }
+    }
+
+    .formDes {
+      width: 60%;
+
+      min-height: 400px;
+      margin: auto;
+      background-color: rgb(254, 254, 254);
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .title {
+        width: 90%;
+        height: 50px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+      }
+
+      .formReview {
+        width: 90%;
+        height: 200px;
+
+        display: flex;
+        .formRating {
+          width: 40%;
+          height: 100%;
+        }
+
+        .formVoteBar {
+          width: 60%;
+          height: 100%;
+          display: flex;
+          // align-items: center;
+          justify-content: start;
+
+          flex-direction: column;
+          // align-items: ;
+          padding-left: 2%;
+        }
+      }
+
+      .formAddRating {
+        width: 90%;
+        height: auto;
+        min-height: 50px;
+        margin-top: 1%;
+        display: flex;
+        align-items: start;
+        flex-direction: column;
+
+        .addComment {
+          width: 100%;
+          height: 0;
+          overflow: hidden;
+          position: relative;
+          border: 1px solid gainsboro;
+          &[id="Active"] {
+            min-height: 300px;
+          }
+          .formInfo {
+            width: 90%;
+            height: 200px;
+            padding-left: 10%;
+            padding-top: 2%;
+
+            .users {
+              width: 40%;
+              height: 40px;
+              display: flex;
+              align-items: center;
+
+              span {
+                &:first-child {
+                  width: 25%;
+                  font-weight: 600;
+                }
+              }
+            }
+            .formRating {
+              width: 50%;
+              height: 50px;
+              display: flex;
+              align-items: center;
+              // span {
+              //   &:first-child {
+              //     width: 25%;
+              //     font-weight: 600;
+              //   }
+              // }
+              .labelRating {
+                width: 25%;
+                font-weight: 600;
+              }
+              :global {
+                .ant-rate {
+                  font-size: 30px;
+                }
+              }
+            }
+            .textAreaCustome {
+              width: 100%;
+              height: 80px;
+              overflow-y: auto;
+              resize: none;
+            }
+
+            .btnSaveComment {
+              width: 100%;
+              height: 80px;
+              display: flex;
+              justify-content: end;
+              align-items: end;
+            }
+          }
+        }
+      }
+    }
+
+    .listCommentUser {
+      width: 100%;
+      min-height: 200px;
+      margin-top: 1%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .formComment {
+        width: 60%;
+        background-color: white;
+        min-height: 100px;
+        overflow-y: auto;
+        max-height: 500px;
+      }
+    }
+  }
+}

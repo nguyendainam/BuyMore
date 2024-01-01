@@ -1,0 +1,31 @@
+@import "../../../assets/style/buton";
+
+.mainView {
+  width: 100vw;
+  height: 100vh;
+  background: url("https://t4.ftcdn.net/jpg/06/22/39/91/360_F_622399137_jlEDsEN0pUMZA6jMKShRoq2po69QBQXj.jpg");
+  object-fit: inherit;
+  mask-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .formMain {
+    width: 40%;
+    height: 40%;
+    background-color: rgba(119, 116, 116, 0.601);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :global {
+    .ant-result-title {
+      color: white;
+      font-size: 25px;
+    }
+    .ant-result-subtitle {
+      color: white;
+    }
+  }
+}

@@ -1,0 +1,27 @@
+$blueColor: #004AAD;
+$linegray: rgb(230, 226, 226);
+$lineblue: #3a8af3;
+$hoverText: #3a8af3;
+$hover: rgb(238, 245, 245);
+$background-dashboard: #F7FAFF;
+$iconColor: #2373dc;
+$iconEdit: #81D8BB;
+$iconDelete: red;
+$iconGreen: #0abd82;
+$iconGreenStr: #045436;
+$bggray:   #f0f0f0;
+$colorTitle: rgb(130, 134, 158) ;
+
+.iconGreen {
+    color: $iconGreen;
+}
+.iconBlue{
+    color: $blueColor;
+}
+.iconRed{
+    color: $iconDelete;
+}
+
+.iconstrongGreen{
+    color: $iconGreenStr;
+}

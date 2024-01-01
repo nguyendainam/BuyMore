@@ -1,0 +1,35 @@
+$color1: #5fdff3; // Màu xanh dương
+$color2: #c5f8f4; // Màu vàng nhạt
+$color3: #e6c8d7; // Màu hồng nhạt
+$color4: #6bfdf3; // Màu xanh lá cây nhạt
+$color5: #ffe3a6; // Màu cam nhạt
+$color6: #11c29f; // Màu xanh lá cây nhạt
+$color7: #f2c9cc; // Màu đỏ hồng nhạt
+
+$color2-pastel: rgba(119, 207, 198, 0.829);
+$color3-pastel: rgba(192, 89, 141, 0.75);
+$color4-pastel: rgba(172, 35, 177, 0.75);
+
+.mainView{
+    width: 90%;
+    height: 90%;
+    background: linear-gradient(45deg, $color2-pastel, $color3-pastel);
+ 
+    display: flex;
+    /* Nếu bạn muốn tất cả các phần tử con cũng phủ hết phần tử .mainView */
+    align-items: stretch;
+    align-items: center;
+    justify-content: center;
+
+    .rank{
+        width: 40%;
+        height: 80%;
+        border: 1px solid white;
+    }
+
+    .chart{
+        width: 50%;
+        height: 80%;
+        border: 1px solid rgb(67, 10, 90);
+    }
+}

@@ -1,0 +1,109 @@
+@import "../../../assets/style/color";
+
+.mainSlide {
+  width: 80%;
+  min-width: 900px;
+  display: grid;
+  grid-template-columns: 75% 25%;
+  padding-left: 2%;
+  padding-right: 2%;
+
+  .itemSlide1 {
+    width: 100%;
+    min-width: 500px;
+    display: flex;
+    position: relative;
+    min-width: 700px;
+
+    :global {
+      .ant-carousel {
+        width: 100%;
+
+        overflow: hidden;
+        .slick-slider {
+          width: 100%;
+          height: 100%; // Set height for the slider
+          overflow: hidden;
+        }
+
+        .slick-list {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+
+          // Set height for the list
+        }
+
+        .slick-track {
+          width: 100%;
+          height: 100%; // Set height for the track
+          display: flex;
+        }
+
+        .slick-slide {
+          width: 100%;
+          height: 100%; // Set height for each slide
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            width: 100% !important;
+            height: 500px;
+            object-fit: cover; // Adjust object-fit as needed
+          }
+        }
+      }
+    }
+  }
+  .itemSlide2 {
+    min-width: 350px;
+    width: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.Featured_categories {
+  width: 85%;
+  min-height: 300px;
+
+  //   background-color: rgb(220, 25, 25);
+  //   padding-top: 1%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: start;
+  padding-left: 2%;
+
+  .itemCat {
+    background-color: white;
+    width: 8%;
+    height: 50%;
+    // border: 1px solid $linegray;
+    margin-top: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    .image {
+      width: 50%;
+      //   height: 50%;
+      object-fit: cover;
+    }
+    .title {
+      font-size: 12px;
+      padding-top: 7%;
+      height: 10%;
+      font-weight: 500;
+    }
+  }
+}

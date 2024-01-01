@@ -1,0 +1,76 @@
+@import "../../../assets/style/buton";
+
+.mainView {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .formView {
+    min-width: 80%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .formSearch {
+      width: 95%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      .search {
+        width: 85%;
+        margin-right: 2%;
+      }
+
+      .addNewUser {
+        width: 15%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      :global {
+        .ant-input-group-wrapper {
+          border-radius: 0px;
+        }
+      }
+    }
+
+    .formTable {
+      width: 95%;
+      height: calc(100% - 50px);
+
+      .imageUser {
+        width: 50px;
+        height: 50px;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+      .formInfor {
+        width: 100px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .formInforAction {
+        font-size: 20px;
+        cursor: pointer;
+
+        .icon {
+          &:first-child {
+            margin-right: 5%;
+            color: rgb(6, 185, 152);
+          }
+          &:last-child {
+            color: red;
+          }
+        }
+      }
+    }
+  }
+}

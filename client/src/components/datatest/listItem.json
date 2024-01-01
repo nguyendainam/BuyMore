@@ -1,0 +1,75 @@
+{
+  "Home": [
+    { "label": "Home 1", "key": 1 },
+    { "label": "Home 2", "key": 1 },
+    { "label": "Home 3", "key": 1 },
+    { "label": "Home 4", "key": 1 },
+    { "label": "Home 5", "key": 1 }
+  ],
+
+  "Shop": [
+    { "label": "Home 6", "key": 1 },
+    { "label": "Home 27", "key": 1 },
+    { "label": "Home 38", "key": 1 },
+    { "label": "Home 49", "key": 1 },
+    { "label": "Home 10", "key": 1 }
+  ],
+
+  "Product": [
+    { "label": "Home 11", "key": 1 },
+    { "label": "Home 12", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 },
+    { "label": "Home 11", "key": 1 },
+    { "label": "Home 12", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 },
+    { "label": "Home 11", "key": 1 },
+    { "label": "Home 12", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 },
+    { "label": "Home 11", "key": 1 },
+    { "label": "Home 12", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 },
+    { "label": "Home 11", "key": 1 },
+    { "label": "Home 12", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 },
+    { "label": "Home 11", "key": 1 },
+    { "label": "Home 12", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 },
+    { "label": "Home 11", "key": 1 },
+    { "label": "Home 12", "key": 1 },
+    { "label": "Home 13", "key": 1 },
+    { "label": "Home 14", "key": 1 },
+    { "label": "Home 15", "key": 1 }
+  ],
+  "Pages": [
+    { "label": "Home 16", "key": 1 },
+    { "label": "Home 27", "key": 1 },
+    { "label": "Home 38", "key": 1 },
+    { "label": "Home 49", "key": 1 },
+    { "label": "Home 50", "key": 1 }
+  ],
+  "Blog": [
+    { "label": "Home 111", "key": 1 },
+    { "label": "Home 222", "key": 1 },
+    { "label": "Home 333", "key": 1 },
+    { "label": "Home 444", "key": 1 },
+    { "label": "Home 555", "key": 1 }
+  ]
+}

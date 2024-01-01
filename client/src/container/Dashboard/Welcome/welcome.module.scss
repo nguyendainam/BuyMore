@@ -1,0 +1,144 @@
+$color1: #5fdff3; // Màu pastel xanh dương
+$color2: #f8e7c5; // Màu pastel vàng nhạt
+$color3: #e6c8d7; // Màu pastel hồng nhạt
+$color4: #c8e5e3; // Màu pastel xanh lá cây nhạt
+$color5: #ffe3a6; // Màu pastel cam nhạt
+$color6: #a0fce9; // Màu pastel xanh lá cây nhạt
+$color7: #f2c9cc; // Màu pastel đỏ hồng nhạt
+.mainFormView {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  max-width: 100vw;
+  padding-left: 10%;
+
+  .topListInformation {
+    min-height: 100px;
+    margin-right: 15%;
+    min-width: 600px;
+    display: grid;
+    grid-template-columns: repeat(
+      4,
+      1fr
+    ); // Sử dụng repeat để tự động chia thành 4 cột
+    gap: 20px; // Thêm khoảng cách giữa các cột
+
+    .tab {
+      width: 100%;
+      min-width: 300px; // Đặt lại giá trị min-width để giảm thiểu xung đột
+      height: 120px;
+      margin: 20px;
+      box-shadow: 2px 5px 5px 5px rgb(231, 231, 231);
+      padding-left: 4%;
+
+      &:first-child {
+        background: linear-gradient(45deg, $color3, $color4);
+        // background: #294c60;
+      }
+
+      &:nth-child(2) {
+        background: linear-gradient(45deg, $color4, $color7);
+      }
+      &:nth-child(3) {
+        background: linear-gradient(45deg, $color2, $color1);
+      }
+      &:last-child {
+        background: linear-gradient(45deg, $color5, $color6);
+      }
+
+      .nametab {
+        width: fit-content;
+        height: 70px;
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: 800;
+        color: rgb(250, 250, 250);
+        text-shadow: 2px 2px 10px rgba(223, 188, 14, 0.5);
+      }
+
+      .statistics {
+        width: 90%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50px;
+        // border: 1px solid saddlebrown;
+        font-weight: 900;
+        display: flex;
+
+        div {
+          &:first-child {
+            width: 15%;
+            height: 100%;
+            color: white;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          &:last-child {
+            width: 90%;
+            height: 100%;
+            color: white;
+            // border: 1px solid;
+            font-size: 30px;
+            display: flex;
+            align-items: start;
+            justify-content: start;
+          }
+        }
+      }
+    }
+  }
+
+  .Chart{
+    width: 90%;
+    height: 350px;
+    display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // border: 1px solid darkblue;
+    // padding-left: 10%;
+
+
+    .formActive {
+      width: 20%;
+      height: 100%;
+      background-color: white;
+    }
+
+    .formChar{
+      width: 50%;
+      min-width: 500px;
+      margin-left: 5%;
+      background-color: white;
+    }
+  }
+
+  .formContent {
+    width: 100%;
+    height: 500px;
+
+    .formTopUser {
+      width: 70%;
+      height: 100%;
+      .title {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      :global {
+        .ant-table {
+          height: 400px; // Set the height to 100% to match the parent's height
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,136 @@
+@import "../../../assets/style/formInput";
+@import "../../../assets/style/buton";
+.mainRegister {
+  width: 100%;
+  height: 100vh;
+  background-image: url("https://img.freepik.com/free-photo/arrangement-black-friday-shopping-carts-with-copy-space_23-2148667047.jpg");
+  object-fit: cover;
+  display: flex;
+  justify-content: center; // Căn giữa theo chiều ngang
+  align-items: center;
+
+  .formRegister {
+    height: 90%;
+    width: 60%;
+    background-color: white;
+    border: 1px solid gray;
+    display: flex;
+
+    .bgRight {
+      width: 60%;
+      height: 100%;
+      background-color: rgb(186, 239, 243);
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    .inputRegister {
+      width: 40%;
+      height: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .formTable {
+        width: 80%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 300px;
+        overflow-y: scroll;
+
+        .formInputReg {
+          width: 100%;
+          height: 50px;
+          border: none;
+          border-bottom: 1px solid gray;
+          border-radius: 0px;
+
+          :checked {
+            border: none;
+          }
+        }
+
+        .formBtn {
+          width: 100%;
+          height: 100px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  // .formLogin {
+  //   width: 600px;
+  //   height: 600px;
+  //   border: 1px solid whitesmoke;
+  //   box-shadow: 0px 0px 3px rgba(0, 0, 0);
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   align-items: center;
+  //   background-color: white;
+  //   padding: 1%;
+
+  //   .formTitle {
+  //     width: 70%;
+  //     height: 40px;
+  //     margin-bottom: 10px;
+  //     display: flex;
+  //     flex-direction: column;
+  //     justify-items: center;
+  //     align-items: center;
+  //     font-weight: 600;
+  //     font-size: 32px;
+  //     color: $blueColor;
+  //     border-bottom-style: dashed;
+  //   }
+  //   .Logincustome {
+  //     width: 100%;
+  //     height: 50%;
+  //     .childItem {
+  //       width: 70%;
+  //       min-height: 70px;
+  //       margin-top: 5%;
+  //       display: flex;
+  //       flex-direction: row;
+  //       align-items: center;
+  //       justify-content: start;
+  //     }
+  //     .childItem2 {
+  //       min-height: 200px;
+  //       height: max-content;
+  //       display: flex;
+
+  //       .left {
+  //         width: 50%;
+  //         height: max-content;
+  //         float: left;
+  //         display: flex;
+  //       }
+  //       .right {
+  //         width: 50%;
+  //         float: right;
+  //         background-color: darkblue;
+  //         height: 100%;
+  //         min-height: 300px;
+  //       }
+  //     }
+  //   }
+  // }
+
+  .formLoading {
+    width: 40%;
+    height: 40%;
+    background-color: rgba(255, 240, 240, 0.53);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

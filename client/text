@@ -1,0 +1,24 @@
+
+  // {interestedProperties.map((property) =>
+  //                   dataOption[property]?.length > 0 ? (
+  //                     <div key={property} className={style.option}>
+  //                       <div>{property}</div>
+  //                       <div className={style.items}>
+  //                         {dataOption[property].map((item) => (
+  //                           <div
+  //                             key={item.value}
+  //                             className={style.item}
+  //                             onClick={() => handleChangeOption(item, property)}
+  //                             // id={getDataItem[property] === item ? 'Active' : undefined}
+  //                           >
+  //                             {
+  //                               selectDrop[property]?.filter(
+  //                                 (i) => i.value === item
+  //                               )[0]?.label
+  //                             }
+  //                           </div>
+  //                         ))}
+  //                       </div>
+  //                     </div>
+  //                   ) : null
+  //                 )} 

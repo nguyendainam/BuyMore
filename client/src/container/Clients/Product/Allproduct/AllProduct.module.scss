@@ -1,0 +1,301 @@
+.mainView {
+  margin-top: 2%;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  //   overflow-y: auto;
+  //   justify-content: center;
+  // min-width: 800px;
+  overflow-x: auto;
+  .content {
+    width: 80%;
+    min-height: 100vh;
+    height: max-content;
+    // background-color: darkblue;
+    display: flex;
+    flex-direction: row;
+
+    .sideMenu {
+      width: 17%;
+      background-color: white;
+      max-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 1%;
+      min-width: 250px;
+      .priceProduct {
+        width: 90%;
+        height: 100px;
+        border-bottom: 1px solid gainsboro;
+        .priceInput {
+          width: 100%;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          .formMoney {
+            width: 140px;
+            height: 40px;
+            border-radius: 0px;
+            // margin: 1px;
+
+            &:last-child {
+              margin-left: 3%;
+            }
+          }
+        }
+
+        .sliderCustom {
+          font-size: 12px;
+        }
+      }
+
+      .formOption {
+        width: 90%;
+        height: auto;
+        font-size: 13px;
+        border-bottom: 1px solid gainsboro;
+        .titleOption {
+          width: b 100%;
+          height: 30px;
+          display: flex;
+          justify-content: space-between;
+          padding: 3%;
+          align-items: center;
+
+          cursor: pointer;
+
+          &[id="Active"] {
+            + .option {
+              height: auto;
+              display: block;
+            }
+          }
+        }
+
+        .option {
+          width: 100%;
+          height: auto;
+          display: none;
+          transition: height 1s ease;
+          display: none;
+          flex-direction: row;
+          flex-wrap: wrap;
+
+          :global {
+            .ant-checkbox-group {
+              width: 100%;
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+              gap: 10px; // Thêm khoảng cách giữa các checkbox
+              // padding: 10px; // Thêm padding để tạo khoảng cách xung quanh
+              // justify-content: space-between;
+              .ant-checkbox-wrapper {
+                // width: calc(60%); // Đảm bảo 3 checkbox mỗi dòng
+                width: auto;
+                min-width: 45%;
+                display: flex;
+                align-items: center;
+
+                // Thêm khoảng cách dưới mỗi checkbox
+              }
+            }
+          }
+        }
+      }
+    }
+    .listProduct {
+      margin-left: 1%;
+      width: 75%;
+
+      .title {
+        width: 100%;
+        height: 50px;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        font-size: 22px;
+        font-weight: bolder;
+        color: rgb(64, 64, 64);
+
+        span {
+          font-size: 16px;
+          margin-left: 5px;
+          font-weight: 300;
+          color: gray;
+        }
+      }
+
+      .Option {
+        font-size: 12px;
+        width: 100%;
+        background-color: white;
+        height: 50px;
+        margin-top: 2px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        min-width: 800px;
+
+        span {
+          &:first-child {
+            font-weight: 600;
+          }
+        }
+        Button {
+          font-size: 12px;
+          width: max-content;
+          height: 40px;
+          border-radius: 0px;
+          margin-left: 1%;
+
+          &[id="Active"] {
+            border: 1px solid rgb(0, 179, 255);
+            color: rgb(0, 179, 255);
+
+            &::after {
+              content: "";
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 0;
+              height: 0;
+              border-style: solid;
+              border-width: 0 25px 25px 0;
+              border-color: transparent rgb(3, 69, 144) transparent transparent;
+            }
+
+            &::before {
+              content: "\2713"; /* Unicode character for checkmark */
+              font-size: 12px; /* Adjust the size as needed */
+              color: white;
+              position: absolute;
+              top: 12%;
+              right: 3px; /* Adjust the right distance as needed */
+              transform: translateY(-50%);
+              z-index: 3;
+              font-weight: 700;
+            }
+          }
+        }
+      }
+
+      .products {
+        width: 100%;
+        max-height: 1000px;
+        background-color: white;
+        margin-top: 1%;
+        display: grid;
+        grid-template-columns: repeat(
+          5,
+          1fr
+        ); /* Updated to use repeat() for flexibility */
+        grid-gap: 0px;
+
+        .item {
+          width: 100%;
+          min-width: 200px;
+          height: 340px;
+          border: 1px solid rgb(247, 247, 247);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+          cursor: pointer;
+          .image {
+            width: 80%;
+            height: 50%;
+            margin-top: 5%;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+
+          .discount {
+            width: 100px;
+            height: 50px;
+            background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA5NiA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iNDAiIHJ4PSI0IiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXIpIiAvPgogIDxtYXNrIGlkPSJtYXNrMCIgbWFzay10eXBlPSJhbHBoYSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9Ijk2IiBoZWlnaHQ9IjQwIj4KICAgIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI0MCIgcng9IjQiIGZpbGw9IndoaXRlIiAvPgogIDwvbWFzaz4KICA8ZyBtYXNrPSJ1cmwoI21hc2swKSI+CiAgICA8cGF0aCBvcGFjaXR5PSIwLjMiCiAgICAgIGQ9Ik03NC4yNDQ2IC05LjAyODY5TDY1Ljg3NjcgOC45MTYyMUw3MC43NzA4IDExLjE5ODNMNjMuOTI0NCAyNS44ODA1TDg0LjQ3MjQgMTEuNjI5M0w3Ny45NDcgOC41ODY0Mkw5MC41NTgxIC0xLjQyMTU2TDc0LjI0NDYgLTkuMDI4NjlaIgogICAgICBmaWxsPSIjMUIxRDI5IiAvPgogIDwvZz4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjM1LjcyMDkiIHkxPSIxLjY2NTQ0ZS0wNiIgeDI9IjU3Ljg4ODYiIHkyPSI0MC4wODczIgogICAgICBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNBQTIwRkYiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzQxM0VGRiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgo8L3N2Zz4=");
+            position: absolute;
+            background-repeat: no-repeat;
+            left: 10%;
+            top: 45%;
+            font-size: 14px;
+            padding-left: 5%;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+
+            span {
+              &:first-child {
+                color: rgb(208, 208, 14);
+              }
+              &:last-child {
+                color: white;
+              }
+            }
+          }
+
+          .brand {
+            width: 90%;
+            margin-top: 4%;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: grey;
+          }
+
+          .nameProduct {
+            width: 90%;
+            font-size: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; // Số dòng tối đa muốn hiển thị
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            // border: 1px solid darkblue;
+            height: 58px;
+          }
+
+          .price {
+            width: 90%;
+            font-weight: bolder;
+            color: #1435c7;
+          }
+          .oldPrice {
+            width: 90%;
+            // font-weight: 500;
+            margin-top: 1%;
+            color: grey;
+            font-style: italic;
+            text-decoration: line-through;
+          }
+        }
+
+        .formEmpty {
+          min-width: 1000px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      .pagination {
+        width: 100%;
+        height: 50px;
+        background-color: white;
+        margin-top: 2%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}

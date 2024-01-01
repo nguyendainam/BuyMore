@@ -1,0 +1,53 @@
+@import "./screen";
+@import "./fontstyle";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --scrollbar-width: 1px; /* Adjust the width as needed */
+  --scrollbar-thumb-color: #46affe;
+  --scrollbar-track-color: #ffffff;
+  overflow-x: hidden;
+
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-width) !important;
+    /* Đặt chiều rộng của thanh cuộn */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color) !important;
+    /* Màu sắc của con trỏ thanh cuộn */
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track-color) !important;
+    /* Màu sắc nền của thanh cuộn */
+  }
+
+  body {
+    font-family: $raleway-font;
+    background-color: #f8f8fc;
+    --webkit-scrollbar-track: white;
+    --scrollbar-width: 0.5px;
+    // overflow-x: auto;
+    @include Reponsive($largeScreen) {
+      border: 1px solid red;
+    }
+
+    @include Reponsive($normalDesktop) {
+      border: 1px solid rgb(238, 255, 0);
+    }
+
+    @include Reponsive($tablet) {
+      border: 1px solid rgb(0, 255, 119);
+    }
+
+    @include Reponsive($mobile) {
+      border: 1px solid rgb(17, 0, 255);
+    }
+  }
+}

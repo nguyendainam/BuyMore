@@ -1,0 +1,29 @@
+@import "./buton";
+
+.modalCustom {
+  // Bạn không cần sử dụng !important nếu bạn sử dụng style thuộc tính trong component React
+
+  // (Optional) Nếu bạn muốn đặt style cho nền overlay
+  :global {
+    .ant-modal-content {
+      width: 660px !important;
+      //   height: 700px;
+    }
+  }
+
+  .fromInforUser {
+    width: 100%;
+    height: 90px;
+    display: flex;
+
+    .item {
+      width: 100%;
+      height: 100%;
+      margin: 2px;
+      border-radius: 0px;
+      .inputForm {
+        height: 30px;
+      }
+    }
+  }
+}

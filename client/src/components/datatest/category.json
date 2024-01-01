@@ -1,0 +1,51 @@
+[
+  {
+    "title": "Computer and desktop",
+    "key": 1,
+    "list": [
+      { "key": 2, "name": "Sony" },
+      { "key": 2, "name": "Sony" },
+      {
+        "key": 3,
+        "name": "Sony",
+        "list": [
+          { "key": 2, "name": "Sony" },
+          { "key": 2, "name": "Sony" }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Laptop & Ipad",
+    "key": 2,
+    "list": []
+  },
+  {
+    "title": "Camera & Photo",
+    "key": 3,
+    "list": []
+  },
+  {
+    "title": "Smartphone & Tablets",
+    "key": 4,
+    "list": []
+  },
+  {
+    "title": "Home & Kitchen",
+    "key": 5,
+    "list": [
+      { "key": 2, "name": "Sony" },
+      { "key": 2, "name": "Sony" },
+      { "key": 2, "name": "Sony" }
+    ]
+  },
+  {
+    "title": "TV & Audios",
+    "key": 6,
+    "list": [
+      { "key": 2, "name": "Sony" },
+      { "key": 2, "name": "Sony" },
+      { "key": 2, "name": "Sony" }
+    ]
+  }
+]

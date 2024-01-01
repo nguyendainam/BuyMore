@@ -1,0 +1,39 @@
+@import "../../../assets/style/fontstyle";
+@import "../../../assets/style/formInput";
+@import "../../../assets/style/buton";
+
+.mainChangeProfile {
+  width: 80%;
+  height: 90%;
+  padding-left: 5%;
+  padding-top: 2%;
+  .formTitlePro {
+    width: 100%;
+    min-height: 70px;
+    // border: 1px solid gainsboro;
+    border-bottom-width: 10px;
+    border-bottom: 1px solid rgb(140, 140, 140);
+  }
+
+  .information {
+    width: 100%;
+    min-height: 300px;
+    margin-top: 1%;
+    .itemInfor {
+      width: 80%;
+      height: 50px;
+      display: grid;
+      grid-template-columns: 15% 35%;
+      align-items: center;
+      margin-top: 1%;
+
+      .des {
+        margin-right: 15%;
+        font-size: 13px;
+        color: grey;
+        display: flex;
+        justify-content: end;
+      }
+    }
+  }
+}
