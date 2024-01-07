@@ -1,5 +1,6 @@
 import { getAllProduct, getProductById } from "../services/product";
 import {
+  getProductByRatingUser,
   handleGetProductReccommend,
   handleGetProductReccommendAfterLogin,
 } from "../services/user";
@@ -133,4 +134,40 @@ export const getProductLoginUser = async () => {
   });
 
   return resultData;
+};
+
+export const getProductByRating = async () => {
+  const result = await getProductByRatingUser();
+  if (result.data.items.length > 0) {
+    const resultData: IProductHomePage[] = result.data.items.map((i) => {
+      const priceInven = i.ProductInventory;
+      const price = JSON.parse(priceInven)[0].Price;
+      const discount = i.Discount;
+      let discountAmount = 0;
+      let priceAfterDiscount = 0;
+      if (i.Discount === 0) {
+        discountAmount = 0;
+        priceAfterDiscount = price;
+      } else {
+        discountAmount = (price * discount) / 100;
+        priceAfterDiscount = price - discountAmount;
+      }
+
+      return {
+        productId: i.Id,
+        brand: i.NameBrand,
+        nameVI: i.NameVI,
+        nameEn: i.NameEN,
+        image: i.Image,
+        price: price,
+        discount: i.Discount,
+        priceAfterDiscount: priceAfterDiscount,
+        savingPrice: discountAmount,
+      };
+    });
+
+    return resultData;
+  } else {
+    return [];
+  }
 };

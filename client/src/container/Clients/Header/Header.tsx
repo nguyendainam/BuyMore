@@ -18,12 +18,9 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { getCurrent, logout } from "../../../redux/action/asyncAction";
-import unidecode from 'unidecode';
+import unidecode from "unidecode";
 // import { extraReducers } from "../../../redux/Slice/userSlice";
-import {
-  LogoutOutlined,
-  UserOutlined
-} from '@ant-design/icons'
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import _ from "lodash";
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -58,16 +55,12 @@ export default function Header() {
   //   // { label: "Contact Us", key: "home", option: false },
   // ];
 
-
-
-
   const [categoryData, setCategoryData] = useState([]);
 
   const handleGetDataCat = async () => {
     const dataCat = await ListItemCategoryHome();
     setCategoryData(dataCat);
   };
-
 
   useEffect(() => {
     handleGetDataCat();
@@ -127,27 +120,25 @@ export default function Header() {
       children:
         item.list.length > 0
           ? item.list?.map((i) => ({
-            label: i.name,
-            key: i.key,
-            children:
-              i.listItem.length > 0
-                ? i.listItem.map((i1) => ({
-                  label: i1.name,
-                  key: i1.keyItem,
-                }))
-                : undefined,
-          }))
+              label: i.name,
+              key: i.key,
+              children:
+                i.listItem.length > 0
+                  ? i.listItem.map((i1) => ({
+                      label: i1.name,
+                      key: i1.keyItem,
+                    }))
+                  : undefined,
+            }))
           : undefined,
     }));
 
     const selectAllProductByTag = (tag: string, key: string) => {
+      const nametag = unidecode(tag);
 
-      const nametag = unidecode(tag)
-
-      const finalSlug = _.replace(nametag, /\s+/g, '-');
-      navigate(`/t/${finalSlug}?key=${key}`)
-
-    }
+      const finalSlug = _.replace(nametag, /\s+/g, "-");
+      navigate(`/t/${finalSlug}?key=${key}`);
+    };
 
     const categoryMenuItems = (
       <Menu className={style.Menu} mode="vertical">
@@ -170,7 +161,12 @@ export default function Header() {
                           <div
                             className={style.itemCat}
                             key={itemchild.key}
-                            onClick={() => selectAllProductByTag(itemchild.label, itemchild.key)}
+                            onClick={() =>
+                              selectAllProductByTag(
+                                itemchild.label,
+                                itemchild.key
+                              )
+                            }
                           >
                             {itemchild.label}
                           </div>
@@ -214,13 +210,13 @@ export default function Header() {
   };
 
   const handleLogin = () => {
-    navigate('/login')
-  }
+    navigate("/login");
+  };
   const handleProfile = () => {
-    navigate('/us/profile')
-  }
+    navigate("/us/profile");
+  };
   const dispatch = useDispatch();
-  const { isLogin, current, msg } = useSelector(state => state.user);
+  const { isLogin, current, msg } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -229,19 +225,15 @@ export default function Header() {
       }
     };
     fetchData();
-
   }, [dispatch, isLogin]);
 
-
   useEffect(() => {
-    if (msg) message.error(msg)
-  }, [msg])
-
+    if (msg) message.error(msg);
+  }, [msg]);
 
   const handleSignout = async () => {
-    await dispatch(logout())
-  }
-
+    await dispatch(logout());
+  };
 
   const information = () => {
     return (
@@ -249,32 +241,30 @@ export default function Header() {
         <div className={style.listOption}>
           <div className={style.item} onClick={handleProfile}>
             Profile
-            <UserOutlined className={style.icon} style={{ color: '#265073' }} />
+            <UserOutlined className={style.icon} style={{ color: "#265073" }} />
           </div>
           <div className={style.item} onClick={handleSignout}>
             Sign Out
-            <LogoutOutlined className={style.icon} style={{ color: 'red' }} />
+            <LogoutOutlined className={style.icon} style={{ color: "red" }} />
           </div>
 
-          {
-            current.RoleId === 'Admin' && (
-              <div className={style.item} onClick={() => navigate('/system')}>
-                SYSTEM MANAGE
-                <MdAdminPanelSettings className={style.icon} style={{ color: 'red' }} />
-              </div>
-            )
-          }
-
+          {current.RoleId === "Admin" && (
+            <div className={style.item} onClick={() => navigate("/system")}>
+              SYSTEM MANAGE
+              <MdAdminPanelSettings
+                className={style.icon}
+                style={{ color: "red" }}
+              />
+            </div>
+          )}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const handleOnpenCart = () => {
-    navigate('/us/cart')
-  }
-
-
+    navigate("/us/cart");
+  };
 
   return (
     <div className={`${style.mainHeader} ${isScrolled ? style.scrolled : ""}`}>
@@ -304,30 +294,31 @@ export default function Header() {
               <BiUser />
             </div>
 
-            {isLogin && current ? (<>
-
-              <Dropdown overlay={information} placement="bottomRight" arrow={{ pointAtCenter: true }}>
-                <Space>
-                  <div className={style.textUser}>{'Wellcome:' + current.UserName}</div>
-                </Space>
-              </Dropdown>
-
-
-            </>) : (
-
+            {isLogin && current ? (
+              <>
+                <Dropdown
+                  overlay={information}
+                  placement="bottomRight"
+                  arrow={{ pointAtCenter: true }}
+                >
+                  <Space>
+                    <div className={style.textUser}>
+                      {"Wellcome:" + current.UserName}
+                    </div>
+                  </Space>
+                </Dropdown>
+              </>
+            ) : (
               <div className={style.centerForm} onClick={handleLogin}>
-                <div className={style.fsmin}  >Login</div>
+                <div className={style.fsmin}>Login</div>
                 <div className="m-2">Account</div>
               </div>
             )}
-
           </div>
 
           <div className={style.iconCart} onClick={handleOnpenCart}>
             <BiSolidCartAlt />
           </div>
-
-
         </div>
       </div>
       <div className={`${style.MenuHeader} ${isScrolled ? style.active : ""}`}>

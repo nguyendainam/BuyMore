@@ -21,7 +21,7 @@ const createProduct = async (product) => {
       }
       const aboutProduct = JSON.parse(product.Product);
 
-      console.log(aboutProduct);
+      // console.log(aboutProduct);
       const imageShow = JSON.parse(product.ImageProduct);
       const listInventory = JSON.parse(product.Inventory);
       const IdProduct = Date.now() + "@" + uuidv4();
@@ -270,6 +270,7 @@ const getAllProductServicesEdit = () => {
   P.Brand_Id,
   P.Type_Product,
   P.Category_Id,
+  P.Discount_Id,
   B.NameBrand,
   P.DescVI,
   P.DescEN,
@@ -278,12 +279,12 @@ const getAllProductServicesEdit = () => {
   (
     SELECT
       PI.*,
-      (
+      ISNULL((
         SELECT II.Image
         FROM Image_Product AS II
         WHERE II.Product_Inventory = PI.Id
         FOR JSON PATH
-      ) AS ImageInventory
+      ), '[]') AS ImageInventory
     FROM Product_Inventory AS PI
     WHERE PI.Id_Product = P.Id
     FOR JSON PATH
@@ -383,8 +384,8 @@ const getAllProductServicesByTags = (key) => {
         JOIN Discount AS D ON D.Id = P.Discount_Id
         JOIN Image_Product as I ON I.Id_Product = P.Id
         WHERE ${keyValues
-          .map((value) => `Category_Id LIKE '%${value}%'`)
-          .join(" OR ")}
+            .map((value) => `Category_Id LIKE '%${value}%'`)
+            .join(" OR ")}
         ORDER BY 
         P.Created DESC;
        
@@ -680,15 +681,241 @@ ORDER BY
     `
       );
 
-      resolve({
-        items: result.recordset,
-      });
     } catch (e) {
       console.log(e);
       reject;
     }
   });
 };
+
+const createNewOptionInEdit = (idProduct) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!idProduct) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        const Id = idProduct
+        const IdInventory = Date.now() + "I@" + uuidv4();
+        const Quantity = 0
+        const Price = 0
+
+        const pool = await connectDB()
+        const result = await pool.request()
+          .input('Id_Product', mssql.VarChar, Id)
+          .input('Id', mssql.VarChar, IdInventory)
+          .input('Quantity', mssql.Int, Quantity)
+          .input('Price', mssql.Int, Price)
+          .query(`INSERT INTO  Product_Inventory (Id_Product , Id ,Quantity ,Price)
+                  SELECT @Id_Product , @Id , @Quantity , @Price
+          `)
+
+        if (result.rowsAffected[0] === 1) {
+          resolve({
+            err: 0,
+            IdInventory: IdInventory
+          })
+        } else {
+          resolve({
+            err: 1,
+            errMessage: 'Create Inventory failed'
+          })
+        }
+
+      }
+    } catch (e) {
+      console.log(e)
+      reject(e)
+    }
+  })
+}
+
+const deleteOptionInEdit = (IdInventory) => {
+
+  console.log(IdInventory)
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!IdInventory) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        const Id = IdInventory
+        const pool = await connectDB()
+        const getImage = await pool.request().input('Id', mssql.VarChar, Id)
+          .query(`SELECT Image FROM  Image_Product WHERE  Product_Inventory = @Id `)
+
+        const deleteItem = await pool.request()
+          .input('Id', mssql.VarChar, Id)
+          .query(`
+            DELETE FROM Image_Product WHERE Product_Inventory = @Id;
+            DELETE FROM Product_Inventory WHERE Id = @Id
+          `);
+
+        // console.log(deleteItem)
+
+
+        if (deleteItem.rowsAffected[1] > 0) {
+          if (getImage.recordset.length > 0) {
+            const listImage = getImage.recordset.map((item) => {
+              const splitImage = item.Image
+              return splitImage
+            })
+            listImage.map((item) => {
+              RemoveImage(item)
+            })
+          }
+          resolve({
+            err: 0,
+            errMessage: 'DeleteItems successful'
+          })
+        } else {
+          resolve({
+            err: 1,
+            errMessage: 'Items is already in cart'
+          })
+        }
+      }
+    } catch (e) {
+      console.log(e)
+      reject(e)
+    }
+  })
+}
+
+export const editProduct = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        // const category_Id = aboutProduct.category.join(",");
+        const dataProduct = await JSON.parse(data.dataProduct)
+
+        console.log("dataProduct", dataProduct)
+
+        const IdProduct = dataProduct.idProduct
+        const nameVI = dataProduct.nameVI
+        const nameEN = dataProduct.nameEN
+        const brandId = dataProduct.brandId
+        const type_Product = dataProduct.category
+        const category_Id = dataProduct.listTag.join(",")
+        const discount = dataProduct.discountId ? dataProduct.discountId : 0
+
+        const pool = await connectDB()
+
+        const saveInforProduct = await pool.request()
+          .input('Id', mssql.VarChar, IdProduct)
+          .input('NameVI', mssql.NVarChar, nameVI)
+          .input('NameEN', mssql.VarChar, nameEN)
+          .input('Brand_Id', mssql.VarChar, brandId)
+          .input('Category_Id', mssql.VarChar, category_Id)
+          .input('Type_Product', mssql.VarChar, type_Product)
+          .input('Discount_Id', mssql.VarChar, discount)
+          .query(`UPDATE Product
+          SET 
+              NameVI = @NameVI,
+              NameEN = @NameEN,
+              Brand_Id = @Brand_Id,
+              Category_Id = @Category_Id,
+              Type_Product = @Type_Product,
+              Discount_Id = @Discount_Id
+          WHERE
+              Id = @Id
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM Product as p
+                  WHERE
+                      p.NameVI = @NameVI
+                      AND p.NameEN = @NameEN
+                      AND p.Brand_Id = @Brand_Id
+                      AND p.Category_Id = @Category_Id
+                      AND p.Type_Product = @Type_Product
+                      AND p.Id <> @Id
+              );`)
+
+        if (saveInforProduct.rowsAffected[0] === 1) {
+          if (data.imageProduct) {
+            const imageBase64 = JSON.parse(data.imageProduct).split(";base64,").pop()
+            const nameImage = data.filename
+
+            const saveImage = await saveImageToFolder(
+              imageBase64,
+              nameImage,
+              "product"
+            );
+            await pool.request().input('Id', mssql.VarChar, IdProduct).query(` UPDATE Image_Product SET Image ='${saveImage}' WHERE Id_Product = @Id  `)
+          }
+
+          const dataOtion = dataProduct.listIventory
+
+          if (dataOtion.length > 0) {
+            dataOtion.map(async (item) => {
+              const Id_Inventory = item.Id;
+              const quantity = item.Quantity || 0;
+              const price = item.Price || 0;
+              const color = item.Color;
+              const size = Array.isArray(item.Size) && item.Size.length > 0 ? item.Size.join(',') : null;
+              const screenSize = Array.isArray(item.screenSize) && item.screenSize.length > 0 ? item.screenSize.join(',') : null;
+              const memory = Array.isArray(item.memory) && item.memory.length > 0 ? item.memory.join(',') : null;
+              const scanFrequency = Array.isArray(item.scanFrequency) && item.scanFrequency.length > 0 ? item.scanFrequency.join(',') : null;
+              const screenType = Array.isArray(item.screenType) && item.screenType.length > 0 ? item.screenType.join(',') : null;
+
+              await pool.request()
+                .input('Id_Product', mssql.VarChar, IdProduct)
+                .input('Id', mssql.VarChar, Id_Inventory)
+                .input('Size', mssql.VarChar, size)
+                .input('Color', mssql.VarChar, color)
+                .input('Quantity', mssql.Int, quantity)
+                .input('Price', mssql.Decimal, price)
+                .input('screenSize', mssql.VarChar, screenSize)
+                .input('memory', mssql.VarChar, memory)
+                .input('scanFrequency', mssql.VarChar, scanFrequency)
+                .input('screenType', mssql.VarChar, screenType)
+                .query(`UPDATE Product_Inventory  
+                        SET 
+                          Size = @Size ,
+                          Color = @Color ,
+                          Quantity = @Quantity ,
+                          Price = @Price ,
+                          screenSize = @screenSize ,
+                          memory = @memory ,
+                          scanFrequency = @scanFrequency ,
+                          screenType = @screenType
+                        WHERE Id_Product = @Id_Product AND Id = @Id
+                `)
+
+
+              // console.log("Update...", updateInventory.rowsAffected)
+            })
+
+
+          }
+          resolve({
+            err: 0,
+            errMessage: 'Update Items successfull'
+          })
+        }
+
+
+
+
+
+
+      }
+
+    } catch (e) {
+      console.log(e)
+      reject(e)
+    }
+  })
+}
 
 export default {
   createProduct,
@@ -703,4 +930,7 @@ export default {
   getProductRatingServices,
   getRankRatingProduct,
   getAllProductServicesEdit,
+  createNewOptionInEdit,
+  deleteOptionInEdit,
+  editProduct
 };

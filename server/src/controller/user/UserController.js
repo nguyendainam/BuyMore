@@ -17,8 +17,9 @@ const comfirmEmail = async (req, res) => {
     return res.status(200).json(result)
 
   } catch (error) {
-    console.log(e)
-    return res.status(400).json(e)
+    console.log(error)
+
+    return res.status(400).json(error)
   }
 }
 
@@ -236,7 +237,7 @@ const ratingProduct = async (req, res) => {
   }
 }
 
-const getAllUserIsActive =async(req,res) => {
+const getAllUserIsActive = async (req, res) => {
   try {
     const result = await UserServices.getTotalUserActive()
     return res.status(200).json(result)
@@ -246,6 +247,25 @@ const getAllUserIsActive =async(req,res) => {
   }
 }
 
+
+const GetInforUserById = async (req, res) => {
+  try {
+    const result = await UserServices.getInforUserById(req.query.idUser)
+    return res.status(200).json(result)
+  } catch (e) {
+    return res.status(400).json(e)
+  }
+}
+
+const getInforAboutOrder = async (req, res) => {
+  try {
+    const result = await UserServices.getInforAboutOrderServices(req.query.key)
+    return res.status(200).json(result)
+
+  } catch (e) {
+    return res.status(400).json(e)
+  }
+}
 
 
 export default {
@@ -267,5 +287,7 @@ export default {
   ChangeStatusOrder,
   ratingProduct,
   comfirmEmail,
-  getAllUserIsActive
+  getAllUserIsActive,
+  GetInforUserById,
+  getInforAboutOrder
 }

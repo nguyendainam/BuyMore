@@ -4,9 +4,11 @@ import {
   getProductLoginUser,
   getProductReccommend,
 } from "../../../../components/GetProduct";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { URL_SERVER_IMG } from "../../../../until/enum";
 import { Image, Pagination } from "antd";
+import { useNavigate } from "react-router-dom";
+import { addProductViewed } from "../../../../redux/Slice/productSlice";
 export default function ReccomendProduct() {
   const { isLogin } = useSelector((state) => state.user);
 
@@ -47,6 +49,14 @@ export default function ReccomendProduct() {
     handleGetListProduct();
   }, [isLogin]);
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const onchangeProduct = (item) => {
+    const id = item.productId;
+    dispatch(addProductViewed({ product: item }));
+    navigate(`d/chi-tiet-san-pham?product=${id}`);
+  };
+
   return (
     <>
       <div className={style.title}>Sản phẩm gợi ý cho bạn</div>
@@ -55,7 +65,7 @@ export default function ReccomendProduct() {
           displayedProducts.map((item) => (
             <div
               className={style.itemProduct}
-              // onClick={() => onchangeProduct(item)}s
+              onClick={() => onchangeProduct(item)}
             >
               <div className={style.formImage}>
                 <Image src={URL_SERVER_IMG + item.image} preview={false} />
@@ -64,7 +74,7 @@ export default function ReccomendProduct() {
                 <div className={style.savingMoney}>
                   <span>Tiết kiệm</span>
                   <span>
-                    {item.savingPrice.toLocaleString().replace(/,/g, ".")}
+                    {item.savingPrice?.toLocaleString().replace(/,/g, ".")}
                   </span>
                 </div>
               ) : (
@@ -75,12 +85,12 @@ export default function ReccomendProduct() {
               <div className={style.formNameProduct}>{item.nameVI}</div>
 
               <div className={style.price}>
-                {item.priceAfterDiscount.toLocaleString().replace(/,/g, ".")}{" "}
+                {item.priceAfterDiscount?.toLocaleString().replace(/,/g, ".")}{" "}
                 <u className={style.iconvnd}>đ</u>{" "}
               </div>
               {item.savingPrice > 0 ? (
                 <div className={style.oldPrice}>
-                  {item.price.toLocaleString().replace(/,/g, ".")} đ
+                  {item.price?.toLocaleString().replace(/,/g, ".")} đ
                 </div>
               ) : (
                 ""

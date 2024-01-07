@@ -1,0 +1,257 @@
+.mainView {
+  width: 100%;
+
+  overflow-x: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 3%;
+  min-width: 900px;
+  .content {
+    width: 80%;
+
+    .aboutOrder {
+      width: 80%;
+      height: 40px;
+      border-bottom: 1px solid gray;
+      border-top: 1px solid gray;
+      display: flex;
+      align-items: center;
+
+      .itemTitle {
+        // width: max-;
+
+        height: 70%;
+        display: flex;
+        align-items: center;
+        margin-right: 1%;
+        padding-right: 2%;
+        padding-left: 2%;
+        border-left: 1px solid gray;
+
+        .item {
+          width: 100px;
+          margin-left: 5px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:first-child {
+            background-color: aqua;
+            color: rgb(7, 112, 151);
+            font-weight: bold;
+          }
+          &:last-child {
+            background-color: rgb(247, 247, 46);
+            color: rgb(152, 152, 5);
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .information {
+      width: 100%;
+      height: auto;
+      display: flex;
+      margin-top: 5%;
+
+      .left {
+        width: 75%;
+
+        .items {
+          width: 100%;
+          min-height: 300px;
+          background-color: white;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .title {
+            width: 95%;
+            height: 50px;
+            border-bottom: 1px solid gainsboro;
+            display: flex;
+            align-items: center;
+            padding-left: 2%;
+            font-weight: bold;
+            font-size: 23px;
+            margin-bottom: 1%;
+          }
+
+          .item {
+            width: 95%;
+            height: 80px;
+            border: 1px solid gainsboro;
+            margin: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .image {
+              // width: 40%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: end;
+              margin-right: 2%;
+              // justify-content:
+              .img {
+                width: 70px;
+                height: 100%;
+                margin-right: 2px;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
+              }
+            }
+
+            .nameProduct {
+              width: 30%;
+              height: 100%;
+              font-size: 13px;
+              font-weight: bold;
+              white-space: normal;
+              display: flex;
+              align-items: center;
+            }
+
+            .quantity {
+              width: 10%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              color: gray;
+            }
+
+            .discount {
+              width: 15%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              color: gray;
+            }
+
+            .afterdiscount {
+              width: 10%;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+
+              .formDiscount {
+                width: 70%;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: rgb(17, 250, 17);
+                color: rgb(1, 103, 1);
+                font-weight: bold;
+              }
+              .price {
+                color: rgb(8, 80, 151);
+                font-weight: bold;
+              }
+            }
+          }
+
+          .formTotal {
+            width: 95%;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .itemTotal {
+              width: 100%;
+              height: 30px;
+              display: flex;
+              justify-content: space-between;
+
+              div {
+                &:first-child {
+                  font-size: 18px;
+                  font-weight: bold;
+                  color: gray;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .right {
+        width: 23%;
+        margin-left: 2%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .inforUser {
+          width: 90%;
+          min-height: 150px;
+          background-color: white;
+          margin-bottom: 7%;
+
+          .aboutCustomer {
+            width: 90%;
+            padding-left: 5%;
+            height: auto;
+            display: flex;
+            align-items: center;
+            padding-top: 5%;
+
+            .avatar {
+              width: 50px;
+              height: 50px;
+              border: 1px solid gainsboro;
+              border-radius: 50%;
+            }
+
+            .usename {
+              width: 100px;
+              margin-left: 5%;
+              font-weight: bold;
+            }
+          }
+
+          .contentContact {
+            width: 100%;
+            height: 45%;
+            padding-left: 5%;
+            // background-color: salmon;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+          }
+        }
+      }
+    }
+  }
+}
+
+.title {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  padding-left: 4%;
+}
+
+.content {
+  width: 90%;
+  margin-left: 5%;
+}

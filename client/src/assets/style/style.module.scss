@@ -35,19 +35,16 @@
     --scrollbar-width: 0.5px;
     // overflow-x: auto;
     @include Reponsive($largeScreen) {
-      border: 1px solid red;
     }
 
     @include Reponsive($normalDesktop) {
-      border: 1px solid rgb(238, 255, 0);
     }
 
     @include Reponsive($tablet) {
-      border: 1px solid rgb(0, 255, 119);
     }
 
     @include Reponsive($mobile) {
-      border: 1px solid rgb(17, 0, 255);
+
     }
   }
 }

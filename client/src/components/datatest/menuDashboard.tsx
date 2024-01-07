@@ -1,4 +1,4 @@
-import {} from "react-icons/fa6";
+import { } from "react-icons/fa6";
 import {
   HomeOutlined,
   AppstoreOutlined,
@@ -133,6 +133,11 @@ export const menuDashboard: IMenuDashboard[] = [
       {
         key: "listOrder",
         label: "Orders",
+      },
+
+      {
+        key: "detailsOrder",
+        label: "Detail Order",
       },
     ],
   },

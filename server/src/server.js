@@ -18,6 +18,7 @@ const app = express()
 
 app.use('/server/Images', express.static(path.join(__dirname, '..', 'Images')))
 
+
 app.use(cors())
 app.use(cookieParser())
 app.use(fileupload({ createParentPath: true }))

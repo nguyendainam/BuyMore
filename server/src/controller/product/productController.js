@@ -109,7 +109,7 @@ const getRatingProduct = async (req, res) => {
     }
 }
 
-const getRatingAllProduct = async (req,res) => {
+const getRatingAllProduct = async (req, res) => {
     try {
         const result = await productServices.getRankRatingProduct()
         return res.status(200).json(result)
@@ -118,8 +118,35 @@ const getRatingAllProduct = async (req,res) => {
     }
 }
 
+const createProductIvenEdit = async (req, res) => {
+    try {
+        const result = await productServices.createNewOptionInEdit(req.query.key)
+        return res.status(200).json(result)
+    } catch (e) {
+        console.log(e)
+        return res.status(400).json(e)
+    }
+}
+
+const deleteProductIvenEdit = async (req, res) => {
+    try {
+        const result = await productServices.deleteOptionInEdit(req.query.key)
+        return res.status(200).json(result)
+    } catch (e) {
+        console.log(e)
+        return res.status(400).json(e)
+    }
+}
 
 
+const updateProduct = async (req, res) => {
+    try {
+        const result = await productServices.editProduct(req.body)
+        return res.status(200).json(result)
+    } catch (e) {
+        return res.status(400).json(e)
+    }
+}
 
 export default {
     createProduct,
@@ -133,5 +160,8 @@ export default {
     getDescriptionPR,
     getRatingProduct,
     getRatingAllProduct,
-    getAllProductDashboard
+    getAllProductDashboard,
+    createProductIvenEdit,
+    deleteProductIvenEdit,
+    updateProduct
 }

@@ -50,19 +50,16 @@ async function getProductbyId(arr) {
 }
 
 const getRecommendationForUser = (user_Id) => {
-
   // console.log("UserId" , user_Id)
 
-
-   const user = user_Id || 'default_user_id';
-    return new Promise(async (resolve, reject) => {
+  const user = user_Id || "default_user_id";
+  return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get(
         `http://127.0.0.1:5000/get_recommendations?user_id=${user}`
       );
 
-      
-        console.log(resolve)
+      console.log(resolve);
 
       if (resolve) {
         const result = await getProductbyId(response.data);
@@ -75,7 +72,7 @@ const getRecommendationForUser = (user_Id) => {
       } else {
         resolve({
           err: 1,
-          items:[]
+          items: [],
         });
       }
 
@@ -83,11 +80,45 @@ const getRecommendationForUser = (user_Id) => {
     } catch (error) {
       // console.log(error);
       resolve({
-        errMessage:'Cannot connect pythonRecommned',
-        items: []
-      })
+        errMessage: "Cannot connect pythonRecommned",
+        items: [],
+      });
     }
   });
 };
 
-export default { getRecommendationForUser };
+const getDataByRating = async (idUser) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!idUser) {
+        resolve({
+          err: -1,
+          errMessage: "Missing data required",
+          items: [],
+        });
+      } else {
+        const response = await axios.get(
+          `http://127.0.0.1:5000/get_recommendations?user_id=${"d00c8643-4fed-4084-8067-8acs13189a2ds"}`
+        );
+
+        if (response) {
+          const result = await getProductbyId(response.data);
+          resolve({
+            err: 0,
+            errMessage: "get data successfull",
+            items: result,
+          });
+        } else {
+          resolve({
+            err: 1,
+            items: [],
+          });
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+export default { getRecommendationForUser, getDataByRating };

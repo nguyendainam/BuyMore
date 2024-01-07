@@ -13,7 +13,7 @@ export const registerUser = (data: FormData) => {
     return axios.post('/registerUser', data)
 }
 
-export const comfirmEmail = (key) => {
+export const comfirmEmail = (key: string) => {
     return axios.get(`/comfirmEmail?key=${key}`)
 }
 
@@ -93,4 +93,12 @@ export const refreshAccessToken = () => {
     return axios.post('/refreshToken', {
         withCredentials: true
     })
+}
+
+export const getInformationUser = (idUser: string) => {
+    return axios.get(`/system/getInforUserById?idUser=${idUser}`)
+}
+
+export const getProductByRatingUser = () => {
+    return axios.get('system/getProductByRating')
 }

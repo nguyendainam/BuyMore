@@ -16,9 +16,10 @@ import moment from "moment";
 import sendEmail from "../../component/formemail.js";
 import { RegisterUser, fomatForgetPassword } from "../../until/formHtml.js";
 import crypto from "crypto";
-import uniqidToken from 'uniqid'
+import uniqidToken from "uniqid";
 
 let RegisterUserService = (data) => {
+  console.log(data);
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.Email | !data.Password) {
@@ -33,7 +34,6 @@ let RegisterUserService = (data) => {
           resolve({
             err: 1,
             errMessage: "Email or Password is not validate",
-
           });
         } else {
           let pool = await connectDB();
@@ -41,12 +41,13 @@ let RegisterUserService = (data) => {
           let UserName = data.UserName;
           let Email = data.Email;
           let Password = await hashUserPassword(data.Password);
-          let RoleId = 'User';
+          let RoleId = "User";
           let Gender = data.Gender;
           let IsActive = false;
           let CreatedAt = new Date();
           let UpdatedAt = new Date();
-          let tokenRegister = uniqidToken() + '###' + new Date().toLocaleString()
+          let tokenRegister =
+            uniqidToken() + "###" + new Date().toLocaleString();
 
           let saveUser = await pool
             .request()
@@ -59,9 +60,7 @@ let RegisterUserService = (data) => {
             .input("IsActive", mssql.Bit, IsActive)
             .input("CreatedAt", mssql.DateTime, CreatedAt)
             .input("UpdatedAt", mssql.DateTime, UpdatedAt)
-            .input("RegisterToken", mssql.VarChar, tokenRegister)
-
-            .query(`
+            .input("RegisterToken", mssql.VarChar, tokenRegister).query(`
                         INSERT INTO Users (UserId, UserName, Password, Email, RoleId, Gender, IsActive, CreatedAt ,UpdatedAt ,RegisterToken)
                         SELECT 
                             @UserId, @UserName, @Password, @Email, @RoleId, @Gender, @IsActive, @CreatedAt,@UpdatedAt, @RegisterToken
@@ -76,25 +75,24 @@ let RegisterUserService = (data) => {
               errMessage: "Create User Success",
             });
 
-
             const originalData = tokenRegister;
             const secretKey = process.env.JWT_SECRET;
-            const cipher = crypto.createCipher('aes-256-cbc', secretKey);
-            let encryptedData = cipher.update(originalData, 'utf-8', 'hex');
-            encryptedData += cipher.final('hex');
+            const cipher = crypto.createCipher("aes-256-cbc", secretKey);
+            let encryptedData = cipher.update(originalData, "utf-8", "hex");
+            encryptedData += cipher.final("hex");
 
-            const html = RegisterUser(encryptedData)
-            await sendEmail(Email, html)
-
+            const html = RegisterUser(encryptedData);
+            await sendEmail(Email, html);
           } else {
             resolve({
-              err: 1,
+              err: 2,
               errMessage: "Create User Failed",
             });
           }
         }
       }
     } catch (e) {
+      console.log(e);
       reject(e);
     }
   });
@@ -285,7 +283,9 @@ const getAllUsers = () => {
   return new Promise(async (resolve, reject) => {
     try {
       const pool = await connectDB();
-      let result = await pool.query(`SELECT * FROM Users WHERE RoleId = 'User' `);
+      let result = await pool.query(
+        `SELECT * FROM Users WHERE RoleId = 'User' `
+      );
       resolve({
         err: 0,
         items: result.recordset,
@@ -532,24 +532,25 @@ const getAllAddressUser = (idUser) => {
       if (!idUser) {
         resolve({
           err: 1,
-          errMessage: 'Missing data required'
-        })
+          errMessage: "Missing data required",
+        });
       } else {
-        const pool = await connectDB()
-        const result = await pool.request()
-          .input('UserID', mssql.VarChar, idUser)
-          .query(`SELECT A.* FROM AddressUser AS A WHERE A.UserID = @UserID `)
+        const pool = await connectDB();
+        const result = await pool
+          .request()
+          .input("UserID", mssql.VarChar, idUser)
+          .query(`SELECT A.* FROM AddressUser AS A WHERE A.UserID = @UserID `);
         resolve({
           err: 0,
-          errMessage: 'Get list address User successfull',
-          items: result.recordset
-        })
+          errMessage: "Get list address User successfull",
+          items: result.recordset,
+        });
       }
     } catch (e) {
-      reject(e)
+      reject(e);
     }
-  })
-}
+  });
+};
 
 const getListOrderByUserServices = (UserId) => {
   return new Promise(async (resolve, reject) => {
@@ -557,13 +558,13 @@ const getListOrderByUserServices = (UserId) => {
       if (!UserId) {
         resolve({
           err: -1,
-          errMessage: 'Missing data required'
-        })
+          errMessage: "Missing data required",
+        });
       } else {
-        const pool = await connectDB()
-        const result = await pool.request()
-          .input('Order_By', mssql.VarChar, UserId)
-          .query(`
+        const pool = await connectDB();
+        const result = await pool
+          .request()
+          .input("Order_By", mssql.VarChar, UserId).query(`
           SELECT 
           O.*, 
           C.*,
@@ -580,7 +581,7 @@ const getListOrderByUserServices = (UserId) => {
           ) AS I ON I.Product_Inventory = C.ProductID
 
           WHERE O.Order_By = @Order_By;   
-          `)
+          `);
 
         /*
         JOIN Product AS P ON P.Id  = C.ProductID
@@ -591,20 +592,19 @@ const getListOrderByUserServices = (UserId) => {
           ) AS I ON I.Product_Inventory = C.ProductID
         */
 
-        console.log(result.recordset)
+        console.log(result.recordset);
 
         resolve({
           err: 0,
-          errMessage: 'Get Data Successfull',
-          items: result.recordset
-        })
+          errMessage: "Get Data Successfull",
+          items: result.recordset,
+        });
       }
     } catch (e) {
-      reject(e)
+      reject(e);
     }
-  })
-}
-
+  });
+};
 
 const updateCartItem = (data, id) => {
   return new Promise(async (resolve, reject) => {
@@ -612,31 +612,32 @@ const updateCartItem = (data, id) => {
       if (!data.key) {
         resolve({
           err: -1,
-          errMessage: 'Missing data required'
-        })
+          errMessage: "Missing data required",
+        });
       } else {
-        const cartId = data.key.split('-')[0]
-        const quantity = data.key.split('-')[1]
+        const cartId = data.key.split("-")[0];
+        const quantity = data.key.split("-")[1];
 
-        const pool = await connectDB()
-        await pool.request().query(`UPDATE  Cart SET  Quantity = '${quantity}' WHERE CartID = '${cartId}' AND UserID = '${id}' `)
+        const pool = await connectDB();
+        await pool
+          .request()
+          .query(
+            `UPDATE  Cart SET  Quantity = '${quantity}' WHERE CartID = '${cartId}' AND UserID = '${id}' `
+          );
         resolve({
-          err: 0
-        })
-
+          err: 0,
+        });
       }
-
-
     } catch (e) {
-      reject(e)
+      reject(e);
     }
-  })
-}
+  });
+};
 
 const GetListOrderAdmin = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const pool = await connectDB()
+      const pool = await connectDB();
       const result = await pool.request().query(`
       SELECT O.*, C.Quantity, U.UserName
       FROM [Eccommerce].[dbo].[Orders] AS O
@@ -647,17 +648,16 @@ const GetListOrderAdmin = () => {
           GROUP BY OrderID
       ) AS C ON O.Id_Order = C.OrderID
       WHERE O.Id_Order IN (SELECT DISTINCT OrderID FROM [Eccommerce].[dbo].[Cart]);
-      `)
+      `);
       resolve({
         err: 0,
-        items: result.recordset
-      })
-
+        items: result.recordset,
+      });
     } catch (e) {
-      reject(e)
+      reject(e);
     }
-  })
-}
+  });
+};
 
 const changeStatusOrder = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -665,26 +665,26 @@ const changeStatusOrder = (data) => {
       if (!data.id || !data.status) {
         resolve({
           err: -1,
-          errMessage: 'Missing data required'
-        })
+          errMessage: "Missing data required",
+        });
       } else {
-        const pool = await connectDB()
-        const result = await pool.request()
-          .input('Id_Order', mssql.VarChar, data.id)
-          .input('StatusOrder', mssql.VarChar, data.status)
-          .query(`UPDATE 
+        const pool = await connectDB();
+        const result = await pool
+          .request()
+          .input("Id_Order", mssql.VarChar, data.id)
+          .input("StatusOrder", mssql.VarChar, data.status).query(`UPDATE 
                   Orders SET StatusOrder = @StatusOrder 
-                  WHERE Id_Order = @Id_Order  `)
+                  WHERE Id_Order = @Id_Order  `);
 
         if (result.rowsAffected[0] === 1) {
           resolve({
             err: 0,
-            errMessage: 'Update successfull'
-          })
-          if (data.status === 'Accepted') {
-            const transaction = await pool.request()
-              .input('Id_Order', mssql.VarChar, data.id)
-              .query(` 
+            errMessage: "Update successfull",
+          });
+          if (data.status === "Accepted") {
+            const transaction = await pool
+              .request()
+              .input("Id_Order", mssql.VarChar, data.id).query(` 
               UPDATE PI
               SET PI.Quantity = PI.Quantity - C.Quantity  
               FROM Product_Inventory AS PI
@@ -692,170 +692,335 @@ const changeStatusOrder = (data) => {
               JOIN Cart AS C ON PI.Id = C.ProductID
               JOIN Orders AS O ON O.Id_Order = C.OrderID
               WHERE O.Id_Order = @Id_Order AND PI.Quantity - C.Quantity >= 0
-            `)
+            `);
           }
         }
       }
     } catch (e) {
-      reject(e)
+      reject(e);
     }
-  })
-}
+  });
+};
 
 export const createRatingProduct = (data, id) => {
-
-  console.log(data)
+  console.log(data);
 
   return new Promise(async (resolve, reject) => {
     try {
       if (!data || !id) {
         resolve({
           err: -1,
-          errMessage: 'Missing data required'
-        })
+          errMessage: "Missing data required",
+        });
       } else {
-        const pool = await connectDB()
-        const idRating = generateRandomString(5)
-        const IdProduct = data.id_Product
-        const IdUser = id
-        const StartRating = data.start
-        const Comment = data.content
-        const date = new Date()
+        const pool = await connectDB();
+        const idRating = generateRandomString(5);
+        const IdProduct = data.id_Product;
+        const IdUser = id;
+        const StartRating = data.start;
+        const Comment = data.content;
+        const date = new Date();
 
-        const resultSaveCmd = await pool.request()
-          .input('Rating_Id', mssql.VarChar, idRating)
-          .input('Id_Product', mssql.VarChar, IdProduct)
-          .input('UserID', mssql.VarChar, IdUser)
-          .input('StartRating', mssql.Int, StartRating)
-          .input('Comment', mssql.NText, Comment)
-          .input('CreatedAt', mssql.DateTime, date)
-          .query(`
+        const resultSaveCmd = await pool
+          .request()
+          .input("Rating_Id", mssql.VarChar, idRating)
+          .input("Id_Product", mssql.VarChar, IdProduct)
+          .input("UserID", mssql.VarChar, IdUser)
+          .input("StartRating", mssql.Int, StartRating)
+          .input("Comment", mssql.NText, Comment)
+          .input("CreatedAt", mssql.DateTime, date).query(`
             INSERT INTO Rating_Product (Rating_Id,Id_Product,UserID,StartRating,Comment,CreatedAt)
             SELECT @Rating_Id, @Id_Product ,@UserID, @StartRating,  @Comment,  @CreatedAt       
             WHERE NOT EXISTS (
               SELECT 1 FROM Rating_Product AS R WHERE R.UserID = @UserID AND R.Id_Product =  @Id_Product
             ) 
-          `)
+          `);
         if (resultSaveCmd.rowsAffected[0] === 1) {
           resolve({
             err: 0,
-            errMessage: 'Create Message success'
-          })
+            errMessage: "Create Message success",
+          });
 
           await pool.request().query(`
                                     UPDATE Product  SET 
                                     totalRating = totalRating + 1 
-                                    WHERE Id = '${IdProduct}'`)
-
+                                    WHERE Id = '${IdProduct}'`);
         } else {
           resolve({
             err: 1,
-            errMessage: 'COmment already exitst'
-          })
-
-
+            errMessage: "COmment already exitst",
+          });
         }
       }
-
-
     } catch (e) {
-      reject(e)
+      reject(e);
     }
-  })
-}
+  });
+};
+
+// export const comfirmEmailRegister = (key) => {
+
+//   console.log("key...." , key)
+//    return new Promise(async (resolve, reject) => {
+//     try {
+//       if (!key) {
+//         resolve({
+//           err: -1,
+//           errMessage: 'Missing data required',
+//         });
+//       } else {
+//         const algorithm = 'aes-256-cbc';
+//         const decipher = crypto.createDecipheriv(
+//           algorithm,
+//           process.env.JWT_SECRET,
+//           Buffer.from(process.env.JWT_SECRET.substring(0, 32))
+//         );
+//         let decryptedData = decipher.update(key, 'hex', 'utf-8');
+//         decryptedData += decipher.final('utf-8');
+
+//         const timeOut = decryptedData.split('###')[1];
+//         const currentTime = new Date();
+//         const timeoutTime = new Date(timeOut);
+//         const timeDifference = (timeoutTime - currentTime) / (1000 * 60);
+
+//         const pool = await connectDB();
+
+//         if (Math.abs(timeDifference) < 15) {
+//           const result = await pool.request().query(`
+//             SELECT Users
+//             WHERE RegisterToken = '${decryptedData}'`);
+//           if (result.rowsAffected[0] === 1) {
+//             resolve({
+//               err: 0,
+//               errMessage: 'Register successful',
+//             });
+//           } else {
+//             resolve({
+//               err: 1,
+//               errMessage: 'Register failed',
+//             });
+//           }
+//         } else {
+//           const result1 = await pool.request().query(`
+//             DELETE FROM Users
+//             WHERE RegisterToken = '${decryptedData}'`);
+//           if (result1.rowsAffected[0] === 1) {
+//             resolve({
+//               err: 0,
+//               errMessage: 'Token expired',
+//             });
+//           } else {
+//             resolve({
+//               err: -1,
+//               errMessage: 'Delete failed',
+//             });
+//           }
+//         }
+//       }
+//     } catch (error) {
+//       console.log(error)
+//       reject(error); // Sửa đổi từ reject(e) thành reject(error)
+//     }
+//   });
+// }
 
 export const comfirmEmailRegister = (key) => {
-
+  console.log("key....", key);
 
   return new Promise(async (resolve, reject) => {
     try {
       if (!key) {
         resolve({
           err: -1,
-          errMessage: 'Missing data required'
-        })
+          errMessage: "Missing data required",
+        });
       } else {
-        const decipher = crypto.createDecipher('aes-256-cbc', process.env.JWT_SECRET);
-        let decryptedData = decipher.update(key, 'hex', 'utf-8');
-        decryptedData += decipher.final('utf-8');
-        const timeOut = decryptedData.split('###')[1]
+        const decipher = crypto.createDecipher(
+          "aes-256-cbc",
+          process.env.JWT_SECRET
+        );
+        let decryptedData = decipher.update(key, "hex", "utf-8");
+        decryptedData += decipher.final("utf-8");
+
+        const timeOut = decryptedData.split("###")[1];
         const currentTime = new Date();
         const timeoutTime = new Date(timeOut);
+
         const timeDifference = (timeoutTime - currentTime) / (1000 * 60);
-        const pool = await connectDB()
+        const pool = await connectDB();
+
         if (Math.abs(timeDifference) < 15) {
           const result = await pool.request().query(`
-          SELECT Users
-          WHERE RegisterToken = '${decryptedData}'`)
+            SELECT * FROM Users 
+            WHERE RegisterToken = '${decryptedData}'`);
           if (result.rowsAffected[0] === 1) {
             resolve({
               err: 0,
-              errMessage: 'Register successfull'
-            })
+              errMessage: "Register successful",
+            });
           } else {
             resolve({
               err: 1,
-              errMessage: 'Register faild'
-            })
+              errMessage: "Register failed",
+            });
           }
         } else {
-          const result1 = await pool.request().query(`DELETE FROM Users  WHERE  RegisterToken = '${decryptedData}' `)
+          const result1 = await pool.request().query(`
+            DELETE FROM Users
+            WHERE RegisterToken = '${decryptedData}'`);
           if (result1.rowsAffected[0] === 1) {
             resolve({
               err: 0,
-              errMessage: 'Token expired'
-            })
+              errMessage: "Token expired",
+            });
           } else {
             resolve({
               err: -1,
-              errMessage: 'Delete fail'
-            })
+              errMessage: "Delete failed",
+            });
           }
-
         }
-
       }
-    } catch (e) {
-      reject(e)
+    } catch (error) {
+      console.log(error);
+      reject(error);
     }
-  })
-}
+  });
+};
 
 const getTotalUserActive = () => {
-  return new Promise(async(resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      const pool = await connectDB()
+      const pool = await connectDB();
       const result = await pool.request().query(`
       SELECT COUNT(*) AS TotalActiveUsers  
       FROM  Users 
       WHERE IsActive = 1 AND RoleId = 'User';
-      `)
+      `);
       const totalUser = await pool.request().query(`
       SELECT COUNT(*) AS TotalUser
       FROM  Users 
-      `)
+      `);
 
       const totalPrice = await pool.request().query(`
       SELECT SUM(TotalPrice) AS TotalOrderPrice ,
       COUNT(*) AS TotalOrders
       FROM Orders;
-      `)
+      `);
 
-    resolve({
-      err: 0 ,
-      activeUsers: result.recordset[0].TotalActiveUsers,
-      totalUsers: totalUser.recordset[0].TotalUser,
-      totalPrice: totalPrice.recordset[0].TotalOrderPrice,
-      TotalOrders : totalPrice.recordset[0].TotalOrders,
-    })
-
+      resolve({
+        err: 0,
+        activeUsers: result.recordset[0].TotalActiveUsers,
+        totalUsers: totalUser.recordset[0].TotalUser,
+        totalPrice: totalPrice.recordset[0].TotalOrderPrice,
+        TotalOrders: totalPrice.recordset[0].TotalOrders,
+      });
     } catch (e) {
-    console.log(e)
-      reject(e)
+      console.log(e);
+      reject(e);
     }
-  })
-}
+  });
+};
 
+const getInforUserById = (idUser) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!idUser) {
+        resolve({
+          err: -1,
+          errMessage: "Missing data required",
+        });
+      } else {
+        const pool = await connectDB();
+        const getListOrder = await pool.request().query(`
+        SELECT O.* ,
+        (
+          SELECT SUM(C.Quantity) AS TotalQuantity
+          FROM Cart AS C
+          WHERE C.OrderID = O.Id_Order
+          FOR JSON PATH
+      ) AS CartList
+        FROM Orders  AS O
+        WHERE  Order_By = '${idUser}'
+        `);
+
+        const getListAddress = await pool.request()
+          .query(`SELECT  * FROM AddressUser
+                  WHERE  UserID = '${idUser}'`);
+        resolve({
+          err: 0,
+          errMessage: "Getdataa successfull",
+          addressUser: getListAddress.recordset,
+          orderUser: getListOrder.recordset,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      reject(e);
+    }
+  });
+};
+
+const getInforAboutOrderServices = (keyOrder) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!keyOrder) {
+        resolve({
+          err: -1,
+          errMessage: "Missing data required",
+        });
+      } else {
+        const pool = await connectDB();
+        const result = await pool.request().query(`
+        SELECT
+        O.*,
+        U.UserName,
+        U.Email,
+        A.PhoneNumber,
+        (
+            SELECT
+                C.ProductID,
+                C.Quantity,
+                C.Price,
+                C.StatusCart,
+                C.Options,
+                C.Discount,
+                D.Discount_Percent,
+                P.NameEN,
+                (
+                    SELECT I.Image
+                    FROM Image_Product AS I
+                    WHERE I.Product_Inventory = C.ProductID
+                    FOR JSON PATH
+                ) AS ListImage
+            FROM
+                Cart AS C
+                JOIN Discount AS D ON D.Id = C.Discount
+                JOIN Product_Inventory AS PI ON PI.Id = C.ProductID
+                JOIN Product AS P ON P.Id = PI.Id_Product
+            WHERE
+                C.OrderID = O.Id_Order
+            FOR JSON PATH
+        ) AS CartList
+    FROM
+        Orders AS O
+        JOIN AddressUser AS A ON A.Id_Address = O.AddressId
+        JOIN Users AS U ON U.UserID = O.Order_By
+    WHERE
+        O.Id_Order = '${keyOrder}';
+        `);
+
+        // console.log('SSS', result)
+        resolve({
+          items: result.recordset,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      reject(e);
+    }
+  });
+};
 
 export default {
   RegisterUserService,
@@ -876,5 +1041,7 @@ export default {
   changeStatusOrder,
   createRatingProduct,
   comfirmEmailRegister,
-  getTotalUserActive
+  getTotalUserActive,
+  getInforUserById,
+  getInforAboutOrderServices,
 };

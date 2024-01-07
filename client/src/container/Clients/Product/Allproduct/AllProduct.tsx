@@ -146,11 +146,11 @@ export default function AllProduct() {
             <div className={style.priceInput}>
               <Input
                 className={style.formMoney}
-                value={funds.start.toLocaleString() + "đ"}
+                value={funds.start?.toLocaleString() + "đ"}
               />
               <Input
                 className={style.formMoney}
-                value={funds.end.toLocaleString() + "đ"}
+                value={funds.end?.toLocaleString() + "đ"}
               />
             </div>
             <Slider
@@ -227,7 +227,7 @@ export default function AllProduct() {
                       <div className={style.discount}>
                         <span>Tiết Kiệm</span>
                         <span>
-                          {item.saveMoney.toLocaleString().replace(/,/g, ".")}
+                          {item.saveMoney?.toLocaleString().replace(/,/g, ".")}
                         </span>
                       </div>
                     ) : (
@@ -242,15 +242,16 @@ export default function AllProduct() {
 
                     <div className={style.price}>
                       {item.priceShow
-                        ? item.priceShow.toLocaleString().replace(/,/g, ".")
+                        ? item.priceShow?.toLocaleString().replace(/,/g, ".")
                         : item.productPrice
-                            .toLocaleString()
+                            ?.toLocaleString()
                             .replace(/,/g, ".")}{" "}
                       <u>đ</u>
                     </div>
                     {item.saveMoney > 0 ? (
                       <div className={style.oldPrice}>
-                        {item.productPrice.toLocaleString().replace(/,/g, ".")}đ
+                        {item.productPrice?.toLocaleString().replace(/,/g, ".")}
+                        đ
                       </div>
                     ) : (
                       ""

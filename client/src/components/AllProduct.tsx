@@ -26,6 +26,7 @@ export interface IItemProduct {
   category?: [];
   type_product?: string;
   totalProduct?: number;
+  discount_id?: string
 }
 
 export const getAllProductByKey = async (key: string) => {
@@ -147,9 +148,6 @@ export const getAllProductDashboard = async () => {
 
 export const getAllProductToEdit = async () => {
   const getdata = await getAllProductToUpdate();
-
-  // console.log(getdata.data.items);
-
   const resultData: IItemProduct[] = getdata.data.items.map((i) => {
     const productEventory = i.ProductInventory;
     const price = JSON.parse(productEventory)[0].Price;
@@ -172,6 +170,7 @@ export const getAllProductToEdit = async () => {
       image: i.Image,
       price: price,
       discount: i.Discount,
+      discount_id: i.Discount_Id,
       priceAfterDiscount: priceAfterDiscount,
       savingPrice: discountAmount,
       category: i.Category_Id.split(","),

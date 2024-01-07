@@ -14,9 +14,7 @@ export default function Comment({ data }) {
                     const randomIndex = Math.floor(Math.random() * pastelColors.length);
                     return pastelColors[randomIndex];
                 };
-
                 const userBackgroundColor = getRandomColor();
-
                 const dateObj = moment(item.Date)
                 const distance = dateObj.fromNow()
 

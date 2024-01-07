@@ -54,12 +54,11 @@ router.get('/system/handleSearchProduct', productController.handleOnSearch)
 router.get('/system/getProductByTags', productController.getProductByTag)
 router.post('/system/createDescription', productController.createDescriptionPR)
 router.get('/system/getDescription', productController.getDescriptionPR)
-
-
 router.get('/system/getRatingProduct', productController.getRatingProduct)
-
-
 router.get('/system/getAllRatingProduct', productController.getRatingAllProduct)
+router.get('/system/createProductIvenEdit', productController.createProductIvenEdit)
+router.get('/system/deleteProductIvenEdit', productController.deleteProductIvenEdit)
+router.post('/system/updateProduct', productController.updateProduct)
 
 //  CRUD UI
 
@@ -67,11 +66,19 @@ router.post('/system/ui/createCarousel', manageUIController.createCarouselImage)
 router.get('/system/ui/getImgCarousel', manageUIController.getCarouselImage)
 
 
+router.post('/system/uploadImage', manageUIController.uploadImageProduct)
+router.post('/system/deleteImage', manageUIController.deleteImageProduct)
 
 //  training data
 
 router.get('/system/createDataTraining', recommendController.createdataToSql)
-router.get('/system/createDataTrainingAfterLogin', verifyAccessToken , recommendController.createdataToSqlHaveAccount)
+router.get('/system/createDataTrainingAfterLogin', verifyAccessToken, recommendController.createdataToSqlHaveAccount)
+router.get('/system/getProductByRating', verifyAccessToken , recommendController.getProductByRating)
+
+
+
+
+
 
 
 export default router

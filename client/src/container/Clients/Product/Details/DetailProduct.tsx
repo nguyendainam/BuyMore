@@ -434,13 +434,13 @@ export default function DetailProduct() {
                           selectedOption.Price -
                           selectedOption.Price * (dataProduct.Discount / 100)
                         )
-                          .toLocaleString()
+                          ?.toLocaleString()
                           .replace(/,/g, ".")}
                         đ
                       </div>
                       <div className={style.befordiscount}>
                         giá cũ:
-                        {selectedOption.Price.toLocaleString().replace(
+                        {selectedOption.Price?.toLocaleString().replace(
                           /,/g,
                           "."
                         )}
@@ -450,7 +450,7 @@ export default function DetailProduct() {
                   ) : (
                     <div className={style.formMoney}>
                       <div className={style.price}>
-                        {selectedOption.Price.toLocaleString().replace(
+                        {selectedOption.Price?.toLocaleString().replace(
                           /,/g,
                           "."
                         )}

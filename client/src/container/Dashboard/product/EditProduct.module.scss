@@ -1,4 +1,4 @@
-  @import "../../../assets/style/formInput";
+@import "../../../assets/style/formInput";
 @import "../../../assets/style/fontstyle";
 @import "../../../assets/style/buton";
 .mainViewDesc {
@@ -18,6 +18,7 @@
     min-width: 800px;
     display: flex;
     flex-direction: column;
+    position: relative;
 
     .formBtnSave {
       width: 100%;
@@ -73,15 +74,47 @@
         }
       }
     }
-.optionProduct {
-  width: 100%;
-  min-height: 300px;
-  background-color: white;
-  margin-top: 2%;
-  display: flex;
-  flex-wrap: wrap;
-}
-    
+    .optionProduct {
+      width: 100%;
+      // min-height: 400px;
+      height: auto;
+      background-color: #fff;
+      margin-top: 2%;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .itemDelete {
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      right: 0;
+      cursor: pointer;
+      font-size: 30px;
+      display: flex;
+      align-items: start;
+      justify-content: end;
+      color: red;
+    }
+
+    .addInventory {
+      width: 100%;
+      height: 50px;
+      margin-top: 2%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icon {
+        width: 50px;
+        height: 100%;
+        font-size: 30px;
+        display: flex;
+        color: rgb(4, 117, 127);
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
   .right {
     width: 25%;
@@ -89,18 +122,18 @@
     height: 100%;
     min-width: 300px;
     .ImageProduct {
-        width: 100%;
-        min-height: 270px;
-        background-color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+      width: 100%;
+      min-height: 270px;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
-        .formUpload{
-          width: 100%;
-          height: 70px;
-        }
+      .formUpload {
+        width: 100%;
+        height: 70px;
       }
+    }
     .otherInformation {
       width: 100%;
       height: 140px;
@@ -108,8 +141,5 @@
       margin-top: 1%;
       border-radius: 5px;
     }
-
   }
 }
-       
-      

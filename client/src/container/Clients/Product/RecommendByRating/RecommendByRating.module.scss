@@ -1,0 +1,133 @@
+@import '../../../../assets/style/color';
+.mainView {
+    width: 70%;
+    margin-top: 2%;
+
+    .title{
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding-left: 5%;
+        font-weight: bold;
+    }
+
+    .products{
+            width: 100%;
+            height: auto;
+            display: grid;
+            grid-template-columns:
+                calc(20%) calc(20%) calc(20%) calc(20%) calc(20%);
+            align-items: center;
+            justify-content: center;
+            padding: 2px 0;
+            min-width: 900px;
+            background-color: #fff;
+
+        .itemProduct {
+                min-width: 250px;
+                width: 100%;
+                height: 400px;
+                border: 1px solid gainsboro;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                // justify-content: center;
+                position: relative;
+                background-color: white;
+                border:1px solid;
+        
+                cursor: pointer;
+        
+                .formImage {
+                    width: 80%;
+                    height: 50%;
+                    object-fit: contain;
+                    margin-top: 2%;
+        
+                    :global {
+                        .ant-image {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+        
+                        .ant-image-img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
+        
+                .savingMoney {
+                    width: 120px;
+                    height: 50px;
+                    background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA5NiA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iNDAiIHJ4PSI0IiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXIpIiAvPgogIDxtYXNrIGlkPSJtYXNrMCIgbWFzay10eXBlPSJhbHBoYSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9Ijk2IiBoZWlnaHQ9IjQwIj4KICAgIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI0MCIgcng9IjQiIGZpbGw9IndoaXRlIiAvPgogIDwvbWFzaz4KICA8ZyBtYXNrPSJ1cmwoI21hc2swKSI+CiAgICA8cGF0aCBvcGFjaXR5PSIwLjMiCiAgICAgIGQ9Ik03NC4yNDQ2IC05LjAyODY5TDY1Ljg3NjcgOC45MTYyMUw3MC43NzA4IDExLjE5ODNMNjMuOTI0NCAyNS44ODA1TDg0LjQ3MjQgMTEuNjI5M0w3Ny45NDcgOC41ODY0Mkw5MC41NTgxIC0xLjQyMTU2TDc0LjI0NDYgLTkuMDI4NjlaIgogICAgICBmaWxsPSIjMUIxRDI5IiAvPgogIDwvZz4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhciIgeDE9IjM1LjcyMDkiIHkxPSIxLjY2NTQ0ZS0wNiIgeDI9IjU3Ljg4ODYiIHkyPSI0MC4wODczIgogICAgICBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNBQTIwRkYiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzQxM0VGRiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgo8L3N2Zz4=");
+                    position: absolute;
+                    background-repeat: no-repeat;
+                    left: 10%;
+                    top: 45%;
+                    font-size: 14px;
+                    padding-left: 5%;
+                    font-weight: 600;
+                    display: flex;
+                    flex-direction: column;
+        
+                    span {
+                        &:first-child {
+                            color: rgb(208, 208, 14);
+                        }
+        
+                        &:last-child {
+                            color: white;
+                        }
+                    }
+                }
+        
+                .brands {
+                    width: 90%;
+                    height: 30px;
+                    display: flex;
+                    align-items: start;
+                    justify-content: start;
+                    font-weight: 600;
+                    color: $colorTitle;
+                    // position: absolute;
+                    margin-top: 10%;
+                    // margin-right: 50%;
+                    font-size: 17px;
+                }
+        
+                .formNameProduct {
+                    width: 90%;
+                    font-size: 14px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3; // Số dòng tối đa muốn hiển thị
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    // border: 1px solid darkblue;
+                    height: 58px;
+                }
+        
+                .price {
+                    width: 90%;
+                    height: 30px;
+                    font-weight: 700;
+                    color: #2a35c3;
+        
+                    .iconvnd {
+                        font-size: 14px;
+                    }
+                }
+        
+                .oldPrice {
+                    width: 90%;
+                    margin-top: 1%;
+                    color: grey;
+                    font-style: italic;
+                    text-decoration: line-through;
+                }
+            }
+    }
+}

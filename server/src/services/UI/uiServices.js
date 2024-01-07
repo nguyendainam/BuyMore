@@ -16,7 +16,6 @@ const createCarouserServices = async (data) => {
           const pool = await connectDB();
           const isShow = 1;
 
-
           arrImage.map(async (img) => {
             const nameImage = img.name;
             const base64ImagePr = img.thumbUrl.split(";base64,").pop();
@@ -116,7 +115,101 @@ const getCarouselImageService = (key) => {
     }
   });
 };
+
+
+const uploadImageServices = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        const imageBase64 = data.image.split(";base64,").pop()
+        const nameImage = data.nameImage
+        const type = data.type
+        const idProduct = data.idProduct
+
+        console.log(idProduct)
+        console.log(type)
+        const pool = await connectDB()
+        const saveImage = await saveImageToFolder(
+          imageBase64,
+          nameImage,
+          "product"
+        );
+        console.log(saveImage)
+        if (saveImage) {
+          const result = await pool.request()
+            .input('TypeImage', mssql.VarChar, type)
+            .input('Image', mssql.VarChar, saveImage)
+            .input('Product_Inventory', mssql.VarChar, idProduct)
+            .query(`INSERT INTO Image_Product (TypeImage,Image,Product_Inventory)
+                  SELECT @TypeImage ,@Image ,@Product_Inventory
+            `)
+          if (result.rowsAffected[0] === 1) {
+            resolve({
+              err: 0,
+              filename: saveImage
+            })
+          } else {
+            resolve({
+              err: 1,
+              errMessage: 'Create data failed'
+            })
+          }
+        }
+      }
+    } catch (e) {
+      console.log(e)
+      reject(e)
+    }
+
+
+
+  })
+}
+
+
+
+const removeImageServices = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        const pool = await connectDB()
+        if (data.type === 'Inventory_Product') {
+          const image = data.image
+          const id = data.idProduct
+          // const filenameImage = image.split('/')[2]
+
+          // console.log(filenameImage)
+          const result = await pool.request().query(`DELETE FROM Image_Product WHERE  Image = '${image}' AND Product_Inventory = '${id}' `)
+          if (result.rowsAffected[0] === 1) {
+            resolve({
+              err: 0,
+              errMessage: 'Delete Image success'
+            })
+            await RemoveImage(image)
+          }
+
+        }
+      }
+    } catch (e) {
+      console.log(e)
+      reject(e)
+    }
+  })
+}
+
 export default {
   createCarouserServices,
   getCarouselImageService,
+  uploadImageServices,
+  removeImageServices
 };

@@ -69,7 +69,6 @@ export default function ListUser() {
 
                         <Column title='Is Active' dataIndex={'Active'}
                             render={(value, record) => {
-                                console.log('record', record)
                                 return (
                                     <div className={style.formInfor} >{record.Active === true ? 'True' : 'False'}</div>
                                 )
@@ -78,7 +77,6 @@ export default function ListUser() {
 
                         <Column title='Action'
                             render={(value, record) => {
-                                console.log('record', record)
                                 return (
                                     <div className={style.formInforAction} >
                                         < AiOutlineForm className={style.icon} />

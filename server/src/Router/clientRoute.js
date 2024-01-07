@@ -27,11 +27,12 @@ router.post('/api/ratingProduct', verifyAccessToken, UserController.ratingProduc
 router.get('/system/getUsers', verifyAccessToken, isAdmin, UserController.getUsers)
 router.get('/system/deleteUser', verifyAccessToken, isAdmin, UserController.DeleteUser)
 router.get('/system/getAllListOrder', verifyAccessToken, isAdmin, UserController.GetListOrder)
+router.get('/system/getInforUserById', verifyAccessToken, isAdmin, UserController.GetInforUserById)
 router.post('/system/changeStatusItem', verifyAccessToken, isAdmin, UserController.ChangeStatusOrder)
 
 
 
-
+router.get('/system/getInforAboutOrder', UserController.getInforAboutOrder)
 
 // 
 router.post('/addToCart', verifyAccessToken, UserController.CreateNewCart)
@@ -39,12 +40,11 @@ router.post('/order/createNewOrder', verifyAccessToken, OrderController.CreateNe
 router.get('/getAllItemInCart', verifyAccessToken, UserController.getItemInCart)
 router.get('/getUpdateItemCart', verifyAccessToken, UserController.updateItemCart)
 router.get('/getOrderByUser', verifyAccessToken, UserController.getListOrderByUser)
-
-router.get('/system/getTotalUserActive' , UserController.getAllUserIsActive)
+router.get('/system/getTotalUserActive', UserController.getAllUserIsActive)
 
 
 // 
-router.get('/api/reccommendProduct' , recommendController.getDataTraining)
+router.get('/api/reccommendProduct', recommendController.getDataTraining)
 
 
 

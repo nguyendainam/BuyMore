@@ -86,7 +86,7 @@ export const handleGetRatingProduct = async (key: string) => {
 }
 
 export const getTopProductRating = async () => {
-  return  axios.get(`/system/getAllRatingProduct`)
+  return axios.get(`/system/getAllRatingProduct`)
 }
 
 
@@ -121,5 +121,31 @@ export const getImageCarousel = async (key: string) => {
 
 
 export const getAllProductToUpdate = async () => {
-    return await axios.get(`/system/getAllProductDashboad`)
+  return await axios.get(`/system/getAllProductDashboad`)
+}
+
+
+export const uploadImageSingleToServer = async (data: FormData) => {
+  return await axios.post(`/system/uploadImage`, data)
+}
+
+export const deleteImage = async (data: FormData) => {
+  return await axios.post('/system/deleteImage', data)
+}
+
+export const addOptionProductEdit = async (key: string) => {
+  return await axios.get(`/system/createProductIvenEdit?key=${key}`)
+}
+
+
+export const deleteOptionProductEdit = async (key: string) => {
+  return await axios.get(`/system/deleteProductIvenEdit?key=${key}`)
+}
+
+export const updateProduct = async (data: FormData) => {
+  return await axios.post(`/system/updateProduct`, data)
+}
+
+export const getOrderDetails = async (key: string) => {
+  return await axios.get(`/system/getInforAboutOrder?key=${key}`)
 }

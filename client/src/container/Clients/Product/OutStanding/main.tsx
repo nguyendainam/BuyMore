@@ -44,7 +44,7 @@ export const OutStanding: React.FC = () => {
                 <div className={style.savingMoney}>
                   <span>Tiết kiệm </span>
                   <span>
-                    {item.saveMoney.toLocaleString().replace(/,/g, ".")}
+                    {item.saveMoney?.toLocaleString().replace(/,/g, ".")}
                   </span>
                 </div>
               ) : (
@@ -55,12 +55,12 @@ export const OutStanding: React.FC = () => {
               <div className={style.formNameProduct}>{item.nameVI}</div>
 
               <div className={style.price}>
-                {item.priceShow.toLocaleString().replace(/,/g, ".")}{" "}
+                {item.priceShow?.toLocaleString().replace(/,/g, ".")}{" "}
                 <u className={style.iconvnd}>đ</u>
               </div>
               {item.saveMoney > 0 ? (
                 <div className={style.oldPrice}>
-                  {item.productPrice.toLocaleString().replace(/,/g, ".")} đ
+                  {item.productPrice?.toLocaleString().replace(/,/g, ".")} đ
                 </div>
               ) : (
                 ""

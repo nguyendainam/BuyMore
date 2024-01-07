@@ -5,10 +5,11 @@ import {
   IProductHomePage,
 } from "../../../../components/GetProduct";
 import { URL_SERVER_IMG } from "../../../../until/enum";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import { Image } from "antd";
+import { addProductViewed } from "../../../../redux/Slice/productSlice";
 
 export default function Featured() {
   const [dataProduct, setDataProduct] = useState<IProductHomePage[]>([]);
@@ -19,8 +20,10 @@ export default function Featured() {
   };
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onchangeProduct = (item) => {
     const id = item.productId;
+    dispatch(addProductViewed({ product: item }));
     navigate(`d/chi-tiet-san-pham?product=${id}`);
   };
 
@@ -51,7 +54,7 @@ export default function Featured() {
                 <div className={style.savingMoney}>
                   <span>Tiết kiệm</span>
                   <span>
-                    {item.savingPrice.toLocaleString().replace(/,/g, ".")}
+                    {item.savingPrice?.toLocaleString().replace(/,/g, ".")}
                   </span>
                 </div>
               ) : (
@@ -62,12 +65,12 @@ export default function Featured() {
               <div className={style.formNameProduct}>{item.nameVI}</div>
 
               <div className={style.price}>
-                {item.priceAfterDiscount.toLocaleString().replace(/,/g, ".")}{" "}
+                {item.priceAfterDiscount?.toLocaleString().replace(/,/g, ".")}{" "}
                 <u className={style.iconvnd}>đ</u>{" "}
               </div>
               {item.savingPrice > 0 ? (
                 <div className={style.oldPrice}>
-                  {item.price.toLocaleString().replace(/,/g, ".")} đ
+                  {item.price?.toLocaleString().replace(/,/g, ".")} đ
                 </div>
               ) : (
                 ""

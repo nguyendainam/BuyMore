@@ -86,11 +86,11 @@ export function ViewedProduct() {
               <div className={styles.brand}>{item.brand}</div>
               <div className={styles.name}>{item.nameVI}</div>
               <div className={styles.price}>
-                {item.priceShow.toLocaleString()} <u>đ</u>
+                {item.priceShow?.toLocaleString()} <u>đ</u>
               </div>
               {item.discount > 0 ? (
                 <div className={styles.oldPrice}>
-                  {item.productPrice.toLocaleString()} <i>đ</i>
+                  {item.productPrice?.toLocaleString()} <i>đ</i>
                 </div>
               ) : (
                 ""
