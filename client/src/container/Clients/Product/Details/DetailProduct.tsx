@@ -16,6 +16,11 @@ import { ratingProduct } from "../../../../services/user";
 import { getDataInforProduct } from "../../../../components/getInforCommentProduct";
 import { RelatedProduct } from "./RalatedProduct";
 
+import ReactHtmlParser from "react-html-parser";
+import ModalContentProduct from "../../../../components/ModalAboutProduct";
+import ModalDetails from "../../../../components/ModalDetails";
+import { useTranslation } from "react-i18next";
+
 interface IProduct {
   nameProduct: string;
   description: string;
@@ -23,7 +28,7 @@ interface IProduct {
 }
 export default function DetailProduct() {
   const idProduct = useLocation().search.split("?product=")[1];
-
+  const { t } = useTranslation();
   const interestedProperties = [
     "Color",
     "Size",
@@ -38,6 +43,7 @@ export default function DetailProduct() {
   const [optionProduct, setOptionProduct] = useState([]);
   const [optionTypeColor, setOptionTypeColor] = useState([]);
   const [listImageProduct, setListImageProduct] = useState([]);
+
   const [dataComment, setDataComment] = useState({
     rating: "",
     content: "",
@@ -45,6 +51,7 @@ export default function DetailProduct() {
   const [isOpenComment, setOpenComment] = useState<boolean>(false);
   const getInformation = async () => {
     const dataProduct = await inforProductById(idProduct);
+
     const listItems = JSON.parse(dataProduct.ListItems);
 
     setProductInventory(listItems);
@@ -82,6 +89,10 @@ export default function DetailProduct() {
     handleSelectedOption(listItems[0]);
     setOptionTypeColor(filteredObject);
   };
+
+  useEffect(() => {
+    getInformation();
+  }, [idProduct]);
 
   const handleChangeOption = (item, options, e) => {
     const IsActive = e.target.id;
@@ -156,8 +167,11 @@ export default function DetailProduct() {
           [options]: item,
         }));
       }
-    } else if (IsActive === "UnActive") {
+
+      handleChangeNewListImage(options, item);
     }
+
+    //  change Image.....
   };
 
   const [selectedOption, setSelectedOption] = useState({
@@ -252,6 +266,26 @@ export default function DetailProduct() {
     }
   };
 
+  const handleChangeNewListImage = (option, value) => {
+    // console.log(option, value)
+    // console.log("productInventory", productInventory)
+    const result = productInventory.filter((item) => {
+      const result = item[option]?.split(",").map((i) => i.trim());
+      return result.includes(value);
+    });
+
+    // console.log("result....", result)
+
+    // console.log("result ", result)
+
+    if (result[0]?.ListImage.length > 0) {
+      const compareList =
+        JSON.stringify(listImageProduct) ===
+        JSON.stringify(result[0].ListImage);
+      if (compareList === false) handleSelectImage(result[0].ListImage);
+    }
+  };
+
   const [isCommentPr, setIsCommentPr] = useState({
     ListComment: [],
     averageStars: 0,
@@ -276,7 +310,7 @@ export default function DetailProduct() {
   useEffect(() => {
     getInformation();
     handleGetCommendProduct();
-  }, []);
+  }, [idProduct]);
 
   const selectorLng = useSelector((state) => state?.system.language);
   const { isLogin, current } = useSelector((state) => state.user);
@@ -294,14 +328,16 @@ export default function DetailProduct() {
         scanFrequency: selectedOption.scanFrequency,
         screenSize: selectedOption.screenSize,
         screenType: selectedOption.screenType,
+        discount: dataProduct.Discount_Id,
       };
 
       const saveProduct = await AddproductToCard(dataSend);
       if (saveProduct.data.err === 0) {
-        message.success("Add Product To cart Successfull");
+        message.success(t("addCartSuccess"));
       }
-    } else if (isLogin === false && !current) {
-      message.error("Vui lòng đăng nhập");
+      // console.log(dataSend)
+    } else if (isLogin === false) {
+      message.error(t("plsLogin"));
     }
   };
 
@@ -318,15 +354,16 @@ export default function DetailProduct() {
         scanFrequency: selectedOption.scanFrequency,
         screenSize: selectedOption.screenSize,
         screenType: selectedOption.screenType,
+        discount: dataProduct.Discount_Id,
       };
 
       const saveProduct = await AddproductToCard(dataSend);
       if (saveProduct.data.err === 0) {
-        message.success("Add Product To cart Successfull");
+        message.success(t("addCartSuccess"));
         navigate("/us/cart");
       }
-    } else if (isLogin === false && !current) {
-      message.error("Vui lòng đăng nhập");
+    } else if (isLogin === false) {
+      message.error(t("plsLogin"));
     }
   };
 
@@ -343,7 +380,7 @@ export default function DetailProduct() {
 
   const handleAddComment = async () => {
     if (isLogin === false) {
-      message.error("Vui lòng đăng nhập");
+      message.error(t("plsLogin"));
     } else {
       const formdata = new FormData();
       formdata.append("id_Product", idProduct);
@@ -352,203 +389,241 @@ export default function DetailProduct() {
 
       const result = await ratingProduct(formdata);
       if (result.data.err === 0) {
-        message.success("Create comment Success");
+        message.success(t("addCmt"));
         handleGetCommendProduct();
       } else {
-        message.error("Bạn đã đánh giá sản phẩm này rồi");
+        message.error(t("addCmtFailed"));
       }
     }
   };
 
   // console.log(dataProduct);
 
+  const HtmlContent = (htmlString) => {
+    const transform = (node, index) => {
+      if (node.type === "tag" && node.name === "button") {
+        return <button key={index}>{node.children[0].data}</button>;
+      }
+    };
+
+    return <div>{ReactHtmlParser(htmlString, { transform })}</div>;
+  };
+
+  const [isOpenModalContent, setIsOpenModalContent] = useState(false);
+  const [isOpenConfigs, setIsOpenConfigs] = useState(false);
+
+  const handleOpenOrCloseModal = () => {
+    setIsOpenModalContent(!isOpenModalContent);
+  };
+
+  const handleOpenModalConfig = () => {
+    setIsOpenConfigs(!isOpenConfigs);
+  };
+
   return (
-    <div className={style.mainFormDetail}>
-      <div className={style.formProduct}>
-        <div className={style.productItems}>
-          <div className={style.Product}>
-            <div className={style.leftProduct}>
-              <div className={style.Image}>
-                <div className={style.mainImg}>
-                  <Image
-                    src={URL_SERVER_IMG + mainImage}
-                    width={300}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
+    <div className={style.DetailsView}>
+      <div className={style.mainFormDetail}>
+        <div className={style.formProduct}>
+          <div className={style.productItems}>
+            <div className={style.Product}>
+              <div className={style.leftProduct}>
+                <div className={style.Image}>
+                  <div className={style.mainImg}>
+                    <Image
+                      src={URL_SERVER_IMG + mainImage}
+                      width={300}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
+                  <div className={style.itemChild}>
+                    {listImageProduct?.length &&
+                      listImageProduct.map((item) => (
+                        <div
+                          className={style.item}
+                          onClick={() => handleSetImage(item.Image)}
+                        >
+                          <img
+                            src={URL_SERVER_IMG + item.Image}
+                            style={{ width: "90%", height: "90%" }}
+                          />
+                        </div>
+                      ))}
+                  </div>
                 </div>
-                <div className={style.itemChild}>
-                  {listImageProduct?.length &&
-                    listImageProduct.map((item) => (
-                      <div
-                        className={style.item}
-                        onClick={() => handleSetImage(item.Image)}
-                      >
-                        <img
-                          src={URL_SERVER_IMG + item.Image}
-                          style={{ width: "90%", height: "90%" }}
-                        />
-                      </div>
-                    ))}
+                <div className={style.aboutProduct}>
+                  {HtmlContent(
+                    selectorLng === "vi"
+                      ? dataProduct.DescVI
+                      : dataProduct.DescEN
+                  )}
                 </div>
               </div>
-              <div className={style.aboutProduct}>
-                {`
-- CPU: Intel Core i7-12700H
-- Màn hình: 15.6" IPS (1920 x 1080),144Hz
-- RAM: 1 x 8GB DDR4 3200MHz
-- Đồ họa: RTX 3050Ti 4GB GDDR6 | Intel Iris Xe Graphics
-- Lưu trữ: 512GB SSD M.2 NVMe /
-- Hệ điều hành: Windows 11 Home
-- Pin: 4 cell 57 Wh
-- Khối lượng: 2.5kg
-- Chuẩn Non-EVO
-              `}
+              <div className={style.rightProduct}>
+                <div className={style.formTitle}>
+                  <div className={style.nameProduct}>
+                    {selectorLng === "vi"
+                      ? dataProduct.NameVI
+                      : dataProduct.NameEN}
+                  </div>
+
+                  <div className={style.nameBrand}>
+                    {selectorLng === "vi" ? (
+                      <span className={style.fontTilte}>Thương Hiệu: </span>
+                    ) : (
+                      <span className={style.fontTilte}>Brand: </span>
+                    )}
+                    {dataProduct.NameBrand}
+                  </div>
+
+                  <div className={style.priceProduct}>
+                    {dataProduct.Discount > 0 ? (
+                      <div className={style.formMoney}>
+                        <div className={style.price}>
+                          {(
+                            selectedOption.Price -
+                            selectedOption.Price * (dataProduct.Discount / 100)
+                          )
+                            ?.toLocaleString()
+                            .replace(/,/g, ".")}
+                          đ
+                        </div>
+                        <div className={style.befordiscount}>
+                          {t("oldPrice")}
+                          {selectedOption.Price?.toLocaleString().replace(
+                            /,/g,
+                            "."
+                          )}
+                          đ
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={style.formMoney}>
+                        <div className={style.price}>
+                          {selectedOption.Price?.toLocaleString().replace(
+                            /,/g,
+                            "."
+                          )}
+                          đ
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {/* <div className={style.quantity} ><span>Số Lượng </span><Input addonBefore="+" addonAfter="-" type="number" min={1} /> </div> */}
+
+                  <div className={style.fromButton}>
+                    <Button onClick={handleBuyProduct}>{t("buy")}</Button>
+                    <Button onClick={handleAddToCart}>{t("addCart")}</Button>
+                  </div>
+                </div>
+                <div className={style.formOption}>
+                  <div className={style.option}>
+                    {getOptionProduct(optionProduct)}
+                  </div>
+                </div>
               </div>
             </div>
-            <div className={style.rightProduct}>
-              <div className={style.formTitle}>
-                <div className={style.nameProduct}>
-                  {selectorLng === "vi"
-                    ? dataProduct.NameVI
-                    : dataProduct.NameEN}
-                </div>
 
-                <div className={style.nameBrand}>
-                  {selectorLng === "vi" ? (
-                    <span className={style.fontTilte}>Thương Hiệu: </span>
-                  ) : (
-                    <span className={style.fontTilte}>Thương Hiệu: </span>
-                  )}
-                  {dataProduct.NameBrand}
-                </div>
+            <div className={style.information}></div>
+          </div>
 
-                <div className={style.priceProduct}>
-                  {dataProduct.Discount > 0 ? (
-                    <div className={style.formMoney}>
-                      <div className={style.price}>
-                        {(
-                          selectedOption.Price -
-                          selectedOption.Price * (dataProduct.Discount / 100)
-                        )
-                          ?.toLocaleString()
-                          .replace(/,/g, ".")}
-                        đ
-                      </div>
-                      <div className={style.befordiscount}>
-                        giá cũ:
-                        {selectedOption.Price?.toLocaleString().replace(
-                          /,/g,
-                          "."
-                        )}
-                        đ
-                      </div>
-                    </div>
-                  ) : (
-                    <div className={style.formMoney}>
-                      <div className={style.price}>
-                        {selectedOption.Price?.toLocaleString().replace(
-                          /,/g,
-                          "."
-                        )}
-                        đ
-                      </div>
-                    </div>
-                  )}
-                </div>
-                {/* <div className={style.quantity} ><span>Số Lượng </span><Input addonBefore="+" addonAfter="-" type="number" min={1} /> </div> */}
-
-                <div className={style.fromButton}>
-                  <Button onClick={handleBuyProduct}>BUY</Button>
-
-                  <Button onClick={handleAddToCart}>ADD TO CART</Button>
-                </div>
+          <div className={style.formDes}>
+            {/* <DescribeProduct /> */}
+            <div className={style.title}>{t("review")}</div>
+            <div className={style.formReview}>
+              <div className={style.formRating}>
+                <Ratting
+                  total={isCommentPr.total}
+                  persent={isCommentPr.averageStars}
+                />
               </div>
-              <div className={style.formOption}>
-                <div className={style.option}>
-                  {getOptionProduct(optionProduct)}
+              <div className={style.formVoteBar}>
+                {isCommentPr.startCount.reverse().map((count, index) => (
+                  <VoteBar
+                    number={index + 1}
+                    ratingCount={count}
+                    ratingTotal={isCommentPr.total}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className={style.formAddRating}>
+              <Button className={style.btnOranged} onClick={openComment}>
+                {t("review")}
+              </Button>
+              <div
+                className={style.addComment}
+                id={isOpenComment ? "Active" : undefined}
+              >
+                <div className={style.formInfo}>
+                  <div className={style.users}>
+                    <span>User: </span>{" "}
+                    <Input
+                      className={style.formRegister}
+                      value={current.UserName}
+                      disabled
+                    />
+                  </div>
+                  <div className={style.formRating}>
+                    <div className={style.labelRating}>{t("rating")}</div>
+                    <Rate
+                      onChange={(value) => handleOnComment(value, "rating")}
+                    />
+                  </div>
+                  <TextArea
+                    className={style.textAreaCustome}
+                    onChange={(e) => handleOnComment(e.target.value, "content")}
+                    placeholder="Thêm Bình Luận"
+                  />
+
+                  <div className={style.btnSaveComment}>
+                    <Button onClick={handleAddComment}>{t("comment")}</Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className={style.information}></div>
+          <div className={style.listCommentUser}>
+            <div className={style.formComment}>
+              <Comment data={isCommentPr.ListComment} />
+            </div>
+          </div>
         </div>
+        {dataProduct && Object.keys(dataProduct).length > 0 && (
+          <RelatedProduct
+            product={{
+              Id: dataProduct.Id,
+              Type_Product: dataProduct.Type_Product,
+            }}
+          />
+        )}
 
-        <div className={style.formDes}>
-          {/* <DescribeProduct /> */}
-          <div className={style.title}>Customer Reviews</div>
-          <div className={style.formReview}>
-            <div className={style.formRating}>
-              <Ratting
-                total={isCommentPr.total}
-                persent={isCommentPr.averageStars}
+        <div className={style.formInfor}>
+          <div className={style.title}>{t("inforPr")}</div>
+          <div className={style.formButton}>
+            <Button onClick={handleOpenOrCloseModal}> {t("desc")}</Button>
+            {isOpenModalContent && (
+              <ModalContentProduct
+                isOpen={true}
+                handleCloseModal={handleOpenOrCloseModal}
+                idProduct={dataProduct.Id}
               />
-            </div>
-            <div className={style.formVoteBar}>
-              {isCommentPr.startCount.reverse().map((count, index) => (
-                <VoteBar
-                  number={index + 1}
-                  ratingCount={count}
-                  ratingTotal={isCommentPr.total}
-                />
-              ))}
-            </div>
-          </div>
-          <div className={style.formAddRating}>
-            <Button className={style.btnOranged} onClick={openComment}>
-              Thêm dánh giá
-            </Button>
-            <div
-              className={style.addComment}
-              id={isOpenComment ? "Active" : undefined}
-            >
-              <div className={style.formInfo}>
-                <div className={style.users}>
-                  <span>User: </span>{" "}
-                  <Input
-                    className={style.formRegister}
-                    value={current.UserName}
-                    disabled
-                  />
-                </div>
-                <div className={style.formRating}>
-                  <div className={style.labelRating}>Rating</div>
-                  <Rate
-                    onChange={(value) => handleOnComment(value, "rating")}
-                  />
-                </div>
-                <TextArea
-                  className={style.textAreaCustome}
-                  onChange={(e) => handleOnComment(e.target.value, "content")}
-                  placeholder="Thêm Bình Luận"
-                />
-
-                <div className={style.btnSaveComment}>
-                  <Button onClick={handleAddComment}>Comment</Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={style.listCommentUser}>
-          <div className={style.formComment}>
-            <Comment data={isCommentPr.ListComment} />
+            )}
+            <Button onClick={handleOpenModalConfig}> {t("config")}</Button>
+            {isOpenConfigs && (
+              <ModalDetails
+                isOpen={true}
+                idProduct={dataProduct.Id}
+                handleCloseModal={handleOpenModalConfig}
+              />
+            )}
           </div>
         </div>
       </div>
-      {dataProduct && Object.keys(dataProduct).length > 0 && (
-        <RelatedProduct
-          product={{
-            Id: dataProduct.Id,
-            Type_Product: dataProduct.Type_Product,
-          }}
-        />
-      )}
     </div>
   );
 }

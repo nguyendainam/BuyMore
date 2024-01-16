@@ -6,6 +6,7 @@ import {
   getAllProductType,
   getListCatHomePage,
 } from "../services/product";
+import { useAppSelector } from "../redux/store";
 
 interface ListCategoryDropdown {
   key: string | number;
@@ -125,23 +126,26 @@ interface IListCategory {
 
 // Promise<IListCategory[]>
 export const ListItemCategoryHome = async (): Promise<IListCategory[]> => {
+
   const data = await getAllCategorybyItem();
-  // console.log(data)
   const listCate = await getListCategory();
   const groupedData: { [key: string]: IListCategory } = {};
   Object.values(listCate).forEach((item) => {
+
     const keyCat = item.key;
     if (keyCat in groupedData) {
       const existingCat = groupedData[keyCat];
     } else {
       groupedData[keyCat] = {
         title: item.titleVi,
+        titleEN: item.titleEN,
         key: item.key,
         image: item.image,
         list: [],
       };
     }
   });
+
 
   Object.values(data).forEach((item) => {
     const keyCat = item.IdCat;
@@ -166,6 +170,7 @@ export const ListItemCategoryHome = async (): Promise<IListCategory[]> => {
           existingList.listItem.push({
             keyItem: keyItem,
             name: item.nameVI,
+            nameEN: item.nameEN,
           });
         }
       } else {
@@ -173,10 +178,12 @@ export const ListItemCategoryHome = async (): Promise<IListCategory[]> => {
         existingCat.list.push({
           key: keyList,
           name: item.ListNameVI,
+          nameEN: item.ListNameEN,
           listItem: [
             {
               keyItem: keyItem,
               name: item.nameVI,
+              nameEN: item.nameEN,
             },
           ],
         });
@@ -203,5 +210,6 @@ export const ListItemCategoryHome = async (): Promise<IListCategory[]> => {
     }
   });
   const resultMenu: IListCategory[] = Object.values(groupedData);
+
   return resultMenu;
 };

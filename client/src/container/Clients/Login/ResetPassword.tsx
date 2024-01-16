@@ -55,14 +55,14 @@ const ResetPassword: React.FC = () => {
     return (
         <>
             <div className={style.mainFormLogin}>
-                <Header />
+
                 <div className={style.formLogin}>
-                    <div className={style.formMaxWidth}>
-                        <div className={style.formTitle}>
-                            Chào mừng bạn đến với BuyMore | Laptop, PC, Màn hình, điện thoại,
-                            linh kiện Chính Hãng!
-                        </div>
-                        <Form name='basic' labelCol={{ span: 10 }} wrapperCol={{ span: 30 }}>
+                    <div className={style.formTitle}>
+                        Cập Nhật Mật Khẩu Mới
+                    </div>
+
+                    <div className={style.inputRegister}>
+                        <Form className={style.formTable} layout="vertical" labelCol={{ span: 10 }} >
                             <Form.Item
                                 label='Password'
                                 name='password'
@@ -120,8 +120,8 @@ const ResetPassword: React.FC = () => {
                                 <Input.Password />
                             </Form.Item>
                         </Form>
-                        <div className={style.inputWidth45}>
-                            <Button onClick={handleSendRequest}>Change Password </Button>
+                        <div className={style.formBtn}>
+                            <Button onClick={handleSendRequest} className={style.btnPrimary}>Change Password </Button>
                         </div>
                     </div>
                 </div>

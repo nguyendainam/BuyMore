@@ -9,9 +9,10 @@ import { URL_SERVER_IMG } from "../../../../until/enum";
 import { Image, Pagination } from "antd";
 import { useNavigate } from "react-router-dom";
 import { addProductViewed } from "../../../../redux/Slice/productSlice";
+import { useTranslation } from "react-i18next";
 export default function ReccomendProduct() {
   const { isLogin } = useSelector((state) => state.user);
-
+  const { t } = useTranslation();
   const [dataProduct, setDataProduct] = useState([]);
   const handleGetListProduct = async () => {
     try {
@@ -59,7 +60,7 @@ export default function ReccomendProduct() {
 
   return (
     <>
-      <div className={style.title}>Sản phẩm gợi ý cho bạn</div>
+      <div className={style.title}>{t("goiy")}</div>
       <div className={style.mainView}>
         {displayedProducts.length &&
           displayedProducts.map((item) => (
@@ -72,9 +73,9 @@ export default function ReccomendProduct() {
               </div>
               {item.savingPrice > 0 ? (
                 <div className={style.savingMoney}>
-                  <span>Tiết kiệm</span>
+                  <span>{t("Save")}</span>
                   <span>
-                    {item.savingPrice?.toLocaleString().replace(/,/g, ".")}
+                    {item.savingPrice?.toLocaleString().replace(/,/g, ".")}.đ
                   </span>
                 </div>
               ) : (

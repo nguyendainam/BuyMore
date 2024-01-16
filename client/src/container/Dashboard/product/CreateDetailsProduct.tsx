@@ -19,11 +19,13 @@ import {
 } from "../../../components/GetdataCategory";
 import FormData from "form-data";
 import {
+    getAllDescProductById,
     handleCreateDescProduct,
     handleGetDescProduct,
 } from "../../../services/product";
 export default function CreateDetailsProduct() {
     const [options, setOptions] = useState([]);
+    const [action, setAction] = useState<'create' | 'update'>('create')
     const [listBrand, setListBrand] = useState<SelectProps["options"]>([]);
     const [listCategory, setListCategory] = useState<SelectProps["options"]>([]);
     const [listTypeProduct, setListTypeProduct] = useState<
@@ -34,6 +36,7 @@ export default function CreateDetailsProduct() {
         basicInforEN: "",
         descVI: "",
         descEN: "",
+
     });
 
     const [selectedProduct, setSelectedProduct] = useState({
@@ -116,6 +119,30 @@ export default function CreateDetailsProduct() {
     }, []); // Run this effect only once on mount
 
     const handleOnChange = async (option) => {
+
+        const resultDesc = await getAllDescProductById(option.value)
+
+        console.log(resultDesc.data.items)
+        if (resultDesc.data.items.length > 0) {
+            const result = resultDesc.data.items[0]
+            setAction('update')
+            setDescription({
+                basicInforVI: result.Config_VI,
+                basicInforEN: result.Config_EN,
+                descVI: result.Des_Details_VI,
+                descEN: result.Des_Details_EN,
+            })
+        } else {
+            setAction('create')
+            setDescription({
+                basicInforVI: "",
+                basicInforEN: "",
+                descVI: "",
+                descEN: "",
+            })
+        }
+
+
         if (option) {
             setSelectedProduct({
                 idProduct: option.value,
@@ -158,27 +185,52 @@ export default function CreateDetailsProduct() {
     };
 
     const handleOnSave = async () => {
-        const IdProduct = selectedProduct.idProduct;
-
-        if (!IdProduct) {
-            message.error("Vui Lòng Chọn đầy đủ thông tin");
-        } else {
-            console.log(IdProduct);
-            const formData = new FormData();
-            formData.append("IdProduct", IdProduct);
-            formData.append("descVI", JSON.stringify(description.descVI));
-            formData.append("descEN", JSON.stringify(description.descEN));
-            formData.append("basicInforVI", JSON.stringify(description.basicInforVI));
-            formData.append("basicInforEN", JSON.stringify(description.basicInforEN));
-            formData.append("action", "create");
-
-            const result = await handleCreateDescProduct(formData);
-            if (result.data.err === 0) {
-                message.success("Lưu thành công");
+        if (action === 'create') {
+            const IdProduct = selectedProduct.idProduct;
+            if (!IdProduct) {
+                message.error("Vui Lòng Chọn đầy đủ thông tin");
             } else {
-                message.error("Lưu thất bại");
+                console.log(IdProduct);
+                const formData = new FormData();
+                formData.append("IdProduct", IdProduct);
+                formData.append("descVI", JSON.stringify(description.descVI));
+                formData.append("descEN", JSON.stringify(description.descEN));
+                formData.append("basicInforVI", JSON.stringify(description.basicInforVI));
+                formData.append("basicInforEN", JSON.stringify(description.basicInforEN));
+                formData.append("action", "create");
+
+                const result = await handleCreateDescProduct(formData);
+                if (result.data.err === 0) {
+                    message.success("Lưu thành công");
+                } else {
+                    message.error("Lưu thất bại");
+                }
             }
         }
+
+        else if (action === 'update') {
+            const IdProduct = selectedProduct.idProduct;
+            if (!IdProduct) {
+                message.error("Vui Lòng Chọn đầy đủ thông tin");
+            } else {
+                console.log(IdProduct);
+                const formData = new FormData();
+                formData.append("IdProduct", IdProduct);
+                formData.append("descVI", JSON.stringify(description.descVI));
+                formData.append("descEN", JSON.stringify(description.descEN));
+                formData.append("basicInforVI", JSON.stringify(description.basicInforVI));
+                formData.append("basicInforEN", JSON.stringify(description.basicInforEN));
+                formData.append("action", "update");
+
+                const result = await handleCreateDescProduct(formData);
+                if (result.data.err === 0) {
+                    message.success("Cập nhật  thành công");
+                } else {
+                    message.error(" cập nhật thất bại");
+                }
+            }
+        }
+
     };
 
     return (
@@ -187,7 +239,7 @@ export default function CreateDetailsProduct() {
                 <div className={style.basicFormProduct}>
                     <div className={style.formBtnSave}>
                         <Button className={style.btnBlue} onClick={handleOnSave}>
-                            Lưu{" "}
+                            {action === 'create' ? 'Lưu' : 'Cập Nhật'}
                         </Button>
                     </div>
                     <div className={style.title}>Open Product</div>

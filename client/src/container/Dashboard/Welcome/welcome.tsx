@@ -18,7 +18,7 @@ export default function Welcome() {
   const [dataTotal, setDataTotal] = useState({});
   const handleGetTopProduct = async () => {
     const result = await getTopRattingProduct();
-    // console.log(result);
+    console.log('sssssssssssss', result);
     setDataTopRating(result);
   };
 

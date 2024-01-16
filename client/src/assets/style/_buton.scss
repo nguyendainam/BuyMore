@@ -67,4 +67,9 @@
   font-size: 15px;
   font-weight: bold;
   border-radius: 0px;
+
+  &:hover {
+    border: none;
+    color: white !important;
+  }
 }

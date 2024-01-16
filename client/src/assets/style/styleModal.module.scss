@@ -6,15 +6,20 @@
   // (Optional) Nếu bạn muốn đặt style cho nền overlay
   :global {
     .ant-modal-content {
-      width: 660px !important;
-      //   height: 700px;
+      width: 790px !important;
+      height: 500px;
+    }
+
+    .ant-modal-footer {
+      position: absolute;
+      bottom: 10px;
+      right: 2s0px;
     }
   }
 
   .fromInforUser {
     width: 100%;
-    height: 90px;
-    display: flex;
+    height: 90%;
 
     .item {
       width: 100%;

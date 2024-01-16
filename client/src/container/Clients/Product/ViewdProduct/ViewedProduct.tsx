@@ -7,6 +7,7 @@ import styles from "./viewedProduct.module.scss";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { URL_SERVER_IMG } from "../../../../until/enum";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 export function ViewedProduct() {
   const { listProduct } = useSelector((state) => state.product);
   const navigate = useNavigate();
@@ -14,13 +15,11 @@ export function ViewedProduct() {
     navigate(`/d/chi-tiet-san-pham?product=${item}`);
   };
 
-  useEffect(() => {}, [listProduct]);
-
-  // console.log(listProduct);
+  const { t } = useTranslation();
   const [activeSlide, setActiveSlide] = useState(0);
   return (
     <div className={styles.mainView}>
-      <div className={styles.title}>Các sản phẩm vừa xem</div>
+      <div className={styles.title}>{t("viewed")}</div>
       <div className={styles.listProduct}>
         <Carousel
           containerProps={{
@@ -33,11 +32,6 @@ export function ViewedProduct() {
           preventScrollOnSwipe
           swipeTreshold={60}
           activeSlideIndex={activeSlide}
-          // activeSlideProps={{
-          //   style: {
-          //     border: "10px solid red",
-          //   },
-          // }}
           onRequestChange={setActiveSlide}
           forwardBtnProps={{
             children: <FaArrowRight />,
@@ -61,42 +55,55 @@ export function ViewedProduct() {
               border: "none",
             },
           }}
-          itemsToShow={4}
+          itemsToShow={6}
           speed={500}
           centerMode
         >
-          {listProduct.map((item, index) => (
-            <div
-              className={styles.itemProduct}
-              key={index}
-              onClick={() => handleOnChangeProduct(item.idProduct)}
-            >
-              <div className={styles.image}>
-                <img src={URL_SERVER_IMG + item.image} />
-              </div>
-              {item.discount > 0 ? (
-                <div className={styles.discount}>
-                  <div>Tiết kiệm</div>
-                  <div>{item.saveMoney}</div>
-                </div>
-              ) : (
-                ""
-              )}
+          {listProduct.map((item, index) => {
+            const priceProduct = item.price;
+            const discount = item.discount;
+            let priceShow = priceProduct;
+            let savingMoney = 0;
+            if (discount > 0) {
+              priceShow = priceProduct - (priceProduct * discount) / 100;
+              savingMoney = priceProduct - priceShow;
+            }
 
-              <div className={styles.brand}>{item.brand}</div>
-              <div className={styles.name}>{item.nameVI}</div>
-              <div className={styles.price}>
-                {item.priceShow?.toLocaleString()} <u>đ</u>
-              </div>
-              {item.discount > 0 ? (
-                <div className={styles.oldPrice}>
-                  {item.productPrice?.toLocaleString()} <i>đ</i>
+            return (
+              <div
+                className={styles.itemProduct}
+                key={index}
+                onClick={() => handleOnChangeProduct(item.idProduct)}
+              >
+                <div className={styles.image}>
+                  <img src={URL_SERVER_IMG + item.image} />
                 </div>
-              ) : (
-                ""
-              )}
-            </div>
-          ))}
+                {item.discount > 0 ? (
+                  <div className={styles.discount}>
+                    <div>{t("Save")}</div>
+                    <div>
+                      {savingMoney?.toLocaleString().replace(/,/g, ".")} đ
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+
+                <div className={styles.brand}>{item.brand}</div>
+                <div className={styles.name}>{item.nameVI}</div>
+                <div className={styles.price}>
+                  {priceShow?.toLocaleString()} <u> .đ</u>
+                </div>
+                {item.discount > 0 ? (
+                  <div className={styles.oldPrice}>
+                    {priceProduct?.toLocaleString()} <i>đ</i>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            );
+          })}
         </Carousel>
       </div>
     </div>

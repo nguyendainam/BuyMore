@@ -96,6 +96,10 @@ export const menuDashboard: IMenuDashboard[] = [
         key: "listbrand",
         label: "List Brands",
       },
+      {
+        key: "editbrand",
+        label: "Edit Brands"
+      }
     ],
   },
 

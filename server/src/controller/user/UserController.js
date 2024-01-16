@@ -263,11 +263,32 @@ const getInforAboutOrder = async (req, res) => {
     return res.status(200).json(result)
 
   } catch (e) {
+
     return res.status(400).json(e)
   }
 }
 
+const deleteItemInCart = async (req, res) => {
+  try {
+    const { _id } = req.user
+    const result = await UserServices.deleteItemInCart(req.query.key, _id)
+    return res.status(200).json(result)
+  } catch (e) {
+    console.log(e)
+    return res.status(400).json(e)
+  }
+}
 
+const updateProfile = async (req, res) => {
+  try {
+    const { _id } = req.user
+    const result = await UserServices.updateProfileByUser(req.body, _id)
+    return res.status(200).json(result)
+  } catch (e) {
+    console.log(e)
+    return res.status(400).json(e)
+  }
+}
 export default {
   RegisterUser,
   getCurrentUser,
@@ -289,5 +310,7 @@ export default {
   comfirmEmail,
   getAllUserIsActive,
   GetInforUserById,
-  getInforAboutOrder
+  getInforAboutOrder,
+  deleteItemInCart,
+  updateProfile
 }

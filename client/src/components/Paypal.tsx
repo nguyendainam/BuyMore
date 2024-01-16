@@ -7,7 +7,7 @@ import {
 import FormData from "form-data";
 
 import { useEffect } from "react";
-import { createNewOrderByUser, getListOderUser } from "../services/user";
+import { createNewOrderByUser } from "../services/user";
 import { useNavigate } from "react-router-dom";
 
 // This value is from the props in the UI
@@ -15,7 +15,12 @@ const style = { "layout": "horizontal" };
 
 
 // Custom component to wrap the PayPalButtons and show loading spinner
-const ButtonWrapper = ({ currency, showSpinner, ammount, address, cart, totalVnd }) => {
+const ButtonWrapper = ({ currency, showSpinner, ammount, address, cart, totalVnd, idAddress }) => {
+
+
+
+
+
     const [{ isPending, options }, disspatch] = usePayPalScriptReducer();
 
     const navigate = useNavigate()
@@ -28,6 +33,7 @@ const ButtonWrapper = ({ currency, showSpinner, ammount, address, cart, totalVnd
             }
         })
     }, [currency, showSpinner])
+
 
     return (
         <>
@@ -51,22 +57,35 @@ const ButtonWrapper = ({ currency, showSpinner, ammount, address, cart, totalVnd
                 }).then(orderId => orderId)
                 }
                 onApprove={(data, actions) => actions.order?.capture().then(async (response) => {
+
+                    console.log("REPONSIVE PAYMENT....", response)
+
                     const dataIdCart = cart.map(item => item.CartId);
                     const addressUser = address.addressUser
                     const total = totalVnd
-                    if (response.status === 'COMPLETED') {
 
+
+                    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+                    console.log(addressUser)
+
+                    console.log("ssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+                    console.log(idAddress)
+
+                    if (response.status === 'COMPLETED') {
                         // console.log(addressUser)
                         const formdata = new FormData()
                         formdata.append('ListIdCart', dataIdCart)
                         formdata.append('address', addressUser)
                         formdata.append('total', total)
                         formdata.append('status', response.status)
-
+                        formdata.append('idAddress', idAddress)
                         const resultOrder = await createNewOrderByUser(formdata)
+
+                        console.log("RESULT ORDER...", resultOrder)
+
                         if (resultOrder.data.err === 0) {
                             console.log('create Order Successfull')
-                            navigate('/')
+                            navigate('/us/checkoutsuccess')
                         } else {
                             console.log('create order false')
                         }
@@ -77,11 +96,15 @@ const ButtonWrapper = ({ currency, showSpinner, ammount, address, cart, totalVnd
     );
 }
 
-export default function Paypal({ amount, cart, address, totalVND }) {
+export default function Paypal({ amount, cart, address, totalVND, idAddress }) {
+
+
     return (
         <div style={{ width: "100%", height: "100%" }}>
             <PayPalScriptProvider options={{ clientId: "AZVHrp0G-CfYAod8DE7lhEQSlDHtnEQoedUrdY2WlCetjZqhV3WoNxYqQAIpRgPLXol6-EwbsdjE8QVU", components: "buttons", currency: "USD" }}>
-                <ButtonWrapper showSpinner={false} currency={'USD'} ammount={amount} cart={cart} address={address} totalVnd={totalVND} />
+                <ButtonWrapper showSpinner={false} currency={'USD'} ammount={amount} cart={cart} address={address} totalVnd={totalVND}
+                    idAddress={idAddress}
+                />
             </PayPalScriptProvider>
         </div>
     );

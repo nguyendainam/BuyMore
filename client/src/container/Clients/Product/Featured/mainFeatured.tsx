@@ -7,13 +7,15 @@ import {
 import { URL_SERVER_IMG } from "../../../../until/enum";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import CryptoJS from "crypto-js";
+// import CryptoJS from "crypto-js";
 import { Image } from "antd";
 import { addProductViewed } from "../../../../redux/Slice/productSlice";
+import { useTranslation } from "react-i18next";
 
 export default function Featured() {
   const [dataProduct, setDataProduct] = useState<IProductHomePage[]>([]);
-  const selector = useSelector((state) => state.system);
+  // const selector = useSelector((state) => state.system);
+  const { t } = useTranslation();
   const handleGetProduct = async () => {
     const data = await getAllProductHomePage();
     setDataProduct(data.slice(0, 10));
@@ -22,6 +24,8 @@ export default function Featured() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onchangeProduct = (item) => {
+    // console.log(item)
+
     const id = item.productId;
     dispatch(addProductViewed({ product: item }));
     navigate(`d/chi-tiet-san-pham?product=${id}`);
@@ -33,10 +37,10 @@ export default function Featured() {
   return (
     <div className={style.main}>
       <div className={style.formTitle}>
-        <span className={style.title}>Sản phẩm mới nhất</span>
+        <span className={style.title}>{t("newProduct")}</span>
 
         <div onClick={() => navigate(`/p/san-pham-noi-bat?t=${"ALL"}`)}>
-          Xem tất cả{" "}
+          {t("selectAll")}
         </div>
       </div>
 
@@ -52,9 +56,9 @@ export default function Featured() {
               </div>
               {item.savingPrice > 0 ? (
                 <div className={style.savingMoney}>
-                  <span>Tiết kiệm</span>
+                  <span>{t("Save")}</span>
                   <span>
-                    {item.savingPrice?.toLocaleString().replace(/,/g, ".")}
+                    {item.savingPrice?.toLocaleString().replace(/,/g, ".")}.đ
                   </span>
                 </div>
               ) : (

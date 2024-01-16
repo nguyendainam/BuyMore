@@ -11,16 +11,19 @@ export const AddproductToCard = async (data) => {
         scanFrequency: data.scanFrequency,
         screenSize: data.screenSize,
         screenType: data.screenType,
+
     };
 
     const product_Inv = data.Id
     const quantity = data.Quantity
     const price = data.Price
+    const discount = data.discount
     const formdata = new FormData()
     formdata.append('option', JSON.stringify(Options))
     formdata.append('product_Inv', product_Inv)
     formdata.append('quantity', quantity)
     formdata.append('price', price)
+    formdata.append('discount', discount)
 
     const result = await addToCart(formdata)
     return result
@@ -40,6 +43,8 @@ interface IItem {
     ProductPrice: number,
     Discount: number,
     Decreased: number
+    Avaiable: boolean,
+    TypeProduct?: string
 
 
 }
@@ -48,9 +53,10 @@ interface IItem {
 export const getAllItemsCart = async () => {
     const result = await getItemsInCart()
     const dataProduct = result.data.items
-
     if (dataProduct.length > 0) {
         const itemsInCart: IItem[] = dataProduct.map((item) => {
+            let avaiable: boolean = false;
+            if (item.Stock >= item.Quantity) avaiable = true
             const quantity = item.Quantity
             const priceProduct = item.Price // gia cua san pham
             const discount = item.Discount_Percent  // % giam gia
@@ -65,7 +71,8 @@ export const getAllItemsCart = async () => {
                 Quantity: quantity,
                 Discount: discount,
                 ProductPrice: priceProduct,
-
+                Avaiable: avaiable,
+                TypeProduct: item.Type_Product
             })
         })
 

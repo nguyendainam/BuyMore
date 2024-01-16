@@ -5,24 +5,29 @@ import { useNavigate } from "react-router-dom";
 import { getTopProductTop6 } from "../../../../components/AllProduct";
 import { Image } from "antd";
 import { URL_SERVER_IMG } from "../../../../until/enum";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProductViewed } from "../../../../redux/Slice/productSlice";
+import { useTranslation } from "react-i18next";
 
 export const OutStanding: React.FC = () => {
   const navigate = useNavigate();
   const [productContent, setProductContent] = useState<
     (JSX.Element | JSX.Element[])[]
   >([]);
-
+  const { t } = useTranslation();
   const handleGetList = (path: string, id: string) => {
     navigate(`/p/${path}?t=${id}`);
   };
 
   const dispatch = useDispatch();
   const handleDetailProduct = (key: string, item?) => {
+    // console.log("OutStanding.....")
+    // console.log(item)
     dispatch(addProductViewed({ product: item }));
     navigate(`/d/chi-tiet-san-pham?product=${key}`);
   };
+
+  const { language } = useSelector((state) => state.system);
 
   const handleGetProduct = async (
     key?: string
@@ -42,9 +47,9 @@ export const OutStanding: React.FC = () => {
               </div>
               {item.saveMoney > 0 ? (
                 <div className={style.savingMoney}>
-                  <span>Tiết kiệm </span>
+                  <span>{t("Save")}</span>
                   <span>
-                    {item.saveMoney?.toLocaleString().replace(/,/g, ".")}
+                    {item.saveMoney?.toLocaleString().replace(/,/g, ".")}.đ
                   </span>
                 </div>
               ) : (
@@ -93,12 +98,14 @@ export const OutStanding: React.FC = () => {
         <div className={style.formProduct} key={item.key}>
           <img src={item.image} alt={item.value} className={style.imgBg} />
           <div className={style.headerForm}>
-            <div className={style.title}>{item.value}</div>
+            <div className={style.title}>
+              {language === "vi" ? item.value : item.valueEN}
+            </div>
             <div
               className={style.smallfont}
               onClick={() => handleGetList(item.path, item.key)}
             >
-              Xem tất cả
+              {t("selectAll")}
             </div>
           </div>
           <div className={style.contentForm}>{productContent[index]}</div>

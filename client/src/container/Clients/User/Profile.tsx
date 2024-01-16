@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './Profile.module.scss'
-import { Menu, MenuProps } from 'antd'
+import { Avatar, Menu, MenuProps } from 'antd'
 import { AppstoreOutlined, ProfileOutlined, UserOutlined, NotificationOutlined, PushpinOutlined } from '@ant-design/icons';
 import ChangeProfile from './ChangeProfile';
 import { useSelector } from 'react-redux';
 import ChangeAddress from './ChangeAddress';
 import ListOrderByUser from './ListOrderByUser';
+
+const ColorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae'];
 export default function Profile() {
 
     const items: MenuProps['items'] = [
@@ -53,9 +55,9 @@ export default function Profile() {
             case 'address':
                 return <ChangeAddress />;
             case 'notification':
-                return <div>Thông báo Content</div>;
+                return <div>Đang trong quá trình phát triển...</div>;
             case 'voucher':
-                return <div>Voucher Content</div>;
+                return <div>Đang trong quá trình phát triển...</div>;
             default:
                 return <div>Profile Content</div>;
         }
@@ -64,22 +66,30 @@ export default function Profile() {
     const handleMenuClick = (key: string) => {
         setSelectedOption(key);
     }
+    const [color, setColor] = useState(ColorList[0]);
 
     const { current } = useSelector((state) => state.user)
+    const random = (array) => array[Math.floor(Math.random() * array.length)];
+    useEffect(() => {
+        setColor(random(ColorList))
+    }, [])
+
 
     return (
         <div className={style.mainProfile}>
             <div className={style.contentProfile}>
                 <div className={style.sideBar}>
                     <div className={style.formProfile}>
-                        <div className={style.avatar}></div>
+                        <div className={style.avatar}>
+                            <Avatar style={{ backgroundColor: color, verticalAlign: 'middle', width: '100%', height: '100%', display: 'flex', alignItems: 'center' }} size="large" >
+                                {current.UserName}
+                            </Avatar>
+                        </div>
                         <div className={style.nameUser}>
                             <div>
                                 {current.UserName}
                             </div>
                             <div>{current.Email}</div></div>
-
-
                     </div>
                     <Menu mode="vertical" items={items} className={style.menu} onClick={({ key }) => handleMenuClick(key)} />
                 </div>

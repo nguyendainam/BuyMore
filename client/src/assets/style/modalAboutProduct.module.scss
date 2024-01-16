@@ -1,0 +1,20 @@
+.mainModal {
+  :global {
+    .ant-modal-body {
+      height: 900px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .title {
+    height: 30px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+  .content {
+    height: 800px;
+  }
+}

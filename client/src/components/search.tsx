@@ -5,6 +5,7 @@ import styles from "./search.module.scss";
 import { handleSearchProduct } from "../services/product";
 import { URL_SERVER_IMG } from "../until/enum";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const Search: React.FC = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -23,6 +24,13 @@ export const Search: React.FC = () => {
     }
   };
 
+  const navigate = useNavigate()
+  const handleOnChangeProduct = (item) => {
+    navigate(`/d/chi-tiet-san-pham?product=${item.Id}`);
+    setDataSearch('')
+
+  }
+
   return (
     <div className={styles.formSearch}>
       <Space.Compact
@@ -39,6 +47,7 @@ export const Search: React.FC = () => {
           }
           placeholder="Search...."
           onChange={(event) => handleOnSearch(event.target.value)}
+          value={dataSearch}
         />
       </Space.Compact>
 
@@ -48,7 +57,7 @@ export const Search: React.FC = () => {
             <div className={styles.items}>
               {/* Hiển thị kết quả tìm kiếm */}
               {searchResults.map((item, index) => (
-                <div key={index} className={styles.item}>
+                <div key={index} className={styles.item} onClick={() => handleOnChangeProduct(item)}>
                   <div className={styles.image}>
                     <img
                       src={`${URL_SERVER_IMG}${item.Image}`}

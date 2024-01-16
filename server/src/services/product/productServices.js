@@ -243,7 +243,7 @@ const getAllProductServices = () => {
         JOIN Image_Product AS I ON I.Id_Product = P.Id
         JOIN Brands AS B ON B.IdBrand = P.Brand_Id
         JOIN Discount AS D ON D.Id = P.Discount_Id
-        ORDER BY P.Id
+        ORDER BY P.Created DESC
         OFFSET 0 ROWS
         FETCH NEXT 50 ROWS ONLY;
         
@@ -254,6 +254,7 @@ const getAllProductServices = () => {
         items: result.recordset,
       });
     } catch (e) {
+      console.log(e)
       reject(e);
     }
   });
@@ -516,7 +517,7 @@ const handleOnSearchProduct = (key) => {
         const pool = await connectDB();
         let result = await pool.request().query(`
         
-        SELECT  P.NameVI , P.NameEN , 
+        SELECT  P.NameVI , P.NameEN , P.Id,
         B.NameBrand ,
         D.Discount_Percent  AS Discount,
         I.Image,
@@ -555,7 +556,6 @@ const createDescProduct = (data) => {
         });
       } else {
         const idProduct = data.IdProduct;
-
         const descVI = JSON.parse(data.descVI);
         const descEN = JSON.parse(data.descEN);
         const basicInforVI = JSON.parse(data.basicInforVI);
@@ -568,7 +568,7 @@ const createDescProduct = (data) => {
             .request()
             .input("Id_Description", mssql.VarChar, id_Description)
             .input("Id_Product", mssql.VarChar, idProduct)
-            .input("Config_VI", mssql.VarChar, basicInforVI)
+            .input("Config_VI", mssql.NVarChar, basicInforVI)
             .input("Config_EN", mssql.VarChar, basicInforEN)
             .input("Des_Details_VI", mssql.NText, descVI)
             .input("Des_Details_EN", mssql.Text, descEN).query(`
@@ -586,6 +586,30 @@ const createDescProduct = (data) => {
             resolve({
               err: 1,
               errMessage: "Create failed",
+            });
+          }
+        } else if (data.action === 'update') {
+          const result = await pool.request()
+            .input("Id_Product", mssql.VarChar, idProduct)
+            .input("Config_VI", mssql.NVarChar, basicInforVI)
+            .input("Config_EN", mssql.VarChar, basicInforEN)
+            .input("Des_Details_VI", mssql.NText, descVI)
+            .input("Des_Details_EN", mssql.Text, descEN)
+            .query(`
+            UPDATE DesProduct 
+            SET Config_VI = @Config_VI  , Config_EN= @Config_EN , Des_Details_VI = @Des_Details_VI , Des_Details_EN =@Des_Details_EN
+            WHERE Id_Product = @Id_Product
+            `)
+
+          if (result.rowsAffected[0] === 1) {
+            resolve({
+              err: 0,
+              errMessage: "update data successfull",
+            });
+          } else {
+            resolve({
+              err: 1,
+              errMessage: "update failed",
             });
           }
         }
@@ -680,6 +704,11 @@ ORDER BY
 
     `
       );
+
+      resolve({
+        err: 0,
+        items: result.recordset
+      })
 
     } catch (e) {
       console.log(e);
@@ -917,6 +946,88 @@ export const editProduct = (data) => {
   })
 }
 
+
+const getAllDescProductById = async (idProduct) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!idProduct) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        const pool = await connectDB()
+        const result = await pool.request().query(`
+          SELECT * FROM DesProduct WHERE Id_Product = '${idProduct}'
+        `)
+        resolve({
+          err: 0,
+          items: result.recordset
+        })
+      }
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
+
+
+
+const getDescProductById = async (idProduct) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!idProduct) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        const pool = await connectDB()
+        const result = await pool.request().query(`
+          SELECT Des_Details_VI, Des_Details_EN FROM DesProduct WHERE Id_Product = '${idProduct}'
+        `)
+        console.log(result.rowsAffected)
+        resolve({
+          err: 0,
+          items: result.recordset
+        })
+      }
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
+
+const getCongfigProductById = async (idProduct) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!idProduct) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        const pool = await connectDB()
+        const result = await pool.request().query(`
+          SELECT Config_VI, Config_EN FROM DesProduct WHERE Id_Product = '${idProduct}'
+        `)
+        console.log(result.rowsAffected)
+        resolve({
+          err: 0,
+          items: result.recordset
+        })
+      }
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
+
+
+
 export default {
   createProduct,
   getAllProductServices,
@@ -932,5 +1043,8 @@ export default {
   getAllProductServicesEdit,
   createNewOptionInEdit,
   deleteOptionInEdit,
-  editProduct
+  editProduct,
+  getDescProductById,
+  getCongfigProductById,
+  getAllDescProductById
 };

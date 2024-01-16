@@ -25,7 +25,10 @@
     .formItems {
       width: 100%;
       min-height: 800px;
-      overflow-y: auto;
+      // overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
       .itemHeader {
         width: 98%;
@@ -64,13 +67,19 @@
         }
       }
       .item {
-        width: 98%;
-        min-height: 150px;
+        width: 90%;
+        min-height: 100px;
         margin: 1%;
         display: flex;
         align-items: center;
         border: 1px solid whitesmoke;
         background-color: white;
+        position: relative;
+
+        &[id="UnAvaiable"] {
+          background-color: rgba(173, 172, 172, 0.201);
+          cursor: no-drop;
+        }
 
         .checkbox {
           margin-right: 1%;
@@ -150,6 +159,20 @@
               }
             }
           }
+        }
+
+        .formUnAvaiable {
+          width: 70px;
+          height: 70px;
+          position: absolute;
+          background-color: rgba(255, 0, 0, 0.179);
+          right: -10px;
+          top: -10px;
+
+          display: flex;
+          align-items: center;
+          color: rgb(198, 4, 4);
+          transform: rotate(-15deg); /* Điều chỉnh góc quay theo nhu cầu */
         }
       }
       .inforBuy {

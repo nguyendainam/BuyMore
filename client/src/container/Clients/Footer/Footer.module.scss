@@ -1,0 +1,99 @@
+.mainView {
+  width: 100%;
+  height: 100%;
+  margin-top: 2%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // margin-bottom: 2%;
+
+  .content {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+
+    .formInfor {
+      width: 100%;
+      height: 250px;
+      .formTitle {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        font-size: 30px;
+        padding-left: 2%;
+        font-weight: 900;
+      }
+      .contendBuyMore {
+        margin-top: 5%;
+        font-size: 16px;
+        font-style: italic;
+      }
+
+      .formTitle1 {
+        font-size: 23px;
+      }
+
+      .contendBuyMore1 {
+        margin-top: 5%;
+        font-size: 27px;
+        font-style: italic;
+        cursor: pointer;
+
+        .facebook {
+          color: rgb(8, 101, 182);
+          margin-left: 2%;
+          margin-right: 2%;
+        }
+
+        .instargram {
+          background: linear-gradient(
+            45deg,
+            #405de6,
+            #5851db,
+            #833ab4,
+            #c13584,
+            #e1306c,
+            #fd1d1d,
+            #f56040,
+            #f77737,
+            #fcaf45,
+            #ffdc80
+          );
+          color: #ffffff; // Màu chữ là trắng hoặc màu phù hợp
+        }
+      }
+      .Email {
+        width: 100%;
+        display: flex;
+        font-size: 16px;
+        div {
+          &:first-child {
+            width: 25%;
+            color: orangered;
+          }
+          &:last-child {
+            color: #fd1d1d;
+            font-weight: bold;
+          }
+        }
+      }
+      .Phone {
+        width: 100%;
+        display: flex;
+        font-size: 16px;
+        div {
+          &:first-child {
+            width: 25%;
+            color: #833ab4;
+          }
+          &:last-child {
+            color: #6813a0;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

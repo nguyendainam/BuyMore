@@ -84,4 +84,10 @@
       border-radius: 5px;
     }
   }
+
+  :global {
+    .k-iframe {
+      height: 600px !important;
+    }
+  }
 }

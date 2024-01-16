@@ -7,10 +7,13 @@ import styles from "./RelatedProduct.module.scss";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { URL_SERVER_IMG } from "../../../../until/enum";
 import { getAllProductByKey } from "../../../../components/AllProduct";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-export const RelatedProduct: React.FC = (product: any) => {
+export const RelatedProduct: React.FC = (product) => {
   const [listProduct, setListProduct] = useState([]);
   const [activeSlide, setActiveSlide] = useState(0);
+  const { t } = useTranslation()
   let settings = {
     dots: false,
     infinite: true,
@@ -32,12 +35,17 @@ export const RelatedProduct: React.FC = (product: any) => {
 
   useEffect(() => {
     getProductByKey();
-  }, []);
+  }, [product]);
+
+  const navigate = useNavigate()
+  const handleOnChangeProduct = (key: string) => {
+    navigate(`/d/chi-tiet-san-pham?product=${key}`)
+  }
 
   return (
     <div className={style.container}>
       <div className={styles.mainView}>
-        <div className={styles.title}>Các sản phẩm liên quan</div>
+        <div className={styles.title}>{t('related')}</div>
         <div className={styles.listProduct}>
           <Carousel
             containerProps={{
@@ -87,7 +95,7 @@ export const RelatedProduct: React.FC = (product: any) => {
               <div
                 className={styles.itemProduct}
                 key={index}
-                // onClick={() => handleOnChangeProduct(item.idProduct)}
+                onClick={() => handleOnChangeProduct(item.idProduct)}
               >
                 <div className={styles.image}>
                   <img src={URL_SERVER_IMG + item.image} />
@@ -95,7 +103,7 @@ export const RelatedProduct: React.FC = (product: any) => {
                 {item.discount > 0 ? (
                   <div className={styles.discount}>
                     <div>Tiết kiệm</div>
-                    <div>{item.saveMoney}</div>
+                    <div>{item.saveMoney?.toLocaleString().replace(/,/g, '.')} .vnđ</div>
                   </div>
                 ) : (
                   ""

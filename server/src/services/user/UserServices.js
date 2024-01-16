@@ -365,6 +365,7 @@ const createNewCartServices = (data, _id) => {
         const UserId = _id;
         const Quantity = data.quantity;
         const Price = data.price;
+        const Discount = data.discount
         const ProductId = data.product_Inv;
         const CreatedAt = moment(new Date()).format("YYYY-MM-DD HH:mm");
         const UpdatedAt = moment(new Date()).format("YYYY-MM-DD HH:mm");
@@ -383,9 +384,11 @@ const createNewCartServices = (data, _id) => {
           .input("UpdatedAt", mssql.DateTime, UpdatedAt)
           .input("OrderId", mssql.VarChar, OrderId)
           .input("StatusCart", mssql.VarChar, StatusCart)
-          .input("Options", mssql.VarChar, Options).query(`
+          .input("Options", mssql.VarChar, Options)
+          .input("Discount", mssql.VarChar, Discount)
+          .query(`
           MERGE INTO Cart AS target
-          USING (VALUES (@Product, @UserId ,@StatusCart , @Options)) AS source (ProductID, UserID, StatusCart ,Options)
+          USING (VALUES (@Product, @UserId ,@StatusCart , @Options )) AS source (ProductID, UserID, StatusCart ,Options )
           ON target.ProductID = source.ProductID AND target.UserID = source.UserID AND target.StatusCart = 'Wait' AND target.Options = source.Options
           WHEN MATCHED THEN
               UPDATE SET
@@ -394,8 +397,8 @@ const createNewCartServices = (data, _id) => {
                   UpdatedAt = @UpdatedAt,
                   Options = @Options
           WHEN NOT MATCHED THEN
-              INSERT (CartID, UserID, ProductID, Quantity, Price, CreatedAt, UpdatedAt, OrderID , StatusCart , Options)
-              VALUES (@CartID, @UserId, @Product, @Quantity, @Price, @CreatedAt, @UpdatedAt, @OrderId ,@StatusCart, @Options);`);
+              INSERT (CartID, UserID, ProductID, Quantity, Price, CreatedAt, UpdatedAt, OrderID , StatusCart , Options , Discount)
+              VALUES (@CartID, @UserId, @Product, @Quantity, @Price, @CreatedAt, @UpdatedAt, @OrderId ,@StatusCart, @Options , @Discount);`);
 
         if (result.rowsAffected[0] === 1) {
           resolve({
@@ -429,7 +432,9 @@ const getAllItemInCartServices = (id) => {
         const result = await pool.request().input("UserID", mssql.VarChar, id)
           .query(`SELECT 
                         C.*, 
+                        P.Type_Product ,
                         PI.Id_Product as Product,
+                        PI.Quantity as Stock,
                         I.Image ,
                         P.NameVI, 
                         P.NameEN,
@@ -441,6 +446,8 @@ const getAllItemInCartServices = (id) => {
                 JOIN Image_Product as I ON PI.Id_Product = I.Id_Product
                 JOIN Discount as D ON D.Id =  P.Discount_Id
                 WHERE C.UserID = @UserID AND C.StatusCart = 'Wait'
+                ORDER BY 
+                C.CreatedAt DESC
           
           `);
 
@@ -568,6 +575,7 @@ const getListOrderByUserServices = (UserId) => {
           SELECT 
           O.*, 
           C.*,
+          P.Id,
           P.NameVI, P.NameEN,B.NameBrand,I.Image as Image
           FROM Orders AS O                  
           JOIN Cart AS C ON C.OrderID = O.Id_Order
@@ -607,31 +615,60 @@ const getListOrderByUserServices = (UserId) => {
 };
 
 const updateCartItem = (data, id) => {
+
+  console.log("Item in cart .....", data)
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.key) {
         resolve({
           err: -1,
-          errMessage: "Missing data required",
-        });
+          errMessage: 'Missing data required'
+        })
       } else {
-        const cartId = data.key.split("-")[0];
-        const quantity = data.key.split("-")[1];
+        const keyCart = data.key.split('-')[0]
+        const quantity = data.key.split('-')[1]
+        if (quantity && quantity !== 'null' && quantity !== null) {
+          const pool = await connectDB()
+          const checkQuantity = await pool.request().query(`
+              SELECT PI.Quantity 
+              FROM Product_Inventory AS PI
+              JOIN Cart as C ON C.ProductID =  PI.Id
+              WHERE C.CartID = '${keyCart}'
+            `)
+          const quantityProduct = checkQuantity.recordset[0].Quantity
+          console.log(checkQuantity.recordset[0].Quantity)
+          if (quantityProduct === 0) {
+            resolve({
+              err: -1,
+              errMessage: 'Product empty'
+            })
+          }
+          else if (quantityProduct > quantity) {
+            await pool.request().query(
+              `UPDATE  Cart SET  Quantity = '${quantity}' WHERE CartID = '${keyCart}' AND UserID = '${id}' `
+            );
+            resolve({
+              err: 0,
+            });
+          } else if (quantity > quantityProduct) {
+            await pool.request().query(
+              `UPDATE  Cart SET  Quantity = '${quantityProduct}' WHERE CartID = '${keyCart}' AND UserID = '${id}' `
+            );
+            resolve({
+              err: 2,
+              errMessage: `Max Items is ${quantityProduct}`,
+              max: quantityProduct
+            })
+          }
 
-        const pool = await connectDB();
-        await pool
-          .request()
-          .query(
-            `UPDATE  Cart SET  Quantity = '${quantity}' WHERE CartID = '${cartId}' AND UserID = '${id}' `
-          );
-        resolve({
-          err: 0,
-        });
+        }
       }
     } catch (e) {
-      reject(e);
+      reject(e)
     }
-  });
+  })
+
+
 };
 
 const GetListOrderAdmin = () => {
@@ -758,71 +795,7 @@ export const createRatingProduct = (data, id) => {
   });
 };
 
-// export const comfirmEmailRegister = (key) => {
 
-//   console.log("key...." , key)
-//    return new Promise(async (resolve, reject) => {
-//     try {
-//       if (!key) {
-//         resolve({
-//           err: -1,
-//           errMessage: 'Missing data required',
-//         });
-//       } else {
-//         const algorithm = 'aes-256-cbc';
-//         const decipher = crypto.createDecipheriv(
-//           algorithm,
-//           process.env.JWT_SECRET,
-//           Buffer.from(process.env.JWT_SECRET.substring(0, 32))
-//         );
-//         let decryptedData = decipher.update(key, 'hex', 'utf-8');
-//         decryptedData += decipher.final('utf-8');
-
-//         const timeOut = decryptedData.split('###')[1];
-//         const currentTime = new Date();
-//         const timeoutTime = new Date(timeOut);
-//         const timeDifference = (timeoutTime - currentTime) / (1000 * 60);
-
-//         const pool = await connectDB();
-
-//         if (Math.abs(timeDifference) < 15) {
-//           const result = await pool.request().query(`
-//             SELECT Users
-//             WHERE RegisterToken = '${decryptedData}'`);
-//           if (result.rowsAffected[0] === 1) {
-//             resolve({
-//               err: 0,
-//               errMessage: 'Register successful',
-//             });
-//           } else {
-//             resolve({
-//               err: 1,
-//               errMessage: 'Register failed',
-//             });
-//           }
-//         } else {
-//           const result1 = await pool.request().query(`
-//             DELETE FROM Users
-//             WHERE RegisterToken = '${decryptedData}'`);
-//           if (result1.rowsAffected[0] === 1) {
-//             resolve({
-//               err: 0,
-//               errMessage: 'Token expired',
-//             });
-//           } else {
-//             resolve({
-//               err: -1,
-//               errMessage: 'Delete failed',
-//             });
-//           }
-//         }
-//       }
-//     } catch (error) {
-//       console.log(error)
-//       reject(error); // Sửa đổi từ reject(e) thành reject(error)
-//     }
-//   });
-// }
 
 export const comfirmEmailRegister = (key) => {
   console.log("key....", key);
@@ -962,6 +935,7 @@ const getInforUserById = (idUser) => {
 };
 
 const getInforAboutOrderServices = (keyOrder) => {
+  console.log(keyOrder)
   return new Promise(async (resolve, reject) => {
     try {
       if (!keyOrder) {
@@ -972,47 +946,49 @@ const getInforAboutOrderServices = (keyOrder) => {
       } else {
         const pool = await connectDB();
         const result = await pool.request().query(`
-        SELECT
-        O.*,
-        U.UserName,
-        U.Email,
-        A.PhoneNumber,
-        (
             SELECT
-                C.ProductID,
-                C.Quantity,
-                C.Price,
-                C.StatusCart,
-                C.Options,
-                C.Discount,
-                D.Discount_Percent,
-                P.NameEN,
-                (
-                    SELECT I.Image
-                    FROM Image_Product AS I
-                    WHERE I.Product_Inventory = C.ProductID
-                    FOR JSON PATH
-                ) AS ListImage
+            O.*,
+            U.UserName,
+            U.Email,
+            A.PhoneNumber,
+            (
+                SELECT
+                    C.ProductID,
+                    C.Quantity,
+                    C.Price,
+                    C.StatusCart,
+                    C.Options,
+                    C.Discount,
+                    D.Discount_Percent,
+                    P.NameEN,
+                    (
+                        SELECT I.Image
+                        FROM Image_Product AS I
+                        WHERE I.Product_Inventory = C.ProductID
+                        FOR JSON PATH
+                    ) AS ListImage
+                FROM
+                    Cart AS C
+                    JOIN Discount AS D ON D.Id = C.Discount
+                    JOIN Product_Inventory AS PI ON PI.Id = C.ProductID
+                    JOIN Product AS P ON P.Id = PI.Id_Product
+                WHERE
+                    C.OrderID = '${keyOrder}'
+                FOR JSON PATH
+            ) AS CartList
             FROM
-                Cart AS C
-                JOIN Discount AS D ON D.Id = C.Discount
-                JOIN Product_Inventory AS PI ON PI.Id = C.ProductID
-                JOIN Product AS P ON P.Id = PI.Id_Product
+            Orders AS O
+            JOIN AddressUser AS A ON A.Id_Address = O.AddressId
+            JOIN Users AS U ON U.UserID = O.Order_By
             WHERE
-                C.OrderID = O.Id_Order
-            FOR JSON PATH
-        ) AS CartList
-    FROM
-        Orders AS O
-        JOIN AddressUser AS A ON A.Id_Address = O.AddressId
-        JOIN Users AS U ON U.UserID = O.Order_By
-    WHERE
-        O.Id_Order = '${keyOrder}';
+            O.Id_Order = '${keyOrder}'
         `);
 
+
+        console.log(result.recordset)
         // console.log('SSS', result)
         resolve({
-          items: result.recordset,
+          items: result.recordset || [],
         });
       }
     } catch (e) {
@@ -1021,6 +997,86 @@ const getInforAboutOrderServices = (keyOrder) => {
     }
   });
 };
+
+const deleteItemInCart = (key, idUser) => {
+  console.log("key,,,,", key)
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!key || !idUser) {
+        resolve({
+          err: -1,
+          errMessage: "Missing data required"
+        })
+      } else {
+        const pool = await connectDB()
+        const result = await pool.request().query(`
+          Update Cart 
+          SET StatusCart = 'Delete' 
+          WHERE CartID = ${key} 
+          AND UserID = '${idUser}'
+          `)
+        console.log("Delete item in cart", result)
+        if (result.rowsAffected[0] === 1) {
+          resolve({
+            err: 0,
+            errMessage: 'Delete items in cart Success'
+          })
+        } else {
+          resolve({
+            err: 1,
+            errMessage: 'Delete items in cart failed'
+          })
+        }
+
+      }
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
+const updateProfileByUser = (data, idUser) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data || !idUser) {
+        resolve({
+          err: -1,
+          errMessage: 'Missing data required'
+        })
+      } else {
+        const pool = await connectDB()
+        const userName = data.userName
+        const gender = data.gender
+        const Id = idUser
+
+        const result = await pool.request()
+          .input('UserName', mssql.NVarChar, userName)
+          .input('Gender', mssql.VarChar, gender)
+          .input('UserID', mssql.VarChar, Id)
+          .query(`
+        UPDATE Users 
+        SET UserName = @UserName , Gender = @Gender 
+        WHERE UserID = @UserID
+        `)
+
+        if (result.rowsAffected[0] === 1) {
+          resolve({
+            err: 0,
+            errMessage: 'Update information success'
+          })
+        } else {
+          resolve({
+            err: 1,
+            errMessage: 'Update information failed'
+          })
+        }
+
+      }
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
 
 export default {
   RegisterUserService,
@@ -1044,4 +1100,44 @@ export default {
   getTotalUserActive,
   getInforUserById,
   getInforAboutOrderServices,
+  deleteItemInCart,
+  updateProfileByUser
 };
+
+
+// SELECT
+// O.*,
+// U.UserName,
+// U.Email,
+// A.PhoneNumber,
+// (
+//     SELECT
+//         C.ProductID,
+//         C.Quantity,
+//         C.Price,
+//         C.StatusCart,
+//         C.Options,
+//         C.Discount,
+//         D.Discount_Percent,
+//         P.NameEN,
+//         (
+//             SELECT I.Image
+//             FROM Image_Product AS I
+//             WHERE I.Product_Inventory = C.ProductID
+//             FOR JSON PATH
+//         ) AS ListImage
+//     FROM
+//         Cart AS C
+//         JOIN Discount AS D ON D.Id = C.Discount
+//         JOIN Product_Inventory AS PI ON PI.Id = C.ProductID
+//         JOIN Product AS P ON P.Id = PI.Id_Product
+//     WHERE
+//         C.OrderID = '${keyOrder}'
+//     FOR JSON PATH
+// ) AS CartList
+// FROM
+// Orders AS O
+// JOIN AddressUser AS A ON A.Id_Address = O.AddressId
+// JOIN Users AS U ON U.UserID = O.Order_By
+// WHERE
+// O.Id_Order = '${keyOrder}'

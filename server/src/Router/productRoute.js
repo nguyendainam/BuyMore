@@ -32,6 +32,8 @@ router.get('/system/getCategoryHomeClient', categoryController.getListCategoryHo
 
 router.post('/system/createOrupdateBrand', brandController.createOrUpdate)
 router.get('/system/getAllBrand', brandController.getAllBrands)
+router.get('/system/getAllInforBrands', brandController.getAllInforBrands)
+
 //  CRUD DISCOUNT
 router.post(
   '/system/createOrUpdateDiscount',
@@ -73,11 +75,16 @@ router.post('/system/deleteImage', manageUIController.deleteImageProduct)
 
 router.get('/system/createDataTraining', recommendController.createdataToSql)
 router.get('/system/createDataTrainingAfterLogin', verifyAccessToken, recommendController.createdataToSqlHaveAccount)
-router.get('/system/getProductByRating', verifyAccessToken , recommendController.getProductByRating)
+router.get('/system/getProductByRating', verifyAccessToken, recommendController.getProductByRating)
 
 
+//  checking in cart
 
 
+//  get Description Product
+router.get('/system/getAllDescProductById', productController.getAllDescProductById)
+router.get('/system/getDescProductById', productController.getDescProductById)
+router.get('/system/getConfigProductById', productController.getConfigProductById)
 
 
 

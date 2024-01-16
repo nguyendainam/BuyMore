@@ -4,22 +4,22 @@ import { getProductByRating } from "../../../../components/GetProduct";
 import { Image } from "antd";
 import { URL_SERVER_IMG } from "../../../../until/enum";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProductViewed } from "../../../../redux/Slice/productSlice";
+import { useTranslation } from "react-i18next";
 
 export const GetProductByRating = () => {
   const [dataProduct, setDataProduct] = useState([]);
-
+  const { t } = useTranslation();
   const getDataProduct = async () => {
     const result = await getProductByRating();
-
-    console.log(result);
     setDataProduct(result);
   };
 
+  const { current } = useSelector((state) => state.user);
   useEffect(() => {
     getDataProduct();
-  }, []);
+  }, [current.Email]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ export const GetProductByRating = () => {
     <>
       {dataProduct.length > 0 && (
         <div className={style.mainView}>
-          <div className={style.title}>Có thể bạn cũng thích</div>
+          <div className={style.title}>{t("like")}</div>
           <div className={style.products}>
             {dataProduct.length &&
               dataProduct.map((item) => (
@@ -46,7 +46,7 @@ export const GetProductByRating = () => {
                   </div>
                   {item.savingPrice > 0 ? (
                     <div className={style.savingMoney}>
-                      <span>Tiết kiệm</span>
+                      <span>{t("Save")}</span>
                       <span>
                         {item.savingPrice?.toLocaleString().replace(/,/g, ".")}
                       </span>

@@ -36,6 +36,9 @@ export const addToCart = (data: FormData) => {
 export const getItemsInCart = () => {
     return axios.get('/getAllItemInCart')
 }
+export const deleteItemsInCart = (key: string) => {
+    return axios.get(`/delete/ItemsInCart?key=${key}`)
+}
 
 export const updateItemInCart = (key: string) => {
     return axios.get(`/getUpdateItemCart?key=${key}`)
@@ -102,3 +105,7 @@ export const getInformationUser = (idUser: string) => {
 export const getProductByRatingUser = () => {
     return axios.get('system/getProductByRating')
 }
+
+export const updateProfileByUser = (data: FormData) => {
+    return axios.post('/updateProfile', data)
+} 

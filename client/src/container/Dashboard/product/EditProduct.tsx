@@ -23,9 +23,16 @@ import { URL_SERVER_IMG } from "../../../until/enum";
 import SelectDrop from "../../../components/datatest/Select";
 import { UploadOutlined } from "@ant-design/icons";
 import { RcFile, UploadProps } from "antd/es/upload";
-import { addOptionProductEdit, deleteImage, deleteOptionProductEdit, updateProduct, uploadImageSingleToServer } from "../../../services/product";
+import {
+  addOptionProductEdit,
+  deleteImage,
+  deleteOptionProductEdit,
+  updateProduct,
+  uploadImageSingleToServer,
+} from "../../../services/product";
 import FormData from "form-data";
 import { getListDiscount } from "../../../components/Discount";
+import { useTranslation } from "react-i18next";
 
 // export interface IlistInventory {
 //   Size: [];
@@ -39,9 +46,9 @@ import { getListDiscount } from "../../../components/Discount";
 //   screenType: [];
 // }
 
-
 export default function EditProduct() {
   const [options, setOptions] = useState([]);
+  const { t } = useTranslation();
   const [listBrand, setListBrand] = useState<SelectProps["options"]>([]);
   const [listCategory, setListCategory] = useState<SelectProps["options"]>([]);
   const [listDiscount, setListDiscount] = useState<SelectProps["options"]>([]);
@@ -62,18 +69,8 @@ export default function EditProduct() {
     optionsProduct: [],
   });
 
-
-
-
-
-
-
-
-
-
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [imgMain, setImgMain] = useState("");
-
 
   const fetchData = async () => {
     try {
@@ -104,7 +101,6 @@ export default function EditProduct() {
     const typeProductData = await AllProductType();
     const categoryData = await getAllCategorybyItem();
 
-
     const brandOptions = brandData.map((item) => ({
       value: item.idBrand,
       label: item.nameBrand,
@@ -120,25 +116,27 @@ export default function EditProduct() {
       label: item.nameVI,
     }));
 
-
     const discountOptions = itemsDiscount.map((item) => ({
       value: item.Id,
-      label: `${item.NameVI + '(' + item.Discount_Percent + "%)"}`,
+      label: `${item.NameVI + "(" + item.Discount_Percent + "%)"}`,
     }));
 
-
-
-
     setListBrand((prevListBrand) => [...prevListBrand, ...brandOptions]);
-    setListTypeProduct((prevListTypeProduct) => [...prevListTypeProduct, ...typeProductOptions]);
-    setListCategory((prevListCategory) => [...prevListCategory, ...categoryOptions]);
+    setListTypeProduct((prevListTypeProduct) => [
+      ...prevListTypeProduct,
+      ...typeProductOptions,
+    ]);
+    setListCategory((prevListCategory) => [
+      ...prevListCategory,
+      ...categoryOptions,
+    ]);
     setListDiscount(discountOptions);
-  }
+  };
 
   useEffect(() => {
     fetchData();
-    handleGetAllOption()
-  }, [])
+    handleGetAllOption();
+  }, []);
 
   const getBase64 = (file: RcFile): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -148,12 +146,8 @@ export default function EditProduct() {
       reader.onerror = (error) => reject(error);
     });
 
-
-
-
   const handleOnChange = async (option) => {
-
-    console.log("ssssssssssss", option)
+    console.log("ssssssssssss", option);
 
     handleRemove();
     let result = option.listInventory.map((item) => {
@@ -188,10 +182,9 @@ export default function EditProduct() {
         optionsProduct: Object.values(result[0].optionsProduct),
       });
     }
-
-
   };
 
+  // const
   const ValidateFileUpload = (file) => {
     const isJpgorPng =
       file.type === "image/jpeg" ||
@@ -241,14 +234,8 @@ export default function EditProduct() {
     setImgMain("");
   };
 
-
-
-
-
-
   const handleAddInventory = async (idProduct: string) => {
-
-    const result = await addOptionProductEdit(idProduct)
+    const result = await addOptionProductEdit(idProduct);
 
     if (result.data.err === 0) {
       const newProduct = {
@@ -263,47 +250,36 @@ export default function EditProduct() {
         scanFrequency: "",
         screenType: "",
         screenSize: "",
-        optionsProduct: selectedProduct.optionsProduct
+        optionsProduct: selectedProduct.optionsProduct,
       };
-
-
 
       setSelectedProduct((prevState) => ({
         ...prevState,
-        listIventory: [...prevState.listIventory, newProduct]
+        listIventory: [...prevState.listIventory, newProduct],
       }));
     }
-
-  }
-
-
-
+  };
 
   const deleteOption = async (IdInventory, index) => {
     if (selectedProduct.listIventory.length < 2) {
-      message.error("Không được xóa nữa")
+      message.error(t("cannotDelete"));
     } else {
-      const result = await deleteOptionProductEdit(IdInventory)
+      const result = await deleteOptionProductEdit(IdInventory);
       if (result.data.err === 0) {
         setSelectedProduct((prevState) => {
           const newListIventory = [...prevState.listIventory];
           newListIventory.splice(index, 1); // Xóa phần tử tại vị trí index
           return { ...prevState, listIventory: newListIventory };
         });
-
       } else {
-        message.error("Delete failed")
+        message.error("Delete failed");
       }
     }
-    // 
-  }
+    //
+  };
 
   const handleOnChangeOption = (option, key) => {
-
-
-
-    const data = option.map((item) => item.value)
-
+    const data = option.map((item) => item.value);
 
     setSelectedProduct((prevState) => {
       const updatedListIventory = [...prevState.listIventory];
@@ -319,20 +295,18 @@ export default function EditProduct() {
         ...prevState,
         listIventory: updatedListIventory,
         [key]: data,
-
-      }
-    })
-  }
+      };
+    });
+  };
 
   const handleOnchangeInforOption = (value, key) => {
-
-    console.log(value, key)
+    console.log(value, key);
 
     setSelectedProduct((prevState) => ({
       ...prevState,
-      [key]: value
-    }))
-  }
+      [key]: value,
+    }));
+  };
 
   const handleOnChangeInventory = (index: number, value: any, key: string) => {
     // console.log(key)
@@ -342,7 +316,7 @@ export default function EditProduct() {
       const getItemInArr = updatedListIventory[index];
       // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
       // console.log(getItemInArr)
-      getItemInArr[key] = value
+      getItemInArr[key] = value;
       return {
         ...prevState,
         listIventory: updatedListIventory,
@@ -350,39 +324,35 @@ export default function EditProduct() {
     });
   };
 
-
-
   const handleUpdateProduct = async () => {
-    const formdata = new FormData()
-    formdata.append('dataProduct', JSON.stringify(selectedProduct))
+    const formdata = new FormData();
+    formdata.append("dataProduct", JSON.stringify(selectedProduct));
     if (fileList.length > 0) {
-
       // console.log(fileList)
-      const baseImage = await getBase64(fileList[0].originFileObj)
-      const filename = (fileList[0].name)
-      formdata.append('imageProduct', JSON.stringify(baseImage))
-      formdata.append('filename', filename)
+      const baseImage = await getBase64(fileList[0].originFileObj);
+      const filename = fileList[0].name;
+      formdata.append("imageProduct", JSON.stringify(baseImage));
+      formdata.append("filename", filename);
     }
 
-    const result = await updateProduct(formdata)
+    const result = await updateProduct(formdata);
 
     if (result.data.err === 0) {
-      message.success("Update success ")
+      message.success("Update success ");
       fetchData();
     } else {
-      message.error("Update failed")
+      message.error("Update failed");
     }
-
-  }
-
-
+  };
 
   return (
     <div className={style.mainViewDesc}>
       <div className={style.left}>
         <div className={style.basicFormProduct}>
           <div className={style.formBtnSave}>
-            <Button className={style.btnBlue} onClick={handleUpdateProduct}>Cập nhật</Button>
+            <Button className={style.btnBlue} onClick={handleUpdateProduct}>
+              Cập nhật
+            </Button>
           </div>
           <div className={style.title}>Open Product</div>
           <div className={style.selectProduct}>
@@ -408,7 +378,9 @@ export default function EditProduct() {
               <Input
                 className={style.formInputcustom}
                 value={selectedProduct.nameVI}
-                onChange={(event) => handleOnchangeInforOption(event.target.value, 'nameVI')}
+                onChange={(event) =>
+                  handleOnchangeInforOption(event.target.value, "nameVI")
+                }
               />
             </div>
             <div className={style.inputWidth45}>
@@ -422,15 +394,16 @@ export default function EditProduct() {
               <Input
                 className={style.formInputcustom}
                 value={selectedProduct.nameEN}
-                onChange={(event) => handleOnchangeInforOption(event.target.value, 'nameEN')}
-
+                onChange={(event) =>
+                  handleOnchangeInforOption(event.target.value, "nameEN")
+                }
               />
             </div>
           </div>
         </div>
 
         {selectedProduct.listIventory?.map((item, index) => {
-          const idInventory = item.Id
+          const idInventory = item.Id;
           // cón
           return (
             <>
@@ -444,7 +417,9 @@ export default function EditProduct() {
                     placeholder="Color"
                     options={SelectDrop.Color}
                     value={item.Color}
-                    onChange={(value) => handleOnChangeInventory(index, value, 'Color')}
+                    onChange={(value) =>
+                      handleOnChangeInventory(index, value, "Color")
+                    }
                   />
                 </div>
                 <div className={style.inputWidthMinOption}>
@@ -455,7 +430,11 @@ export default function EditProduct() {
                     className={style.formInputOption}
                     value={item.Quantity}
                     onChange={(event) =>
-                      handleOnChangeInventory(index, event.target.value, "Quantity")
+                      handleOnChangeInventory(
+                        index,
+                        event.target.value,
+                        "Quantity"
+                      )
                     }
                     min={1}
                     type="number"
@@ -469,7 +448,11 @@ export default function EditProduct() {
                     className={style.formInputOption}
                     value={item.Price}
                     onChange={(event) =>
-                      handleOnChangeInventory(index, event.target.value, "Price")
+                      handleOnChangeInventory(
+                        index,
+                        event.target.value,
+                        "Price"
+                      )
                     }
                     min={1}
                     type="number"
@@ -481,116 +464,139 @@ export default function EditProduct() {
                   </Typography.Title>
                   <Upload
                     accept=".png,.jpeg,.jpg"
-                    fileList={(item.ImageInventory?.map((image) => ({
-                      uid: image.uid,
-                      name: `Image ${image.uid}`,
-                      status: "done",
-                      url: `${URL_SERVER_IMG}${image.Image}`,
-                    })) || [])}
+                    fileList={
+                      item.ImageInventory?.map((image) => ({
+                        uid: image.uid,
+                        name: `Image ${image.uid}`,
+                        status: "done",
+                        url: `${URL_SERVER_IMG}${image.Image}`,
+                      })) || []
+                    }
                     listType="picture-card"
                     beforeUpload={async (file) => {
                       try {
                         const image = await getBase64(file);
                         const formData = new FormData();
-                        formData.append('image', image);
-                        formData.append('nameImage', file.name);
-                        formData.append('type', 'Inventory_Product');
-                        formData.append('idProduct', idInventory);
+                        formData.append("image", image);
+                        formData.append("nameImage", file.name);
+                        formData.append("type", "Inventory_Product");
+                        formData.append("idProduct", idInventory);
 
-                        const result = await uploadImageSingleToServer(formData);
+                        const result = await uploadImageSingleToServer(
+                          formData
+                        );
                         if (result.data.err === 0) {
                           setSelectedProduct((prevProduct) => {
                             const updatedItem = { ...prevProduct };
-                            const updatedImageInventory =
-                              (updatedItem.listIventory[index]?.ImageInventory || []).map((img) => ({
-                                ...img,
-                              }));
+                            const updatedImageInventory = (
+                              updatedItem.listIventory[index]?.ImageInventory ||
+                              []
+                            ).map((img) => ({
+                              ...img,
+                            }));
 
                             const newImage = {
                               Image: `${result.data.filename}`,
                             };
 
                             updatedImageInventory.push(newImage);
-                            updatedItem.listIventory[index].ImageInventory = updatedImageInventory;
+                            updatedItem.listIventory[index].ImageInventory =
+                              updatedImageInventory;
                             return updatedItem;
                           });
                         }
                       } catch (error) {
-                        console.error('Error during file upload:', error);
+                        console.error("Error during file upload:", error);
                         // Handle error if needed
                       }
                     }}
-
                     onRemove={async (removedFile) => {
-
-                      const fileName = removedFile.url?.split('server/')[1]
+                      const fileName = removedFile.url?.split("server/")[1];
                       const formData = new FormData();
-                      formData.append('type', 'Inventory_Product');
-                      formData.append('image', fileName);
-                      formData.append('idProduct', idInventory);
+                      formData.append("type", "Inventory_Product");
+                      formData.append("image", fileName);
+                      formData.append("idProduct", idInventory);
 
-                      const result = await deleteImage(formData)
+                      const result = await deleteImage(formData);
                       if (result.data.err === 0) {
                         setSelectedProduct((prevProduct) => {
                           const updatedItem = { ...prevProduct };
                           // Create a copy of the existing ImageInventory array
-                          if (updatedItem.listIventory[index].ImageInventory.length >= 2) {
-                            const updatedImageInventory = updatedItem.listIventory[index].ImageInventory.filter(
-                              (img) => img.Image !== fileName
-                            );
+                          if (
+                            updatedItem.listIventory[index].ImageInventory
+                              .length >= 2
+                          ) {
+                            const updatedImageInventory =
+                              updatedItem.listIventory[
+                                index
+                              ].ImageInventory.filter(
+                                (img) => img.Image !== fileName
+                              );
                             // Update the ImageInventory property in the existing data structure
-                            updatedItem.listIventory[index].ImageInventory = updatedImageInventory;
+                            updatedItem.listIventory[index].ImageInventory =
+                              updatedImageInventory;
                           } else {
-                            message.error("Không được nhỏ hơn 1")
+                            message.error(t("smaller1"));
                           }
                           return updatedItem;
                         });
                       } else {
-                        message.error("Delete Image Failed")
+                        message.error(t("deleteItemFailed"));
                       }
                     }}
                   >
                     {item.ImageInventory?.length < 4 ? "+ Upload" : null}
                   </Upload>
-
                 </div>
 
-                {Object.values(selectedProduct.optionsProduct)?.map((i1, key) => {
+                {Object.values(selectedProduct.optionsProduct)?.map(
+                  (i1, key) => {
+                    // console.log('i1', item)
+                    return (
+                      <div key={key} className={style.inputWidthMinOption}>
+                        <Typography.Title level={5} className={style.fontTitle}>
+                          {i1}
+                        </Typography.Title>
+                        <Select
+                          mode="multiple"
+                          className={style.formInputOption}
+                          options={SelectDrop[i1]}
+                          value={
+                            typeof item[i1] === "string"
+                              ? item[i1]?.split(",")
+                              : item[i1]
+                          }
+                          onChange={(value) =>
+                            handleOnChangeInventory(index, value, i1)
+                          }
+                        />
+                      </div>
+                    );
+                  }
+                )}
 
-                  // console.log('i1', item)
-                  return (
-                    <div key={key} className={style.inputWidthMinOption}>
-                      <Typography.Title level={5} className={style.fontTitle}>
-                        {i1}
-                      </Typography.Title>
-                      <Select
-                        mode="multiple"
-                        className={style.formInputOption}
-                        options={SelectDrop[i1]}
-                        value={(typeof item[i1] === 'string') ? item[i1]?.split(',') : item[i1]}
-                        onChange={(value) => handleOnChangeInventory(index, value, i1)}
-                      />
-                    </div>
-                  );
-                })}
-
-                <div className={style.itemDelete} onClick={() => deleteOption(idInventory, index)}> <TiDeleteOutline /> </div>
+                <div
+                  className={style.itemDelete}
+                  onClick={() => deleteOption(idInventory, index)}
+                >
+                  {" "}
+                  <TiDeleteOutline />{" "}
+                </div>
               </div>
-
-
             </>
           );
         })}
 
         {selectedProduct.idProduct && (
           <div className={style.addInventory}>
-            <div className={style.icon} onClick={() => handleAddInventory(selectedProduct.idProduct)}>
+            <div
+              className={style.icon}
+              onClick={() => handleAddInventory(selectedProduct.idProduct)}
+            >
               <IoAddCircleSharp />
             </div>
           </div>
         )}
-
-
       </div>
 
       <div className={style.right}>
@@ -601,16 +607,14 @@ export default function EditProduct() {
             width={200}
             height={200}
             src={imgMain ? imgMain : URL_SERVER_IMG + selectedProduct.image}
-
           />
           <div className={style.formUpload}>
             <Upload
               accept=".png,.jpeg,.jpg,"
               onChange={handleChangeImageProduct}
               onRemove={handleRemove}
-            // value={fileList[0].name}
-            // showUploadList={false}
-
+              // value={fileList[0].name}
+              // showUploadList={false}
             >
               <Button icon={<UploadOutlined />}>Upload</Button>
             </Upload>
@@ -626,7 +630,9 @@ export default function EditProduct() {
               showSearch
               options={SelectDrop.OptionsPr}
               value={selectedProduct.optionsProduct}
-              onChange={(value, option) => handleOnChangeOption(option, 'optionsProduct')}
+              onChange={(value, option) =>
+                handleOnChangeOption(option, "optionsProduct")
+              }
             />
           </div>
         </div>
@@ -639,7 +645,7 @@ export default function EditProduct() {
               showSearch
               options={listTypeProduct}
               value={selectedProduct.category}
-              onChange={(value) => handleOnchangeInforOption(value, 'category')}
+              onChange={(value) => handleOnchangeInforOption(value, "category")}
             />
           </div>
         </div>
@@ -654,7 +660,9 @@ export default function EditProduct() {
               placeholder="Option Product"
               options={listCategory}
               value={selectedProduct.listTag}
-              onChange={(value, option) => handleOnChangeOption(option, 'listTag')}
+              onChange={(value, option) =>
+                handleOnChangeOption(option, "listTag")
+              }
             />
           </div>
         </div>
@@ -668,7 +676,7 @@ export default function EditProduct() {
               placeholder="Option Product"
               options={listBrand}
               value={selectedProduct.brandId}
-              onChange={(value) => handleOnchangeInforOption(value, 'brandId')}
+              onChange={(value) => handleOnchangeInforOption(value, "brandId")}
             />
           </div>
         </div>
@@ -681,7 +689,9 @@ export default function EditProduct() {
               placeholder="Option discount"
               options={listDiscount}
               value={selectedProduct.discountId}
-              onChange={(value) => handleOnchangeInforOption(value, 'discountId')}
+              onChange={(value) =>
+                handleOnchangeInforOption(value, "discountId")
+              }
             />
           </div>
         </div>

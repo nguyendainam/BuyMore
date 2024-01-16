@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import style from "./Cart.module.scss";
-import { Button, Checkbox, Input, InputNumber, Result, message } from "antd";
+import {
+  Button,
+  Checkbox,
+  Input,
+  InputNumber,
+  Modal,
+  Result,
+  message,
+} from "antd";
 import { getAllItemsCart, updateItem } from "../../../components/Cart";
 import { URL_SERVER_IMG } from "../../../until/enum";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -8,6 +16,8 @@ import Select from "../../../components/datatest/Select";
 import { dataItemCart } from "../../../redux/action/asyncAction";
 import { useDispatch } from "react-redux";
 import { choosenItemInCart } from "../../../redux/Slice/userSlice";
+import { deleteItemsInCart } from "../../../services/user";
+import { useTranslation } from "react-i18next";
 
 interface IItem {
   CartId: number;
@@ -21,6 +31,8 @@ interface IItem {
   TotalPrice: number;
   Discount: number;
   ProductPrice: number;
+  Avaiable: boolean;
+  TypeProduct: string;
 }
 
 export default function Cart() {
@@ -31,7 +43,8 @@ export default function Cart() {
       choosen: false,
     },
   ]);
-
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [isMax, setIsMax] = useState<number>(0);
   const interestedProperties = [
     "Color",
     "Size",
@@ -55,12 +68,12 @@ export default function Cart() {
     discount: 0,
     amountToPay: 0,
   });
-
+  const { t } = useTranslation();
   const handleGetItems = async () => {
     const items = await getAllItemsCart();
-
     let data: IItem[] = [];
 
+    console.log("items...", items);
     if (items.length) {
       data = items.map((item) => {
         const quantity = item.Quantity;
@@ -80,6 +93,8 @@ export default function Cart() {
           Discount: discount,
           ProductPrice: productPrice,
           TotalPrice: totalPrice,
+          Avaiable: item.Avaiable,
+          TypeProduct: item.TypeProduct,
         };
       });
     }
@@ -94,17 +109,20 @@ export default function Cart() {
   };
 
   const onChange = async (value: number, id: number) => {
-    console.log("changed", value, id);
-
     const key = id + "-" + value;
-    const data = await updateItem(key);
+    const result = await updateItem(key);
+    if (result.data.err === 2) {
+      setIsMax(result.data.max);
+      setIsOpenModal(true);
+    } else if (result.data.err === 0) {
+      await handleGetItems();
+    }
+
     const updatedDataItems = dataItems.map((item) =>
       item.CartId === id ? { ...item, Quantity: value } : item
     );
 
     setDataItems(updatedDataItems);
-    console.log(updatedDataItems);
-
     const getItemChoosen = await Promise.all(
       checkItems
         .filter((item) => item.choosen === true)
@@ -161,23 +179,6 @@ export default function Cart() {
     }
     handleChangeBill();
   };
-  // const handleCheckboxChange = async (product) => {
-
-  //     console.log(checkItems, '---------------------------------')
-  //     console.log('---------------------------------')
-  //     const updatedItems = [...checkItems];
-
-  //     const itemToUpdate = updatedItems.find((item) => item.key === product);
-  //     if (itemToUpdate) {
-  //         itemToUpdate.choosen = !itemToUpdate.choosen;
-  //         setCheckItem(updatedItems);
-  //         // const data = updatedItems.filter((item) => item.choosen === true);
-  //         // const data = updatedItems.filter((item) => item.choosen);
-
-  //     }
-  //     await dispatch(choosenItemInCart({ dataItem: updatedItems }))
-  //     handleChangeBill();
-  // };
 
   const handleChangeBill = () => {
     const selectedDataItems = dataItems.filter((item) => {
@@ -190,20 +191,17 @@ export default function Cart() {
     let totalMoney = 0;
     let totalProduct = 0;
     let savingPrice = 0;
-
+    let amount = 0;
     selectedDataItems.forEach((item) => {
       // Tính giá của sản phẩm với giảm giá
-      const discountedPrice =
-        item.ProductPrice * item.Quantity * (1 - item.Discount / 100);
-      totalMoney += discountedPrice;
-
-      // Tính tổng số sản phẩm và giá giảm giá
-      totalProduct += item.Quantity;
-      savingPrice += item.ProductPrice * item.Quantity - discountedPrice;
+      totalMoney = totalMoney + item.TotalPrice;
+      savingPrice = savingPrice + (totalMoney * item.Discount) / 100;
+      amount = totalMoney - savingPrice;
+      totalProduct = totalProduct + item.Quantity;
     });
 
     // Tính tổng giá trị giảm giá từ các sản phẩm
-    const amount = totalMoney - savingPrice;
+    // const amount = totalMoney - savingPrice;
 
     setBill({
       totalPrice: totalMoney,
@@ -258,24 +256,60 @@ export default function Cart() {
       await dispatch(choosenItemInCart({ dataItem: datacheckOut }));
       navigate("/us/checkout");
     } else {
-      message.info("Bạn chưa chọn sản phẩm nào");
+      message.info(t("cartEmpty"));
     }
   };
+
+  const handleCloseModal = async () => {
+    await handleGetItems();
+    setIsOpenModal(!isOpenModal);
+  };
+
+  const modalQuantity = (Quantity?: number) => {
+    return (
+      <Modal
+        title="Thông Báo"
+        style={{ height: 100 }}
+        open={isOpenModal}
+        onOk={handleCloseModal}
+      >
+        {t("maxProduct")} : {Quantity}
+      </Modal>
+    );
+  };
+
+  const DeleteItemInCart = async (item) => {
+    const result = await deleteItemsInCart(item);
+    if (result.data.err === 0) {
+      await handleGetItems();
+      message.success(t("deleteSuccess"));
+    } else {
+      message.error(t("deleteItemFailed"));
+    }
+  };
+
+  // const navigate = useNavigate()
+  const handleSimilarProduct = (typeProduct) => {
+    console.log(typeProduct);
+    navigate(`/p/San-pham-tuong-tu?t=${typeProduct}`);
+  };
+
   return (
     <div className={style.mainCart}>
+      {isOpenModal && modalQuantity(isMax)}
       <div className={style.formLeft}>
-        <div className={style.title}>Your Cart</div>
+        <div className={style.title}>{t("cart")} </div>
         <div className={style.formItems}>
           <div className={style.itemHeader}>
-            <Checkbox
+            {/* <Checkbox
               className={style.checkbox}
               onChange={handleSelectAll}
-            ></Checkbox>
+            ></Checkbox> */}
             <div className={style.ChangeOption}>
-              <div className={style.Item}>Sản phẩm </div>
-              <div className={style.Item}>Gía tiền </div>
-              <div className={style.Item}>Số lượng</div>
-              <div className={style.Item}>Tổng</div>
+              <div className={style.Item}>{t("product")} </div>
+              <div className={style.Item}>{t("price")}</div>
+              <div className={style.Item}>{t("quantity")}</div>
+              <div className={style.Item}>{t("total")}</div>
             </div>
           </div>
           {dataItems.length ? (
@@ -300,11 +334,15 @@ export default function Cart() {
                   totalPrice - (totalPrice * item.Discount) / 100;
 
               return (
-                <div className={style.item}>
+                <div
+                  className={style.item}
+                  id={item.Avaiable ? "Avaiable" : "UnAvaiable"}
+                >
                   <Checkbox
                     // checked={check}
                     className={style.checkbox}
                     onChange={() => handleCheckboxChange(item.CartId)}
+                    disabled={item.Avaiable === true ? false : true}
                   ></Checkbox>
                   <div className={style.image}>
                     <img src={`${URL_SERVER_IMG}${item.Image}`} />
@@ -322,6 +360,7 @@ export default function Cart() {
                           /,/g,
                           "."
                         )}
+                        disabled={item.Avaiable === true ? false : true}
                       />
                     </div>
 
@@ -331,6 +370,7 @@ export default function Cart() {
                         max={100000}
                         value={item.Quantity}
                         onChange={(value) => onChange(value, item.CartId)}
+                        disabled={item.Avaiable === true ? false : true}
                       />
                     </div>
                   </div>
@@ -359,10 +399,22 @@ export default function Cart() {
                   </div>
 
                   <div className={style.lastOption}>
-                    <span>Xóa</span>
+                    <span onClick={() => DeleteItemInCart(item.CartId)}>
+                      {t("delete")}
+                    </span>
 
-                    <span>Tìm các sản phẩm tương tự</span>
+                    <span
+                      onClick={() => handleSimilarProduct(item.TypeProduct)}
+                    >
+                      {t("likeProduct")}
+                    </span>
                   </div>
+
+                  {item.Avaiable === false && (
+                    <div className={style.formUnAvaiable}>
+                      {t("outOfStock")}
+                    </div>
+                  )}
                 </div>
               );
             })
@@ -372,7 +424,12 @@ export default function Cart() {
                 status="404"
                 title="404"
                 subTitle="Your Cart Is Empty"
-                extra={<Button type="primary">Back Home</Button>}
+                extra={
+                  <Button type="primary" onClick={returnHome}>
+                    {" "}
+                    {t("backHome")}
+                  </Button>
+                }
               />
             </div>
           )}
@@ -380,30 +437,30 @@ export default function Cart() {
       </div>
 
       <div className={style.formRight}>
-        <div className={style.title}>Order Sumary</div>
+        <div className={style.title}>{t("bill")}</div>
         <div className={style.formTotal}>
           <div className={style.item}>
-            <span>Tổng số sản phẩm</span>
+            <span>{t("totalProduct")}</span>
             <span>{bill.totalProduct}</span>
           </div>
           <div className={style.item}>
-            <span>Số tiền phải trả</span>
+            <span>{t("totalPrice")}</span>
             <span>{bill.totalPrice?.toLocaleString()}</span>
           </div>
           <div className={style.item}>
-            <span>Giảm giá</span>
+            <span>{t("discount")}</span>
             <span>{bill.discount?.toLocaleString()}</span>
           </div>
 
           <div className={style.item}>
-            <span>Total</span>
+            <span>{t("total")}</span>
             <span>{bill.amountToPay?.toLocaleString()}</span>
           </div>
         </div>
 
         <div className={style.formButton}>
           <Button className={style.buttonBuy} onClick={handleCheckOut}>
-            Mua Hàng
+            {t("pay")}
           </Button>
         </div>
       </div>

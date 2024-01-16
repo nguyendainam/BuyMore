@@ -7,7 +7,6 @@ import {
   useLocation,
   useNavigate,
   useParams,
-  useSearchParams,
 } from "react-router-dom";
 import Select from "../../../../components/datatest/Select";
 import { optionFilterProduct } from "../../../../components/datatest/typeProduct";
@@ -35,14 +34,6 @@ export default function AllProduct() {
     start: 0,
     end: 0,
   });
-  // const [selectedOptions, setSelectedOptions] = useState({
-  //     size: [],
-  //     color: [],
-  //     screenSize: [],
-  //     memory: [],
-  //     scanFrequency: [],
-  //     screenType: [],
-  // });
 
   const t = useLocation().search.split("?t=")[1];
   const handleGetProduct = async () => {
@@ -114,7 +105,6 @@ export default function AllProduct() {
 
   const handleChangeFillter = (key: string) => {
     setbtnFilter(key);
-    console.log(key);
     let arrangeProduct = [];
     if (key === "discount") {
       arrangeProduct = [...products].sort((a, b) => b.discount - a.discount);
@@ -137,7 +127,7 @@ export default function AllProduct() {
   const handlePagination = (newPage) => {
     setCurrentPage(newPage);
   };
-
+  const { namepath } = useParams()
   return (
     <div className={style.mainView}>
       <div className={style.content}>
@@ -178,7 +168,7 @@ export default function AllProduct() {
                 <div
                   className={style.titleOption}
                   id="Active"
-                  // id={activeOptions.includes(item.value) ? 'Active' : 'UnActive'}
+                // id={activeOptions.includes(item.value) ? 'Active' : 'UnActive'}
                 >
                   <span>{item.label}</span> <FaAngleDown />
                 </div>
@@ -195,7 +185,7 @@ export default function AllProduct() {
 
         <div className={style.listProduct}>
           <div className={style.title}>
-            Laptop<span>({totalProduct} SẢN PHẨM)</span>{" "}
+            {namepath === 'All' ? ' Tất Cả Sản Phẩm' : namepath.charAt(0).toUpperCase() + namepath.slice(1).replace(/-/g, ' ')}<span>({totalProduct} SẢN PHẨM)</span>{" "}
           </div>
           <div className={style.Option}>
             <span>Sắp Xếp Theo :</span>
@@ -244,8 +234,8 @@ export default function AllProduct() {
                       {item.priceShow
                         ? item.priceShow?.toLocaleString().replace(/,/g, ".")
                         : item.productPrice
-                            ?.toLocaleString()
-                            .replace(/,/g, ".")}{" "}
+                          ?.toLocaleString()
+                          .replace(/,/g, ".")}{" "}
                       <u>đ</u>
                     </div>
                     {item.saveMoney > 0 ? (

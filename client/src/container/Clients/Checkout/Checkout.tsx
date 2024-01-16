@@ -8,16 +8,18 @@ import { URL_SERVER_IMG } from "../../../until/enum";
 import { ListAddUser } from "../../../components/GetUser";
 import { getDataLocation } from "../../../components/Location";
 import Paypal from "../../../components/Paypal";
+import ListAddressToShip from "./ModelAddress";
 
 export default function Checkout() {
   const [dataAddress, setDataAddress] = useState({});
-  const [listAddress, setListAddress] = useState({});
+  const [listAddress, setListAddress] = useState([]);
+  const [idAddress, setIdAddress] = useState<string>('')
   const [total, setTotal] = useState(0);
   const [totalUSD, setTotalUSD] = useState<number>(0);
   const { userCart } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [dataLoaded, setDataLoaded] = useState<boolean>(false);
-
+  const [openModal, setOpenModal] = useState<boolean>(false)
   const handleGetSubTotal = () => {
     setIsLoading(true);
 
@@ -63,32 +65,59 @@ export default function Checkout() {
           .wards?.find((w) => w.value === item.Ward),
       }));
 
-      console.log("xxxxxxxxxxxxxxxxxxxxxxx", data);
+
+
+      setListAddress(data);
+    }
+  };
+
+
+  const handleSetData = (dataAddress?) => {
+    let data = dataAddress
+    if (!dataAddress) data = listAddress
+    if (data.length > 0) {
       const address = {
         addressUser: `${data[0].Line1} / ${data[0].Ward.label} / ${data[0].District.label} / ${data[0].City.label}`,
         userName: data[0].UserName,
         PhoneNumber: data[0].PhoneNumber,
       };
       setDataAddress(address);
-      setListAddress(data);
-      setDataLoaded(true); // Đánh dấu là dữ liệu đã được tải xong từ hàm này
+      setDataLoaded(true);
     }
-  };
+
+  }
+
+
 
   const fetchData = async () => {
     await handleGetSubTotal();
     await handleGetListAddress();
   };
 
+
   useEffect(() => {
     fetchData().then(() => {
+
+      handleSetData(listAddress)
       setIsLoading(false); // Tắt isLoading sau khi cả hai hàm đã hoàn thành
     });
-  }, []);
 
-  // const changeToUsd = parseInt(total.toString()) / 23500;
+
+  }, [idAddress]);
+
+
+  const handleChangeAddess = () => {
+    setOpenModal(!openModal)
+  }
+
+  const ChangeAddressOption = async (key) => {
+    setIdAddress(key)
+    const result = await listAddress?.filter((items) => items.Id_Address === key)
+    handleSetData(result)
+  }
   return (
     <div className={style.mainVieww}>
+      <ListAddressToShip isOpen={openModal} handleClose={handleChangeAddess} handleGetKeyAddress={(value) => ChangeAddressOption(value)} onLoading={handleGetListAddress} />
       <div className={style.left}>
         <img src={img} className={style.imageBg} alt="payment" />
       </div>
@@ -159,12 +188,10 @@ export default function Checkout() {
                 </div>
 
                 <span className={style.address}>
-                  {" "}
                   Địa Chỉ nhận:{dataAddress.addressUser}
-                  {}
                 </span>
 
-                <div>Chọn địa chỉ khác</div>
+                <div style={{ marginTop: '20px', cursor: 'pointer' }} onClick={handleChangeAddess} >Chọn địa chỉ khác</div>
               </div>
             ) : (
               <div>Thêm Địa Chỉ Nhận hàng</div>
@@ -178,6 +205,7 @@ export default function Checkout() {
                 cart={userCart}
                 address={dataAddress}
                 totalVND={total}
+                idAddress={idAddress}
               />
             </div>
           ) : (

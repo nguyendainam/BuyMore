@@ -23,12 +23,12 @@ export default function ListUser() {
         <div className={style.mainView}>
             <div className={style.formView}>
                 <div className={style.formSearch}>
-                    <div className={style.search}>
+                    {/* <div className={style.search}>
                         <Search placeholder="Search" enterButton />
                     </div>
                     <div className={style.addNewUser}>
                         <Button className={style.btnBlue} >Create New</Button>
-                    </div>
+                    </div> */}
                 </div>
                 <div className={style.formTable}>
                     <Table dataSource={dataUser}>

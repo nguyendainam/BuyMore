@@ -148,6 +148,35 @@ const updateProduct = async (req, res) => {
     }
 }
 
+const getAllDescProductById = async (req, res) => {
+    try {
+        const result = await productServices.getAllDescProductById(req.query.key)
+        return res.status(200).json(result)
+
+    } catch (e) {
+        return res.status(400).json(e)
+    }
+}
+
+const getDescProductById = async (req, res) => {
+    try {
+        const result = await productServices.getDescProductById(req.query.key)
+        return res.status(200).json(result)
+
+    } catch (e) {
+        return res.status(400).json(e)
+    }
+}
+
+const getConfigProductById = async (req, res) => {
+    try {
+        const result = await productServices.getCongfigProductById(req.query.key)
+        return res.status(200).json(result)
+    } catch (e) {
+        return res.status(400).json(e)
+    }
+}
+
 export default {
     createProduct,
     getAllProduct,
@@ -163,5 +192,8 @@ export default {
     getAllProductDashboard,
     createProductIvenEdit,
     deleteProductIvenEdit,
-    updateProduct
+    updateProduct,
+    getDescProductById,
+    getConfigProductById,
+    getAllDescProductById
 }

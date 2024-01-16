@@ -45,15 +45,6 @@ export default function Header() {
   const { t } = useTranslation();
 
   const [isScrolled, setIsScrolled] = useState(false);
-  // const selector = useSelector(state => state.system)
-  // const listItems = [
-  //   // { label: "Home", key: "Home", option: true },
-  //   // { label: "Shop", key: "Shop", option: true },
-  //   // { label: "Product", key: "Product", option: true },
-  //   // { label: "Pages", key: "Pages", option: true },
-  //   // { label: "Blog", key: "Blog", option: true },
-  //   // { label: "Contact Us", key: "home", option: false },
-  // ];
 
   const [categoryData, setCategoryData] = useState([]);
 
@@ -96,40 +87,24 @@ export default function Header() {
     }
   };
 
-  // const menuComponents = listItems.map((item) => {
-  //   const menu = handleGetData(item.key);
-  //   return (
-  //     <Dropdown
-  //       key={item.key}
-  //       className={style.itemDropdown}
-  //       overlay={menu}
-  //     // onClick={() => console.log(item.key)}
-  //     >
-  //       <Space>
-  //         {item.label}
-  //         {item.option ? <DownOutlined /> : ""}
-  //       </Space>
-  //     </Dropdown>
-  //   );
-  // });
-
+  const { language } = useSelector((state) => state.system)
   const OptionCategory = () => {
     const dataCategory = categoryData.map((item) => ({
-      label: item.title,
+      label: language === 'vi' ? item.title : item.titleEN,
       key: item.key,
       children:
         item.list.length > 0
           ? item.list?.map((i) => ({
-              label: i.name,
-              key: i.key,
-              children:
-                i.listItem.length > 0
-                  ? i.listItem.map((i1) => ({
-                      label: i1.name,
-                      key: i1.keyItem,
-                    }))
-                  : undefined,
-            }))
+            label: language === 'vi' ? i.name : i.nameEN,
+            key: i.key,
+            children:
+              i.listItem.length > 0
+                ? i.listItem.map((i1) => ({
+                  label: language === 'vi' ? i1.name : i1.nameEN,
+                  key: i1.keyItem,
+                }))
+                : undefined,
+          }))
           : undefined,
     }));
 
@@ -139,6 +114,9 @@ export default function Header() {
       const finalSlug = _.replace(nametag, /\s+/g, "-");
       navigate(`/t/${finalSlug}?key=${key}`);
     };
+
+
+
 
     const categoryMenuItems = (
       <Menu className={style.Menu} mode="vertical">
@@ -197,7 +175,7 @@ export default function Header() {
             <AiOutlineMenu />
           </div>
           <div className={style.formTitleListCategory}>
-            Browse All Categories
+            {t('brower')}
           </div>
         </div>
       </Dropdown>
@@ -240,17 +218,17 @@ export default function Header() {
       <div className={style.OptionAdmin}>
         <div className={style.listOption}>
           <div className={style.item} onClick={handleProfile}>
-            Profile
+            {t('profile')}
             <UserOutlined className={style.icon} style={{ color: "#265073" }} />
           </div>
           <div className={style.item} onClick={handleSignout}>
-            Sign Out
+            {t('signout')}
             <LogoutOutlined className={style.icon} style={{ color: "red" }} />
           </div>
 
           {current.RoleId === "Admin" && (
             <div className={style.item} onClick={() => navigate("/system")}>
-              SYSTEM MANAGE
+              Admin
               <MdAdminPanelSettings
                 className={style.icon}
                 style={{ color: "red" }}
@@ -269,7 +247,7 @@ export default function Header() {
   return (
     <div className={`${style.mainHeader} ${isScrolled ? style.scrolled : ""}`}>
       <div className={style.topHeader}>
-        <div>You are a student and students get 20% discount</div>
+        <div>{t('welcome')}</div>
         <div>
           <Language />
         </div>
@@ -280,7 +258,7 @@ export default function Header() {
       </div>
 
       <div className={style.centerHeader}>
-        <div className={style.formLogo} onClick={returnHome}>
+        <div className={style.formLogo} onClick={returnHome} style={{ cursor: 'pointer' }}>
           <img src={Logo} className={style.imgLogo} />
         </div>
 
@@ -289,7 +267,7 @@ export default function Header() {
         </div>
 
         <div className={style.aboutUser}>
-          <div className={style.loginUser}>
+          <div className={style.loginUser} style={{ cursor: 'pointer' }}>
             <div className={style.iconLogin}>
               <BiUser />
             </div>
@@ -300,6 +278,7 @@ export default function Header() {
                   overlay={information}
                   placement="bottomRight"
                   arrow={{ pointAtCenter: true }}
+
                 >
                   <Space>
                     <div className={style.textUser}>
@@ -309,14 +288,14 @@ export default function Header() {
                 </Dropdown>
               </>
             ) : (
-              <div className={style.centerForm} onClick={handleLogin}>
-                <div className={style.fsmin}>Login</div>
-                <div className="m-2">Account</div>
+              <div className={style.centerForm} onClick={handleLogin} style={{ cursor: 'pointer' }}>
+                <div className={style.fsmin}>{t('login')}</div>
+                <div className="m-2">{t('account')}</div>
               </div>
             )}
           </div>
 
-          <div className={style.iconCart} onClick={handleOnpenCart}>
+          <div className={style.iconCart} onClick={handleOnpenCart} style={{ cursor: 'pointer' }}>
             <BiSolidCartAlt />
           </div>
         </div>

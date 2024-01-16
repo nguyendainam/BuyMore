@@ -1,136 +1,138 @@
-import React, { useEffect, useState } from 'react'
-import ImgCrop from 'antd-img-crop'
-import { Upload, message } from 'antd'
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface'
-import style from './CategoryProduct.module.scss'
-import { Input, Typography, Button } from 'antd'
-import FormData from 'form-data'
-import { CorUCategories } from '../../../services/product'
-import { List } from 'antd'
-import { getListCategory } from '../../../components/GetdataCategory'
-import { Image } from 'antd'
-import { URL_SERVER_IMG } from '../../../until/enum'
-import { MdEditSquare, MdDelete } from 'react-icons/md'
+import React, { useEffect, useState } from "react";
+import ImgCrop from "antd-img-crop";
+import { Upload, message } from "antd";
+import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import style from "./CategoryProduct.module.scss";
+import { Input, Typography, Button } from "antd";
+import FormData from "form-data";
+import { CorUCategories } from "../../../services/product";
+import { List } from "antd";
+import { getListCategory } from "../../../components/GetdataCategory";
+import { Image } from "antd";
+import { URL_SERVER_IMG } from "../../../until/enum";
+import { MdEditSquare, MdDelete } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 interface ICategory {
-  idCate?: string | number
-  nameVI: string
-  nameEN: string
-  oldImage?: string
+  idCate?: string | number;
+  nameVI: string;
+  nameEN: string;
+  oldImage?: string;
 }
 
 interface IActionCategory {
-  action: 'create' | 'update'
+  action: "create" | "update";
 }
 
 export default function CategoryProduct() {
   const [actionCat, setactionCat] = useState<IActionCategory>({
-    action: 'create'
-  })
-  const [fileList, setFileList] = useState<UploadFile[]>([])
+    action: "create",
+  });
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [category, setCategory] = useState<ICategory>({
-    idCate: '',
-    nameVI: '',
-    nameEN: '',
-    oldImage: ''
-  })
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList)
-  }
+    idCate: "",
+    nameVI: "",
+    nameEN: "",
+    oldImage: "",
+  });
+  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
 
-  const [dataCategory, setDataCategory] = useState([])
+  const [dataCategory, setDataCategory] = useState([]);
 
   const onPreview = async (file: UploadFile) => {
-    let src = file.url as string
+    let src = file.url as string;
     if (!src) {
-      src = await new Promise(resolve => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file.originFileObj as RcFile)
-        reader.onload = () => resolve(reader.result as string)
-      })
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
     }
-    const image = new Image()
-    image.src = src
-    const imgWindow = window.open(src)
-    imgWindow?.document.write(image.outerHTML)
-  }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
 
   const handleOnchange = (value: string, id: string) => {
-    setCategory(prevCategory => ({ ...prevCategory, [id]: value }))
-  }
+    setCategory((prevCategory) => ({ ...prevCategory, [id]: value }));
+  };
+
+  const { t } = useTranslation();
 
   const handleOnSave = async () => {
-    const formData = new FormData()
-    formData.append('action', actionCat.action)
-    formData.append('Image', JSON.stringify(fileList))
-    formData.append('nameVI', category.nameVI)
-    formData.append('nameEN', category.nameEN)
+    const formData = new FormData();
+    formData.append("action", actionCat.action);
+    formData.append("Image", JSON.stringify(fileList));
+    formData.append("nameVI", category.nameVI);
+    formData.append("nameEN", category.nameEN);
 
-    if (actionCat.action === 'create') {
-      const saveData = await CorUCategories(formData)
+    if (actionCat.action === "create") {
+      const saveData = await CorUCategories(formData);
       if (saveData.data.err === 0) {
-        const data = await getListCategory()
-        setDataCategory(data)
-        handleClear()
+        const data = await getListCategory();
+        setDataCategory(data);
+        handleClear();
 
-
-        message.success('Created category successfully')
+        message.success(t("addItemSuccess"));
       } else {
-        message.error('Error creating category')
+        message.error("Error creating category");
       }
-    } else if (actionCat.action === 'update') {
-      formData.append('Id', category.idCate)
-      const updateCat = await CorUCategories(formData)
+    } else if (actionCat.action === "update") {
+      formData.append("Id", category.idCate);
+      const updateCat = await CorUCategories(formData);
       if (updateCat.data.err === 0) {
-        message.success('Update category successfully')
+        message.success(t("updateSuccess"));
         const fetchData = async () => {
-          const data = await getListCategory()
-          setDataCategory(data)
-        }
+          const data = await getListCategory();
+          setDataCategory(data);
+        };
 
-        setFileList([])
+        setFileList([]);
 
-        setactionCat({ action: 'create' })
+        setactionCat({ action: "create" });
         setCategory({
-          nameEN: '',
-          nameVI: '',
-          oldImage: ``
-        })
+          nameEN: "",
+          nameVI: "",
+          oldImage: ``,
+        });
 
-        fetchData().catch(console.error)
+        fetchData().catch(console.error);
       } else {
-        message.error('Error updating category')
+        message.error("Error updating category");
       }
     }
-  }
+  };
 
-  const handleEditCategory = async item => {
-    setactionCat({ action: 'update' })
+  const handleEditCategory = async (item) => {
+    setactionCat({ action: "update" });
     setCategory({
       idCate: item.key,
       nameEN: item.titleEN,
       nameVI: item.titleVi,
-      oldImage: `${URL_SERVER_IMG}${item.image}`
-    })
-  }
+      oldImage: `${URL_SERVER_IMG}${item.image}`,
+    });
+  };
 
   const handleClear = () => {
-    setactionCat({ action: 'create' })
+    setactionCat({ action: "create" });
     setCategory({
-      nameEN: '',
-      nameVI: '',
-      oldImage: ``
-    })
-    setFileList([])
-  }
+      nameEN: "",
+      nameVI: "",
+      oldImage: ``,
+    });
+    setFileList([]);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getListCategory()
-      setDataCategory(data)
-    }
-    fetchData().catch(console.error)
-  }, [])
+      const data = await getListCategory();
+      setDataCategory(data);
+    };
+    fetchData().catch(console.error);
+  }, []);
 
   return (
     <>
@@ -140,14 +142,14 @@ export default function CategoryProduct() {
             <Typography.Title level={5}>Name Product VI </Typography.Title>
             <Input
               value={category.nameVI}
-              onChange={event => handleOnchange(event.target.value, 'nameVI')}
+              onChange={(event) => handleOnchange(event.target.value, "nameVI")}
             />
           </div>
           <div className={style.inputMaxWidth}>
             <Typography.Title level={5}>Name Product EN</Typography.Title>
             <Input
               value={category.nameEN}
-              onChange={event => handleOnchange(event.target.value, 'nameEN')}
+              onChange={(event) => handleOnchange(event.target.value, "nameEN")}
             />
           </div>
           <div className={style.formImageCate}>
@@ -155,33 +157,33 @@ export default function CategoryProduct() {
               <Typography.Title level={5}>Icon Category</Typography.Title>
               <ImgCrop rotationSlider beforeCrop={handleOnchange}>
                 <Upload
-                  listType='picture-card'
+                  listType="picture-card"
                   fileList={fileList}
                   onChange={onChange}
                   onPreview={onPreview}
                 >
-                  {fileList.length < 1 && '+ Upload'}
+                  {fileList.length < 1 && "+ Upload"}
                 </Upload>
               </ImgCrop>
             </div>
-            {actionCat.action === 'update' ? (
+            {actionCat.action === "update" ? (
               <div className={style.inputWidth45}>
                 <Typography.Title level={5}>Old Image</Typography.Title>
                 <Image className={style.Oldimage} src={category.oldImage} />
               </div>
             ) : (
-              ''
+              ""
             )}
           </div>
 
           <div className={style.inputMaxWidth}>
-            <Button type='primary' onClick={handleOnSave}>
-              {actionCat.action === 'create' ? 'Save' : 'Update'}
+            <Button type="primary" onClick={handleOnSave}>
+              {actionCat.action === "create" ? "Save" : "Update"}
             </Button>
 
             <Button
-              type='dashed'
-              style={{ marginLeft: '5px' }}
+              type="dashed"
+              style={{ marginLeft: "5px" }}
               onClick={handleClear}
             >
               Clear
@@ -189,7 +191,7 @@ export default function CategoryProduct() {
           </div>
         </div>
         <div className={style.formListCategory}>
-          <List itemLayout='horizontal' dataSource={dataCategory}>
+          <List itemLayout="horizontal" dataSource={dataCategory}>
             {dataCategory.map((item, index) => {
               return (
                 <div className={style.formListItem} key={index}>
@@ -221,11 +223,11 @@ export default function CategoryProduct() {
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
           </List>
         </div>
       </div>
     </>
-  )
+  );
 }

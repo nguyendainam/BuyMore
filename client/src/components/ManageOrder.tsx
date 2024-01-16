@@ -37,6 +37,9 @@ interface UserInformation {
 
 export const detailsOrder = async (key: string) => {
     const result = await getOrderDetails(key)
+
+
+
     const itemIncart = result.data.items[0].CartList
     const dataItems = JSON.parse(itemIncart)
     const address = result.data.items[0].AddressOrder
@@ -87,3 +90,22 @@ export const detailsOrder = async (key: string) => {
     }
 
 }
+
+export const handleGetSelectOrder = async () => {
+    try {
+        const resultdata = await getListManageOrder();
+
+        const options = resultdata.data.items
+            .map((item) => ({
+                value: item.Id_Order,
+                label: item.Id_Order.slice(0, 5)
+            }));
+
+        return options;
+    } catch (error) {
+        console.error("Error in handleGetSelectOrder:", error);
+        return [];
+    }
+};
+
+

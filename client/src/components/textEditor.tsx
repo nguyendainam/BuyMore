@@ -33,6 +33,8 @@ export const TextEditor: React.FC<TextEditorProps> = ({ handleSendContext, edito
     const handleOnchange = (event: EditorChangeEvent) => {
         handleSendContext(event.html, editorKey)
     }
+    React.useEffect(() => { }, [content])
+
 
     try {
         return (
@@ -47,8 +49,9 @@ export const TextEditor: React.FC<TextEditorProps> = ({ handleSendContext, edito
                     InsertImage
                 ]}
                 className={styles.mainTextEditor}
-                defaultContent={content}
+                value={content ? content : ''}
                 onChange={handleOnchange}
+
             />
         );
     } catch (error) {

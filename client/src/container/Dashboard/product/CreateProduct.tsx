@@ -302,6 +302,7 @@ export const CreateNewProduct: React.FC = () => {
       <TextEditor
         handleSendContext={(data, key) => handleSaveDesc(data, key)}
         editorKey={key}
+        content={product[key]}
       />
     );
   };

@@ -10,6 +10,8 @@ interface ITopRating {
 
 export const getTopRattingProduct = async () => {
   const result = await getTopProductRating();
+
+
   const dataMap: ITopRating[] = result.data.items.map((item) => ({
     IdProduct: item.Id_Product,
     Image: item.Image,

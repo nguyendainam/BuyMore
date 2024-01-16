@@ -7,7 +7,7 @@ import {
   getAllProductByTag,
   getAllProductByTas,
 } from "../../../../components/AllProduct";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Select from "../../../../components/datatest/Select";
 import { optionFilterProduct } from "../../../../components/datatest/typeProduct";
 import { useSelector } from "react-redux";
@@ -121,6 +121,7 @@ export default function AllProductByTag() {
     setCurrentPage(newPage);
   };
 
+  const { nametag } = useParams()
   return (
     <div className={style.mainView}>
       <div className={style.content}>
@@ -174,7 +175,7 @@ export default function AllProductByTag() {
 
         <div className={style.listProduct}>
           <div className={style.title}>
-            Loại Sản Phẩm<span>(80 SẢN PHẨM)</span>{" "}
+            {nametag && nametag?.charAt(0).toUpperCase() + nametag.slice(1).replace(/-/g, ' ')}<span>({totalProduct} SẢN PHẨM)</span>{" "}
           </div>
           <div className={style.Option}>
             <span>Sắp Xếp Theo :</span>
@@ -223,8 +224,8 @@ export default function AllProductByTag() {
                       {item.priceShow
                         ? item.priceShow?.toLocaleString().replace(/,/g, ".")
                         : item.productPrice
-                            ?.toLocaleString()
-                            .replace(/,/g, ".")}{" "}
+                          ?.toLocaleString()
+                          .replace(/,/g, ".")}{" "}
                       <u>đ</u>
                     </div>
                     {item.saveMoney > 0 ? (

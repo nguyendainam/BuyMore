@@ -45,9 +45,7 @@ const CountdownButton = () => {
             <div className={style.titleSuccess}>
                 Thanh toán thành công,
                 <div className={style.timeOut}>
-
                     <span>  Tiếp tục mua sắm:</span> <span><CountdownTimer initialTime={countdownTime} onTimeout={handleTimeout} /></span>
-
                 </div>
             </div>
         </div>

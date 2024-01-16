@@ -100,6 +100,11 @@ export const GetAllBrands = async () => {
   return await axios.get('/system/getAllBrand')
 }
 
+
+export const getProductByBrand = async (key: string) => {
+  return await axios.get(`/system/getAllInforBrands?key=${key}`)
+}
+
 //  DISCOUNT
 export const getAllDiscount = async () => {
   return await axios.get('/system/getAllDiscount')
@@ -148,4 +153,18 @@ export const updateProduct = async (data: FormData) => {
 
 export const getOrderDetails = async (key: string) => {
   return await axios.get(`/system/getInforAboutOrder?key=${key}`)
+}
+
+export const getDescProductById = async (key: string) => {
+  return await axios.get(`/system/getDescProductById?key=${key}`)
+}
+
+export const getConfigProductById = async (key: string) => {
+  return await axios.get(`/system/getConfigProductById?key=${key}`)
+}
+
+
+
+export const getAllDescProductById = async (key: string) => {
+  return await axios.get(`/system/getAllDescProductById?key=${key}`)
 }

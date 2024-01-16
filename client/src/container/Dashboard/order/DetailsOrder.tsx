@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import style from "./DetailsOrder.module.scss";
-import { detailsOrder } from "../../../components/ManageOrder";
+import { detailsOrder, handleGetSelectOrder } from "../../../components/ManageOrder";
 import { URL_SERVER_IMG } from "../../../until/enum";
 import moment from "moment";
+import { Select } from "antd";
 export default function DetailsOrder() {
   const [dataAddress, setDataAddress] = useState({});
   const [dataUser, setDataUser] = useState({});
   const [dataItems, setDataItems] = useState([]);
   const [aboutOder, setAboutOder] = useState({});
+  const [dataSelect, setDataSelect] = useState([])
 
   const handleGetData = async (key: string) => {
     const resultdata = await detailsOrder(key);
+
+
+
     if (resultdata) {
       setDataAddress(resultdata.address);
       setDataUser(resultdata?.UserInformation[0]);
@@ -19,9 +24,20 @@ export default function DetailsOrder() {
     }
   };
 
+  const handleGetOption = async () => {
+    const opts = await handleGetSelectOrder()
+    setDataSelect(opts)
+  }
+
   useEffect(() => {
-    handleGetData("MNIMzz7EPV1703349008328");
+    handleGetOption()
+
   }, []);
+
+  const handleOnSelect = async (key) => {
+    handleGetData(key);
+  }
+
 
   return (
     <div className={style.mainView}>
@@ -39,6 +55,17 @@ export default function DetailsOrder() {
             {" "}
             <div className={style.item}>{aboutOder.status}</div>{" "}
             <div className={style.item}>{aboutOder.StatusOrder}</div>
+          </div>
+
+          <div>
+            <Select
+              showSearch
+              placeholder="Select a other order"
+              optionFilterProp="children"
+              style={{ width: 200 }}
+              options={dataSelect}
+              onChange={(value) => handleOnSelect(value)}
+            />
           </div>
         </div>
 

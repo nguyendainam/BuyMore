@@ -5,6 +5,7 @@ import Header from '../container/Clients/Header/Header'
 import Profile from '../container/Clients/User/Profile'
 import Checkout from '../container/Clients/Checkout/Checkout'
 import CheckoutSuccess from '../container/Clients/Checkout/CheckoutSuccess'
+import Fotter from '../container/Clients/Footer/Fotter'
 
 export default function clientRouter() {
     return (
@@ -16,6 +17,7 @@ export default function clientRouter() {
                 <Route path='checkout' element={<Checkout />} />
                 <Route path='checkoutsuccess' element={<CheckoutSuccess />} />
             </Routes>
+
 
         </>
 

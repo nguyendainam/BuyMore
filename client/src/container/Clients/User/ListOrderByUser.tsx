@@ -4,8 +4,9 @@ import style from "./ListOrderByUser.module.scss";
 import { URL_SERVER_IMG } from "../../../until/enum";
 import Select from "../../../components/datatest/Select";
 import moment from "moment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
 
 export default function ListOrderByUser() {
   const [listData, setListData] = useState([]);
@@ -41,6 +42,11 @@ export default function ListOrderByUser() {
   );
 
   const { language } = useSelector((state) => state.system);
+  const navigate = useNavigate()
+  const handleGetDetailProduct = (item) => {
+    navigate(`/d/chi-tiet-san-pham?product=${item}`);
+  }
+
 
   return (
     <div className={style.mainListOrder}>
@@ -54,8 +60,8 @@ export default function ListOrderByUser() {
             interestedProperties.map((property) => {
               const data = options[property]
                 ? Select[property].filter(
-                    (item) => item.value === options[property]
-                  )
+                  (item) => item.value === options[property]
+                )
                 : null;
 
               return data ? renderProperty(property, data[0].label) : null;
@@ -99,8 +105,8 @@ export default function ListOrderByUser() {
                 </div>
 
                 <div>
-                  <Button className={style.btnBlue}>Đánh giá</Button>
-                  <Button className={style.btnWhite}>Mua lại</Button>
+                  <Button className={style.btnBlue} onClick={() => handleGetDetailProduct(item.Id)} >Đánh giá</Button>
+                  <Button className={style.btnWhite} onClick={() => handleGetDetailProduct(item.Id)} >Mua lại</Button>
                 </div>
               </div>
               <div>{/* Render date here */}</div>

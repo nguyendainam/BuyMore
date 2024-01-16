@@ -19,6 +19,8 @@ import register from "../../../assets/image/register.png";
 import FormData from "form-data";
 import { registerUser } from "../../../services/user";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 type FieldType = {
   username?: string;
   password?: string;
@@ -36,7 +38,7 @@ export default function Register() {
   const [correctEmail, setCorrectEmail] = useState<boolean>(false);
   const [correctPass, setCorrectPass] = useState<boolean>(false);
   const [openLoading, setOpenLoading] = useState<boolean>(false);
-
+  const { t } = useTranslation();
   const [dataRegister, setDataRegister] = useState({
     username: "",
     email: "",
@@ -53,7 +55,7 @@ export default function Register() {
 
   const handleRegister = async () => {
     if (!correctEmail || !correctPass || !dataRegister.username) {
-      message.error("Vui lòng kiểm tra lại thông tin ");
+      message.error(t("checkAgain"));
     } else {
       const formdata = new FormData();
       formdata.append("Email", dataRegister.email);
@@ -72,13 +74,18 @@ export default function Register() {
     }
   };
 
+  const { language } = useSelector((state) => state.system);
   return (
     <div className={style.mainRegister}>
       {openLoading ? (
         <div className={style.formLoading}>
           <Result
             icon={<LoadingOutlined />}
-            title="Vui lòng kiểm tra email để xác nhận !"
+            title={`${
+              language === "vi"
+                ? "Vui lòng kiểm tra email để xác nhận !"
+                : "Please check your email to confirm!"
+            } `}
           />
         </div>
       ) : (
@@ -92,7 +99,15 @@ export default function Register() {
                 label="Username"
                 name="username"
                 rules={[
-                  { required: true, message: "Please input your username!" },
+                  {
+                    required: true,
+
+                    message: `${
+                      language === "vi"
+                        ? "Vui lòng nhập tên người dùng !"
+                        : "Please enter userName!"
+                    } `,
+                  },
                 ]}
               >
                 <Input
@@ -121,7 +136,7 @@ export default function Register() {
                 name="email"
                 required
                 rules={[
-                  { required: true, message: "Please input your username!" },
+                  { required: true, message: "Please input your Email!" },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       const isValistEmail = validateEmail(value);

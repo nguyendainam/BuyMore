@@ -23,7 +23,20 @@ const getAllBrands = async (req, res) => {
   }
 }
 
+const getAllInforBrands = async (req, res) => {
+  try {
+    let result = await brandServices.getAllAboutBrands(req.query.key)
+    return res.status(200).json(result)
+
+  } catch (e) {
+    console.log(e)
+    return res.status(400).json(e)
+  }
+
+}
+
 export default {
   createOrUpdate,
-  getAllBrands
+  getAllBrands,
+  getAllInforBrands
 }

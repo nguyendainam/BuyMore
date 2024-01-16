@@ -18,6 +18,7 @@ import ListOrder from "../container/Dashboard/order/ListOrder";
 import EditProduct from "../container/Dashboard/product/EditProduct";
 import CustomerInfor from "../container/Dashboard/user/CustomerInfor";
 import DetailsOrder from "../container/Dashboard/order/DetailsOrder";
+import { EditBrand } from "../container/Dashboard/brand/Edit";
 
 export default function SystemRouter() {
   return (
@@ -41,6 +42,7 @@ export default function SystemRouter() {
       <Route path="editProduct" element={<EditProduct />} />
       <Route path="user" element={<CustomerInfor />} />
       <Route path="detailsOrder" element={<DetailsOrder />} />
+      <Route path="editbrand" element={<EditBrand />} />
     </Routes>
   );
 }

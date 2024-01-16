@@ -66,6 +66,8 @@ export default function ListOrder() {
     }
   };
 
+
+
   return (
     <div className={style.mainViewForm}>
       <div className={style.formContent}>
@@ -120,21 +122,18 @@ export default function ListOrder() {
             />
             <Column
               title=""
-              render={(value, record) => {
-                record.status === "Accepted" ? (
+              render={(value, record) =>
+                record.status !== "Accepted" ? (
                   <div
                     className={style.icon}
-                    onClick={() =>
-                      handleOpenModal(record.orderId, record.status)
-                    }
+                    onClick={() => handleOpenModal(record.orderId, record.status)}
                   >
                     <CiSearch />
                   </div>
-                ) : (
-                  ""
-                );
-              }}
+                ) : null
+              }
             />
+
           </Table>
         </div>
       </div>
